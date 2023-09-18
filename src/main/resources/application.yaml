@@ -1,0 +1,18 @@
+spring:
+  main:
+    banner-mode: off
+
+  datasource:
+     url: jdbc:mysql://localhost:3306/FromBankService
+     username: root
+     password: 08Berloga
+     driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQLDialect
+#    defer-datasource-initialization: false
+#    open-in-view: false
+
+#  liquibase:
+#    change-log: classpath:
