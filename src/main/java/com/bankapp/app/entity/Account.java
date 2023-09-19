@@ -3,10 +3,7 @@ package com.bankapp.app.entity;
 import com.bankapp.app.enums.AccountStatus;
 import com.bankapp.app.enums.AccountType;
 import com.bankapp.app.enums.CurrencyCode;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,13 +15,16 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "account")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Account {
 
     @Id
+    @GeneratedValue(generator = "UUID")
+
     @Column(name = "id")
-    private UUID id; // почитать
+    private UUID id;
 
     @Column(name = "client_id")
     private UUID clientId;
@@ -49,9 +49,6 @@ public class Account {
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-
-    public Account() {
-    }
 
     public Account(UUID id, UUID clientId, String name,
                    AccountType type, AccountStatus status,

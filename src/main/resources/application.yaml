@@ -3,7 +3,7 @@ spring:
     banner-mode: off
 
   datasource:
-     url: jdbc:mysql://localhost:3306/FromBankService
+     url: jdbc:mysql://localhost:3306/frombankservice
      username: root
      password: 08Berloga
      driver-class-name: com.mysql.cj.jdbc.Driver

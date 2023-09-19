@@ -1,33 +1,72 @@
 package com.bankapp.app.entity;
 
 import com.bankapp.app.enums.ClientStatus;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.awt.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.*;
+
+@Entity
+@Table(name = "client")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Client {
+
+    @Id
+    @GeneratedValue(generator = "UUID")
+
+    @Column(name = "id")
     private UUID id;
-    private int managerId;
-    //private Manager manager;
+
+    @Column(name = "client_status")
     private ClientStatus status;
-    private Integer taxCode;
+
+    @Column(name = "tax_code")
+    private String taxCode;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "e-mail")
     private String email;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "phone_numer")
     private String phone;
+
+    @Column(name = "created_at")
     private Timestamp createdAt;
+
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    public Client(UUID id, ClientStatus status, Integer taxCode,
-                  String firstName, String lastName,
-                  String email, String address, String phone,
-                  Timestamp createdAt, Timestamp updatedAt, int managerId) {
+    @Column(name = "accounts")
+    @OneToMany(mappedBy = "accounts", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private List<Account> accounts;
+
+    @Column(name = "manager")
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
+    orphanRemoval = true, cascade = {MERGE,PERSIST,REFRESH})
+    private List<Manager> manager;
+
+    public Client(UUID id, ClientStatus status, String taxCode, String firstName,
+                  String lastName, String email, String address, String phone,
+                  Timestamp createdAt, Timestamp updatedAt, List<Account> accounts, List<Manager> manager) {
         this.id = id;
         this.status = status;
         this.taxCode = taxCode;
@@ -38,19 +77,20 @@ public class Client {
         this.phone = phone;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.managerId = managerId;
+        this.accounts = accounts;
+        this.manager = manager;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Client client)) return false;
-        return Objects.equals(id, client.id) && Objects.equals(firstName, client.firstName) && Objects.equals(lastName, client.lastName) && Objects.equals(phone, client.phone);
+        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phone, client.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, phone);
+        return Objects.hash(taxCode, phone);
     }
 
     @Override
@@ -58,15 +98,16 @@ public class Client {
         return "Client{" +
                 "id=" + id +
                 ", status=" + status +
-                ", tax_code=" + taxCode +
-                ", first_name='" + firstName + '\'' +
-                ", last_name='" + lastName + '\'' +
+                ", taxCode=" + taxCode +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phone + '\'' +
-                ", created_at=" + createdAt +
-                ", updated_at=" + updatedAt +
-                ", manager_id=" + managerId +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", accounts=" + accounts +
+                ", manager=" + manager +
                 '}';
     }
 }
