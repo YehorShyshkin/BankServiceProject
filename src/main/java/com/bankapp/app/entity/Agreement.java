@@ -7,11 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
-import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "agreement")
@@ -41,27 +38,27 @@ public class Agreement {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "products")
-    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY,
-    orphanRemoval = true,cascade = {MERGE,PERSIST,REFRESH})
-    private List<Product> products;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Product product;
 
-    @Column(name = "accounts")
-    @OneToMany(mappedBy = "accounts", fetch = FetchType.LAZY,
-    orphanRemoval = true, cascade = {MERGE,PERSIST,REFRESH})
-    private List<Account> accounts;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     public Agreement(UUID id, double interestRate, AccountStatus status,
-                     double sum, Timestamp createdAt, Timestamp updatedAt,
-                     List<Product> products, List<Account> accounts) {
+                     double sum, Timestamp createdAt,
+                     Timestamp updatedAt,
+                     Product product,
+                     Account account) {
         this.id = id;
         this.interestRate = interestRate;
         this.status = status;
         this.sum = sum;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.products = products;
-        this.accounts = accounts;
+        this.product = product;
+        this.account = account;
     }
 
     @Override
@@ -85,8 +82,8 @@ public class Agreement {
                 ", sum=" + sum +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", products=" + products +
-                ", accounts=" + accounts +
+                ", products=" + product +
+                ", accounts=" + account +
                 '}';
     }
 }
