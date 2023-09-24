@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.awt.*;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -15,7 +14,7 @@ import java.util.UUID;
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
-@Table(name = "client")
+@Table(name = "clients")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -39,14 +38,14 @@ public class Client {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "e-mail")
+    @Column(name = "email")
     private String email;
 
     @Column(name = "address")
     private String address;
 
-    @Column(name = "phone_numer")
-    private String phone;
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -54,19 +53,17 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "accounts")
-    @OneToMany(mappedBy = "accounts", fetch = FetchType.LAZY,
+    @OneToOne(mappedBy = "clients", fetch = FetchType.LAZY,
             orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
-    private List<Account> accounts;
+    private Account account;
 
-    @Column(name = "manager")
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-    orphanRemoval = true, cascade = {MERGE,PERSIST,REFRESH})
-    private List<Manager> manager;
+    @OneToOne(mappedBy = "manager", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private Manager managers;
 
     public Client(UUID id, ClientStatus status, String taxCode, String firstName,
                   String lastName, String email, String address, String phone,
-                  Timestamp createdAt, Timestamp updatedAt, List<Account> accounts, List<Manager> manager) {
+                  Timestamp createdAt, Timestamp updatedAt, Account account, Manager managers) {
         this.id = id;
         this.status = status;
         this.taxCode = taxCode;
@@ -74,23 +71,23 @@ public class Client {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
-        this.phone = phone;
+        this.phoneNumber = phone;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.accounts = accounts;
-        this.manager = manager;
+        this.account = account;
+        this.managers = managers;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Client client)) return false;
-        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phone, client.phone);
+        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phoneNumber, client.phoneNumber); // Исправлено на phoneNumber
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taxCode, phone);
+        return Objects.hash(taxCode, phoneNumber); // Исправлено на phoneNumber
     }
 
     @Override
@@ -103,11 +100,11 @@ public class Client {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
-                ", phone='" + phone + '\'' +
+                ", phone='" + phoneNumber + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", accounts=" + accounts +
-                ", manager=" + manager +
+                ", accounts=" + account +
+                ", manager=" + managers +
                 '}';
     }
 }

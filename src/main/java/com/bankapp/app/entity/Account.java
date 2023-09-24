@@ -10,11 +10,15 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
-@Table(name = "account")
+@Table(name = "accounts")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -22,27 +26,23 @@ public class Account {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
-
-    @Column(name = "client_id")
-    private UUID clientId;
 
     @Column(name = "name")
     private String name;
 
-    @Column(name = "type")
+    @Column(name = "account_type")
     private AccountType type;
 
     @Column(name = "status")
     private AccountStatus status;
 
-    @Column(name = "balance")
-    private float balance;
-
     @Column(name = "currency_code")
     private CurrencyCode currencyCode;
+
+    @Column(name = "balance")
+    private float balance;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -50,47 +50,70 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    public Account(UUID id, UUID clientId, String name,
-                   AccountType type, AccountStatus status,
-                   float balance, CurrencyCode currency_code,
-                   Timestamp createdAt, Timestamp updatedAt) {
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private List<Client> clients;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private List<Agreement> agreementList;
+
+    @OneToMany(mappedBy = "debitAccount", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private Set<Transaction> debitTransaction;
+
+    @OneToMany(mappedBy = "creditAccount", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    private Set<Transaction> creditTransaction;
+
+    public Account(UUID id, String name, AccountType type,
+                   AccountStatus status, CurrencyCode currencyCode,
+                   float balance, Timestamp createdAt,
+                   Timestamp updatedAt, List<Client> clients,
+                   List<Agreement> agreementList,
+                   Set<Transaction> debitTransaction,
+                   Set<Transaction> creditTransaction) {
         this.id = id;
-        this.clientId = clientId;
         this.name = name;
         this.type = type;
         this.status = status;
+        this.currencyCode = currencyCode;
         this.balance = balance;
-        this.currencyCode = currency_code;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.clients = clients;
+        this.agreementList = agreementList;
+        this.debitTransaction = debitTransaction;
+        this.creditTransaction = creditTransaction;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Account account)) return false;
-        return Objects.equals(id, account.id)
-                && Objects.equals(clientId, account.clientId)
-                && Objects.equals(name, account.name);
+        return Objects.equals(name, account.name) && status == account.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientId, name);
+        return Objects.hash(name, status);
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", client_id=" + clientId +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", status=" + status +
+                ", currencyCode=" + currencyCode +
                 ", balance=" + balance +
-                ", currency_code=" + currencyCode +
-                ", created_at=" + createdAt +
-                ", updated_at=" + updatedAt +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", clients=" + clients +
+                ", agreementList=" + agreementList +
+                ", debitTransaction=" + debitTransaction +
+                ", creditTransaction=" + creditTransaction +
                 '}';
     }
 }

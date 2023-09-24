@@ -41,19 +41,17 @@ public class Agreement {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "products")
-    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY,
-    orphanRemoval = true,cascade = {MERGE,PERSIST,REFRESH})
+    @OneToMany(mappedBy = "agreement", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
     private List<Product> products;
 
-    @Column(name = "accounts")
-    @OneToMany(mappedBy = "accounts", fetch = FetchType.LAZY,
-    orphanRemoval = true, cascade = {MERGE,PERSIST,REFRESH})
-    private List<Account> accounts;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     public Agreement(UUID id, double interestRate, AccountStatus status,
                      double sum, Timestamp createdAt, Timestamp updatedAt,
-                     List<Product> products, List<Account> accounts) {
+                     List<Product> products, Account account) {
         this.id = id;
         this.interestRate = interestRate;
         this.status = status;
@@ -61,7 +59,7 @@ public class Agreement {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.products = products;
-        this.accounts = accounts;
+        this.account = account;
     }
 
     @Override
@@ -86,7 +84,7 @@ public class Agreement {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", products=" + products +
-                ", accounts=" + accounts +
+                ", accounts=" + account +
                 '}';
     }
 }

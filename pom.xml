@@ -5,8 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.3</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>3.1.2</version>
+        <relativePath/>
     </parent>
     <groupId>com.bankapp</groupId>
     <artifactId>app</artifactId>
@@ -14,7 +14,7 @@
     <name>FromBankService</name>
     <description>FromBankService</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>19</java.version>
     </properties>
     <dependencies>
         <dependency>
@@ -41,11 +41,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.3.0.Final</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -64,5 +59,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

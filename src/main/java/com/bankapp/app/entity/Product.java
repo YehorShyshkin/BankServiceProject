@@ -12,64 +12,52 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.*;
-
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @NoArgsConstructor
 @Getter
 @Setter
 public class Product {
 
     @Id
-
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
-    private UUID id; // Представляет уникальный идентификатор продукта, обычно это UUID.
+    private UUID id; // Уникальный идентификатор продукта (обычно UUID).
 
     @Column(name = "name")
-    private String name; // Содержит название продукта.
+    private String name; // Название продукта.
 
     @Column(name = "product_status")
-    private ProductStatus status; // Представляет статус продукта, который имеет тип ProductStatus
+    private ProductStatus status; // Статус продукта (используется перечисление ProductStatus).
 
     @Column(name = "currency_code")
-    private CurrencyCode currencyCode; // Хранит код валюты продукта, который имеет тип CurrencyCode.
+    private CurrencyCode currencyCode; // Код валюты продукта (используется перечисление CurrencyCode).
 
     @Column(name = "interest_rate")
-    private double interestRate; // Содержит процентную ставку, связанную с продуктом.
+    private double interestRate; // Процентная ставка, связанная с продуктом.
 
     @Column(name = "product_limit")
-    private int productLimit; // Представляет лимит, связанный с продуктом.
+    private int productLimit; // Лимит, связанный с продуктом.
 
     @Column(name = "created_at")
-    private Timestamp createdAt; // Содержат временные метки, указывающие на момент создания продукта.
+    private Timestamp createdAt; // Временная метка создания продукта.
 
     @Column(name = "updated_at")
-    private Timestamp updatedAt; //Содержат временные метки, указывающие на момент обновления продукта.
+    private Timestamp updatedAt; // Временная метка обновления продукта.
 
-    /**
-     * Поле manager связано с аннотацией @OneToMany,
-     * что указывает на то, что один продукт может иметь одного
-     * менеджера (Manager).
-     */
-    @Column(name = "manager")
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-    orphanRemoval = true,cascade = {MERGE,PERSIST,REFRESH})
-    private List<Manager> manager;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    // Здесь указывается имя столбца, который будет использоваться для связи с таблицей Manager
+    private Manager manager;
 
-
-    /**
-     * Поле agreements также связано с аннотацией @OneToMany, что указывает на то,
-     * что один продукт может иметь множество соглашений (Agreement).
-     */
-    @Column(name = "agreements")
     @OneToMany(mappedBy = "agreements", fetch = FetchType.LAZY,
-    orphanRemoval = true,cascade = {MERGE,PERSIST,REFRESH})
+            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Agreement> agreements;
 
-    public Product(UUID id, String name, ProductStatus status, CurrencyCode currencyCode, double interestRate, int productLimit, Timestamp createdAt,
-                   Timestamp updatedAt, List<Manager> manager, List<Agreement> agreements) {
+    public Product(UUID id, String name, ProductStatus status, CurrencyCode currencyCode, double interestRate,
+                   int productLimit, Timestamp createdAt,
+                   Timestamp updatedAt, Manager manager,
+                   List<Agreement> agreements) {
         this.id = id;
         this.name = name;
         this.status = status;

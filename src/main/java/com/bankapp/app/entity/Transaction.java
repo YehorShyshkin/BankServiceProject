@@ -1,46 +1,69 @@
 package com.bankapp.app.entity;
 
+import com.bankapp.app.enums.TransactionType;
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.*;
+
+@Entity
+@Table(name = "transactions")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Transaction {
 
+    @Id
+    @GeneratedValue(generator = "UUID")
+    @Column(name = "transaction_id")
     private UUID id;
-    private int type;
-    private double amount;
-    private String description;
-    private Timestamp created_at;
-    private Account debitAccountId;
-    private Account creditAccountId;
 
-    public Transaction(UUID id, int type, double amount, String description,
-                       Timestamp created_at, Account debitAccountId,
-                       Account creditAccountId) {
+    @Column(name = "transaction_type")
+    private TransactionType type;
+
+    @Column(name = "amount")
+    private double amount;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "debit_account_id")
+    private Account debitAccount;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "credit_account_id")
+    private Account creditAccount;
+
+    public Transaction(UUID id, TransactionType type, double amount, String description, Timestamp createdAt, Account debitAccount, Account creditAccount) {
         this.id = id;
         this.type = type;
         this.amount = amount;
         this.description = description;
-        this.created_at = created_at;
-        //this.debitAccountId = debitAccountId.getId();
-        //this.creditAccountId = creditAccountId.getClient_id();
+        this.createdAt = createdAt;
+        this.debitAccount = debitAccount;
+        this.creditAccount = creditAccount;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Transaction that)) return false;
-        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(debitAccountId, that.debitAccountId) && Objects.equals(creditAccountId, that.creditAccountId);
+        return type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, debitAccountId, creditAccountId);
+        return Objects.hash(type);
     }
 
     @Override
@@ -50,9 +73,9 @@ public class Transaction {
                 ", type=" + type +
                 ", amount=" + amount +
                 ", description='" + description + '\'' +
-                ", created_at=" + created_at +
-                ", debit_account_id=" + debitAccountId +
-                ", credit_account_id=" + creditAccountId +
+                ", createdAt=" + createdAt +
+                ", debitAccount=" + debitAccount +
+                ", creditAccount=" + creditAccount +
                 '}';
     }
 }
