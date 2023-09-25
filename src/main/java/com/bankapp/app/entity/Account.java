@@ -50,9 +50,9 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
-    private List<Client> clients;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
             orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
@@ -69,7 +69,7 @@ public class Account {
     public Account(UUID id, String name, AccountType type,
                    AccountStatus status, CurrencyCode currencyCode,
                    float balance, Timestamp createdAt,
-                   Timestamp updatedAt, List<Client> clients,
+                   Timestamp updatedAt, Client client,
                    List<Agreement> agreementList,
                    Set<Transaction> debitTransaction,
                    Set<Transaction> creditTransaction) {
@@ -81,7 +81,7 @@ public class Account {
         this.balance = balance;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.clients = clients;
+        this.client = client;
         this.agreementList = agreementList;
         this.debitTransaction = debitTransaction;
         this.creditTransaction = creditTransaction;
@@ -110,7 +110,7 @@ public class Account {
                 ", balance=" + balance +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", clients=" + clients +
+                ", clients=" + client +
                 ", agreementList=" + agreementList +
                 ", debitTransaction=" + debitTransaction +
                 ", creditTransaction=" + creditTransaction +

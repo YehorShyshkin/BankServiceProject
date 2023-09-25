@@ -42,7 +42,7 @@ public class Manager {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Client> clients;
 
     @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
