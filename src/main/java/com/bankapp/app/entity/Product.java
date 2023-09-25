@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
@@ -36,10 +37,10 @@ public class Product {
     private CurrencyCode currencyCode; // Код валюты продукта (используется перечисление CurrencyCode).
 
     @Column(name = "interest_rate")
-    private double interestRate; // Процентная ставка, связанная с продуктом.
+    private BigDecimal interestRate; // Процентная ставка, связанная с продуктом.
 
     @Column(name = "product_limit")
-    private int productLimit; // Лимит, связанный с продуктом.
+    private BigDecimal productLimit; // Лимит, связанный с продуктом.
 
     @Column(name = "created_at")
     private Timestamp createdAt; // Временная метка создания продукта.
@@ -49,16 +50,15 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
-    // Здесь указывается имя столбца, который будет использоваться для связи с таблицей Manager
     private Manager manager;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
             orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
     private List<Agreement> agreements;
 
-
-    public Product(UUID id, String name, ProductStatus status, CurrencyCode currencyCode, double interestRate,
-                   int productLimit, Timestamp createdAt,
+    public Product(UUID id, String name, ProductStatus status,
+                   CurrencyCode currencyCode, BigDecimal interestRate,
+                   BigDecimal productLimit, Timestamp createdAt,
                    Timestamp updatedAt, Manager manager,
                    List<Agreement> agreements) {
         this.id = id;

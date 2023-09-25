@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
-
-import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "transactions")
@@ -18,7 +17,6 @@ import static jakarta.persistence.CascadeType.*;
 @Getter
 @Setter
 public class Transaction {
-
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "transaction_id")
@@ -28,7 +26,7 @@ public class Transaction {
     private TransactionType type;
 
     @Column(name = "amount")
-    private double amount;
+    private BigDecimal amount;
 
     @Column(name = "description")
     private String description;
@@ -44,7 +42,10 @@ public class Transaction {
     @JoinColumn(name = "credit_account_id")
     private Account creditAccount;
 
-    public Transaction(UUID id, TransactionType type, double amount, String description, Timestamp createdAt, Account debitAccount, Account creditAccount) {
+    public Transaction(UUID id, TransactionType type,
+                       BigDecimal amount, String description,
+                       Timestamp createdAt, Account debitAccount,
+                       Account creditAccount) {
         this.id = id;
         this.type = type;
         this.amount = amount;
