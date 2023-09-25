@@ -53,17 +53,18 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToOne(mappedBy = "clients", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
-    private Account account;
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<Account> accounts;
 
-    @OneToOne(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
-    private Manager managers;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
     public Client(UUID id, ClientStatus status, String taxCode, String firstName,
                   String lastName, String email, String address, String phone,
-                  Timestamp createdAt, Timestamp updatedAt, Account account, Manager managers) {
+                  Timestamp createdAt, Timestamp updatedAt,
+                  List<Account> accounts, Manager manager) {
         this.id = id;
         this.status = status;
         this.taxCode = taxCode;
@@ -74,8 +75,8 @@ public class Client {
         this.phoneNumber = phone;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.account = account;
-        this.managers = managers;
+        this.accounts = accounts;
+        this.manager = manager;
     }
 
     @Override
@@ -103,8 +104,8 @@ public class Client {
                 ", phone='" + phoneNumber + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", accounts=" + account +
-                ", manager=" + managers +
+                ", accounts=" + accounts +
+                ", manager=" + manager +
                 '}';
     }
 }

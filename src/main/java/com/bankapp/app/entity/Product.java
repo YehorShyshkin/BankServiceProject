@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
@@ -50,9 +52,10 @@ public class Product {
     // Здесь указывается имя столбца, который будет использоваться для связи с таблицей Manager
     private Manager manager;
 
-    @OneToMany(mappedBy = "agreements", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
+            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
     private List<Agreement> agreements;
+
 
     public Product(UUID id, String name, ProductStatus status, CurrencyCode currencyCode, double interestRate,
                    int productLimit, Timestamp createdAt,
