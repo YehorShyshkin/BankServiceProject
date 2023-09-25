@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,13 +25,13 @@ public class Agreement {
     private UUID id;
 
     @Column(name = "interest_rate")
-    private double interestRate;
+    private BigDecimal interestRate;
 
     @Column(name = "status")
     private AccountStatus status;
 
     @Column(name = "sum")
-    private double sum;
+    private BigDecimal sum;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -46,8 +47,8 @@ public class Agreement {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Agreement(UUID id, double interestRate, AccountStatus status,
-                     double sum, Timestamp createdAt,
+    public Agreement(UUID id, BigDecimal interestRate, AccountStatus status,
+                     BigDecimal sum, Timestamp createdAt,
                      Timestamp updatedAt,
                      Product product,
                      Account account) {
@@ -65,12 +66,12 @@ public class Agreement {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Agreement agreement)) return false;
-        return Double.compare(interestRate, agreement.interestRate) == 0 && status == agreement.status;
+        return status == agreement.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(interestRate, status);
+        return Objects.hash(status);
     }
 
     @Override
