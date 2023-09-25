@@ -22,7 +22,6 @@ public class Manager {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
 

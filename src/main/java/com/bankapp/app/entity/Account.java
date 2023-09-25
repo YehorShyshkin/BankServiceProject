@@ -42,7 +42,7 @@ public class Account {
     private CurrencyCode currencyCode;
 
     @Column(name = "balance")
-    private float balance;
+    private BigDecimal balance;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -68,7 +68,7 @@ public class Account {
 
     public Account(UUID id, String name, AccountType type,
                    AccountStatus status, CurrencyCode currencyCode,
-                   float balance, Timestamp createdAt,
+                   BigDecimal balance, Timestamp createdAt,
                    Timestamp updatedAt, Client client,
                    List<Agreement> agreementList,
                    Set<Transaction> debitTransaction,
