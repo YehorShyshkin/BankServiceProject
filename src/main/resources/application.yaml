@@ -7,12 +7,14 @@ spring:
      username: root
      password: 08Berloga
      driver-class-name: com.mysql.cj.jdbc.Driver
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
-#    defer-datasource-initialization: false
-#    open-in-view: false
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: false
+    open-in-view: false
 
-#  liquibase:
-#    change-log: classpath:
+  liquibase:
+    change-log: classpath:/db/changelog-master.xml
+
+

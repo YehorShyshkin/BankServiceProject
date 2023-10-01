@@ -20,7 +20,6 @@ public class Agreement {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
 
@@ -28,6 +27,7 @@ public class Agreement {
     private BigDecimal interestRate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @Column(name = "sum")

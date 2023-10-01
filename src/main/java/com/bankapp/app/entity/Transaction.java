@@ -23,6 +23,7 @@ public class Transaction {
     private UUID id;
 
     @Column(name = "transaction_type")
+    @Enumerated(EnumType.STRING)
     private TransactionType type;
 
     @Column(name = "amount")
