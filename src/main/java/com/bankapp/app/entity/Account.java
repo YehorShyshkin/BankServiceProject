@@ -33,12 +33,15 @@ public class Account {
     private String name;
 
     @Column(name = "account_type")
+    @Enumerated(EnumType.STRING)
     private AccountType type;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @Column(name = "currency_code")
+    @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode;
 
     @Column(name = "balance")

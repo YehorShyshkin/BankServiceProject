@@ -20,11 +20,11 @@ public class Client {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
 
     @Column(name = "client_status")
+    @Enumerated(EnumType.STRING)
     private ClientStatus status;
 
     @Column(name = "tax_code")

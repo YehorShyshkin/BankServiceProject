@@ -32,6 +32,7 @@ public class Manager {
     private String lastName;
 
     @Column(name = "manager_status")
+    @Enumerated(EnumType.STRING)
     private ManagerStatus status;
 
     @Column(name = "created_at")

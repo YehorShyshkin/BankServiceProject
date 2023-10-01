@@ -31,9 +31,11 @@ public class Product {
     private String name; // Название продукта.
 
     @Column(name = "product_status")
+    @Enumerated(EnumType.STRING)
     private ProductStatus status; // Статус продукта (используется перечисление ProductStatus).
 
     @Column(name = "currency_code")
+    @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode; // Код валюты продукта (используется перечисление CurrencyCode).
 
     @Column(name = "interest_rate")
