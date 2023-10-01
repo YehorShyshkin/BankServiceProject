@@ -20,12 +20,12 @@ public class Client {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
 
     @Column(name = "client_status")
-    private ClientStatus status;
+    @Enumerated(EnumType.STRING)
+    private ClientStatus clientStatus;
 
     @Column(name = "tax_code")
     private String taxCode;
@@ -51,20 +51,19 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "client")
     private List<Account> accounts;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    public Client(UUID id, ClientStatus status, String taxCode, String firstName,
+    public Client(UUID id, ClientStatus clientStatus, String taxCode, String firstName,
                   String lastName, String email, String address, String phone,
                   Timestamp createdAt, Timestamp updatedAt,
                   List<Account> accounts, Manager manager) {
         this.id = id;
-        this.status = status;
+        this.clientStatus = clientStatus;
         this.taxCode = taxCode;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -93,7 +92,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", status=" + status +
+                ", status=" + clientStatus +
                 ", taxCode=" + taxCode +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

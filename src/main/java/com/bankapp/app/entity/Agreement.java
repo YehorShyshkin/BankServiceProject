@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "agreement")
+@Table(name = "agreements")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -20,7 +20,6 @@ public class Agreement {
 
     @Id
     @GeneratedValue(generator = "UUID")
-
     @Column(name = "id")
     private UUID id;
 
@@ -28,10 +27,11 @@ public class Agreement {
     private BigDecimal interestRate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
     @Column(name = "sum")
-    private BigDecimal sum;
+    private BigDecimal agreementSum;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -40,22 +40,23 @@ public class Agreement {
     private Timestamp updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
     public Agreement(UUID id, BigDecimal interestRate, AccountStatus status,
-                     BigDecimal sum, Timestamp createdAt,
+                     BigDecimal agreementSum, Timestamp createdAt,
                      Timestamp updatedAt,
                      Product product,
                      Account account) {
         this.id = id;
         this.interestRate = interestRate;
         this.status = status;
-        this.sum = sum;
+        this.agreementSum = agreementSum;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.product = product;
@@ -80,7 +81,7 @@ public class Agreement {
                 "id=" + id +
                 ", interestRate=" + interestRate +
                 ", status=" + status +
-                ", sum=" + sum +
+                ", sum=" + agreementSum +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", products=" + product +

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "products")
@@ -31,9 +30,11 @@ public class Product {
     private String name; // Название продукта.
 
     @Column(name = "product_status")
+    @Enumerated(EnumType.STRING)
     private ProductStatus status; // Статус продукта (используется перечисление ProductStatus).
 
     @Column(name = "currency_code")
+    @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode; // Код валюты продукта (используется перечисление CurrencyCode).
 
     @Column(name = "interest_rate")
@@ -49,11 +50,10 @@ public class Product {
     private Timestamp updatedAt; // Временная метка обновления продукта.
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @OneToMany(mappedBy = "product")
     private List<Agreement> agreements;
 
     public Product(UUID id, String name, ProductStatus status,
