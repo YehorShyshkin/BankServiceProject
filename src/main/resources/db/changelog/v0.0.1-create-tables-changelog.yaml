@@ -1,0 +1,294 @@
+databaseChangeLog:
+  - changeSet:
+      id: create managers table
+      author: admin
+      changes:
+        - createTable:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: manager_status
+                  type: varchar(50)
+                  constraints:
+                    unique: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create products table
+      author: admin
+      changes:
+        - createTable:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(70)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency_code
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: interest_rate
+                  type: decimal(6,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_limit
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manager_id
+                  type: binary(16)
+  - changeSet:
+      id: create clients table
+      author: admin
+      changes:
+        - createTable:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: client_status
+                  type: varchar(20)
+                  constraints:
+                    unique: false
+              - column:
+                  name: tax_code
+                  type: varchar(16)
+                  constraints:
+                    unique: false
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: address
+                  type: varchar(80)
+                  constraints:
+                    nullable: false
+                    unique: false
+              - column:
+                  name: phone_number
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    unique: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    unique: false
+              - column:
+                  name: manager_id
+                  type: binary(16)
+  - changeSet:
+      id: create accounts table
+      author: admin
+      changes:
+        - createTable:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: account_type
+                  type: varchar(50)
+                  constraints:
+                    unique: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    unique: false
+              - column:
+                  name: currency_code
+                  type: varchar(50)
+                  constraints:
+                    unique: false
+              - column:
+                  name: balance
+                  type: decimal(15,2)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: binary(16)
+  - changeSet:
+      id: create agreements table
+      author: admin
+      changes:
+        - createTable:
+            tableName: agreements
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: interest_rate
+                  type: decimal(6,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    unique: false
+              - column:
+                  name: sum
+                  type: decimal(15,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product_id
+                  type: binary(16)
+              - column:
+                  name: account_id
+                  type: binary(16)
+
+  - changeSet:
+      id: create transactions table
+      author: admin
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: transaction_type
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+              - column:
+                  name: amount
+                  type: decimal(12,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  constraints:
+                    unique: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: debit_account_id
+                  type: binary(16)
+              - column:
+                  name: credit_account_id
+                  type: binary(16)

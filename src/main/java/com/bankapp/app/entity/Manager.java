@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.*;
-
 @Entity
 @Table(name = "managers")
 @NoArgsConstructor
@@ -26,14 +24,14 @@ public class Manager {
     private UUID id;
 
     @Column(name = "first_name")
-    private String firstName;
+    private String managerFirstName;
 
     @Column(name = "last_name")
-    private String lastName;
+    private String managerLastName;
 
     @Column(name = "manager_status")
     @Enumerated(EnumType.STRING)
-    private ManagerStatus status;
+    private ManagerStatus managerStatus;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -41,48 +39,46 @@ public class Manager {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Client> clients;
+    @OneToMany(mappedBy = "manager")
+    private List<Client> listClients;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
-    private List<Product> products;
+    @OneToMany(mappedBy = "manager")
+    private List<Product> listProducts;
 
-    public Manager(UUID id, String firstName, String last_name, ManagerStatus status, Timestamp createdAt, Timestamp updatedAt, List<Client> clients, List<Product> products) {
+    public Manager(UUID id, String managerFirstName, String last_name, ManagerStatus managerStatus, Timestamp createdAt, Timestamp updatedAt, List<Client> listClients, List<Product> listProducts) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = last_name;
-        this.status = status;
+        this.managerFirstName = managerFirstName;
+        this.managerLastName = last_name;
+        this.managerStatus = managerStatus;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.clients = clients;
-        this.products = products;
+        this.listClients = listClients;
+        this.listProducts = listProducts;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Manager manager)) return false;
-        return Objects.equals(firstName, manager.firstName) && Objects.equals(lastName, manager.lastName);
+        return Objects.equals(managerFirstName, manager.managerFirstName) && Objects.equals(managerLastName, manager.managerLastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName);
+        return Objects.hash(managerFirstName, managerLastName);
     }
 
     @Override
     public String toString() {
         return "Manager{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", last_name='" + lastName + '\'' +
-                ", status=" + status +
+                ", firstName='" + managerFirstName + '\'' +
+                ", last_name='" + managerLastName + '\'' +
+                ", status=" + managerStatus +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", clients=" + clients +
-                ", products=" + products +
+                ", clients=" + listClients +
+                ", products=" + listProducts +
                 '}';
     }
 }

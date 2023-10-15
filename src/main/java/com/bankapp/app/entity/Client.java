@@ -25,16 +25,16 @@ public class Client {
 
     @Column(name = "client_status")
     @Enumerated(EnumType.STRING)
-    private ClientStatus status;
+    private ClientStatus clientStatus;
 
     @Column(name = "tax_code")
     private String taxCode;
 
     @Column(name = "first_name")
-    private String firstName;
+    private String clientFirstName;
 
     @Column(name = "last_name")
-    private String lastName;
+    private String clientLastName;
 
     @Column(name = "email")
     private String email;
@@ -51,23 +51,22 @@ public class Client {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "client")
     private List<Account> accounts;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    public Client(UUID id, ClientStatus status, String taxCode, String firstName,
-                  String lastName, String email, String address, String phone,
+    public Client(UUID id, ClientStatus clientStatus, String taxCode, String clientFirstName,
+                  String clientLastName, String email, String address, String phone,
                   Timestamp createdAt, Timestamp updatedAt,
                   List<Account> accounts, Manager manager) {
         this.id = id;
-        this.status = status;
+        this.clientStatus = clientStatus;
         this.taxCode = taxCode;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.clientFirstName = clientFirstName;
+        this.clientLastName = clientLastName;
         this.email = email;
         this.address = address;
         this.phoneNumber = phone;
@@ -81,22 +80,22 @@ public class Client {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Client client)) return false;
-        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phoneNumber, client.phoneNumber); // Исправлено на phoneNumber
+        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phoneNumber, client.phoneNumber);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taxCode, phoneNumber); // Исправлено на phoneNumber
+        return Objects.hash(taxCode, phoneNumber);
     }
 
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", status=" + status +
+                ", status=" + clientStatus +
                 ", taxCode=" + taxCode +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                ", firstName='" + clientFirstName + '\'' +
+                ", lastName='" + clientLastName + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
                 ", phone='" + phoneNumber + '\'' +
