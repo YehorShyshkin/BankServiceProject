@@ -3,6 +3,7 @@ package com.bankapp.app.entity;
 import com.bankapp.app.enums.AccountStatus;
 import com.bankapp.app.enums.AccountType;
 import com.bankapp.app.enums.CurrencyCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,20 +54,21 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @JsonIgnore
+    @OneToMany(mappedBy = "account")
     private List<Agreement> agreementList;
 
-    @OneToMany(mappedBy = "debitAccount", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @JsonIgnore
+    @OneToMany(mappedBy = "debitAccount")
     private Set<Transaction> debitTransaction;
 
-    @OneToMany(mappedBy = "creditAccount", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @JsonIgnore
+    @OneToMany(mappedBy = "creditAccount")
     private Set<Transaction> creditTransaction;
 
     public Account(UUID id, String name, AccountType type,

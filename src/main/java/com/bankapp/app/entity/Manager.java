@@ -41,12 +41,10 @@ public class Manager {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "manager")
     private List<Client> clients;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @OneToMany(mappedBy = "manager")
     private List<Product> products;
 
     public Manager(UUID id, String firstName, String last_name, ManagerStatus status, Timestamp createdAt, Timestamp updatedAt, List<Client> clients, List<Product> products) {

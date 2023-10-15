@@ -51,11 +51,10 @@ public class Product {
     private Timestamp updatedAt; // Временная метка обновления продукта.
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY,
-            orphanRemoval = true, cascade = {MERGE, PERSIST, REFRESH})
+    @OneToMany(mappedBy = "product")
     private List<Agreement> agreements;
 
     public Product(UUID id, String name, ProductStatus status,

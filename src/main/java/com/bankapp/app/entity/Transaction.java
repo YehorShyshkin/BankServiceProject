@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "transactions")
 @NoArgsConstructor
@@ -19,7 +21,7 @@ import java.util.UUID;
 public class Transaction {
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "transaction_id")
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "transaction_type")
@@ -35,12 +37,12 @@ public class Transaction {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "debit_account_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {MERGE, PERSIST, REFRESH})
+    @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
     private Account debitAccount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "credit_account_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {MERGE, PERSIST, REFRESH})
+    @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
     private Account creditAccount;
 
     public Transaction(UUID id, TransactionType type,
