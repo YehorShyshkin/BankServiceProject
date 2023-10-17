@@ -25,7 +25,7 @@ public class Client {
 
     @Column(name = "client_status")
     @Enumerated(EnumType.STRING)
-    private ClientStatus status;
+    private ClientStatus clientStatus;
 
     @Column(name = "tax_code")
     private String taxCode;
@@ -58,12 +58,12 @@ public class Client {
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    public Client(UUID id, ClientStatus status, String taxCode, String firstName,
+    public Client(UUID id, ClientStatus clientStatus, String taxCode, String firstName,
                   String lastName, String email, String address, String phone,
                   Timestamp createdAt, Timestamp updatedAt,
                   List<Account> accounts, Manager manager) {
         this.id = id;
-        this.status = status;
+        this.clientStatus = clientStatus;
         this.taxCode = taxCode;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -92,7 +92,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", status=" + status +
+                ", status=" + clientStatus +
                 ", taxCode=" + taxCode +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

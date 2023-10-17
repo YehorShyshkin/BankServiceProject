@@ -16,8 +16,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.*;
-
 @Entity
 @Table(name = "accounts")
 @NoArgsConstructor
@@ -31,22 +29,22 @@ public class Account {
     private UUID id;
 
     @Column(name = "name")
-    private String name;
+    private String accountName;
 
     @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
-    private AccountType type;
+    private AccountType accountType;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private AccountStatus status;
+    private AccountStatus accountStatus;
 
     @Column(name = "currency_code")
     @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode;
 
     @Column(name = "balance")
-    private BigDecimal balance;
+    private BigDecimal accountBalance;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -54,36 +52,36 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "account")
     private List<Agreement> agreementList;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "debitAccount")
     private Set<Transaction> debitTransaction;
 
-    @JsonIgnore
+    //@JsonIgnore
     @OneToMany(mappedBy = "creditAccount")
     private Set<Transaction> creditTransaction;
 
-    public Account(UUID id, String name, AccountType type,
-                   AccountStatus status, CurrencyCode currencyCode,
-                   BigDecimal balance, Timestamp createdAt,
+    public Account(UUID id, String accountName, AccountType accountType,
+                   AccountStatus accountStatus, CurrencyCode currencyCode,
+                   BigDecimal accountBalance, Timestamp createdAt,
                    Timestamp updatedAt, Client client,
                    List<Agreement> agreementList,
                    Set<Transaction> debitTransaction,
                    Set<Transaction> creditTransaction) {
         this.id = id;
-        this.name = name;
-        this.type = type;
-        this.status = status;
+        this.accountName = accountName;
+        this.accountType = accountType;
+        this.accountStatus = accountStatus;
         this.currencyCode = currencyCode;
-        this.balance = balance;
+        this.accountBalance = accountBalance;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.client = client;
@@ -96,23 +94,23 @@ public class Account {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Account account)) return false;
-        return Objects.equals(name, account.name) && status == account.status;
+        return Objects.equals(accountName, account.accountName) && accountStatus == account.accountStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, status);
+        return Objects.hash(accountName, accountStatus);
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", type=" + type +
-                ", status=" + status +
+                ", name='" + accountName + '\'' +
+                ", type=" + accountType +
+                ", status=" + accountStatus +
                 ", currencyCode=" + currencyCode +
-                ", balance=" + balance +
+                ", balance=" + accountBalance +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", clients=" + client +
