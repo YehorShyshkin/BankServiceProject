@@ -16,11 +16,8 @@ public interface AccountMapper {
     @Mapping(source = "accountBalance", target = "accountBalance")
     @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "client.clientStatus", target = "clientStatus")
-    @Mapping(source = "client.firstName", target = "firstName")
-    @Mapping(source = "client.lastName", target = "lastName")
-/*
-    @Mapping(source = "agreementList.agreementSum", target = "agreementSum")
-*/
+    @Mapping(source = "client.clientLastName", target = "clientLastName")
+
     AccountDTO toDo(Account id);
 
     List<AccountDTO> toDo(List<Account> accountList);

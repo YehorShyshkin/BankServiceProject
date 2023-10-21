@@ -21,6 +21,5 @@ public class AccountDTO {
      * Client
      */
     private String clientStatus;
-    private String firstName;
-    private String lastName;
+    private String clientLastName;
 }
