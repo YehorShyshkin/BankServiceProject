@@ -19,6 +19,7 @@ import static jakarta.persistence.CascadeType.*;
 @Getter
 @Setter
 public class Transaction {
+
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
