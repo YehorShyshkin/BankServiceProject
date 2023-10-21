@@ -27,18 +27,18 @@ public class Product {
     private UUID id; // Уникальный идентификатор продукта (обычно UUID).
 
     @Column(name = "name")
-    private String name; // Название продукта.
+    private String productName; // Название продукта.
 
     @Column(name = "product_status")
     @Enumerated(EnumType.STRING)
-    private ProductStatus status; // Статус продукта (используется перечисление ProductStatus).
+    private ProductStatus productStatus; // Статус продукта (используется перечисление ProductStatus).
 
     @Column(name = "currency_code")
     @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode; // Код валюты продукта (используется перечисление CurrencyCode).
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate; // Процентная ставка, связанная с продуктом.
+    private BigDecimal productInterestRate; // Процентная ставка, связанная с продуктом.
 
     @Column(name = "product_limit")
     private BigDecimal productLimit; // Лимит, связанный с продуктом.
@@ -56,16 +56,16 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<Agreement> agreements;
 
-    public Product(UUID id, String name, ProductStatus status,
-                   CurrencyCode currencyCode, BigDecimal interestRate,
+    public Product(UUID id, String productName, ProductStatus productStatus,
+                   CurrencyCode currencyCode, BigDecimal productInterestRate,
                    BigDecimal productLimit, Timestamp createdAt,
                    Timestamp updatedAt, Manager manager,
                    List<Agreement> agreements) {
         this.id = id;
-        this.name = name;
-        this.status = status;
+        this.productName = productName;
+        this.productStatus = productStatus;
         this.currencyCode = currencyCode;
-        this.interestRate = interestRate;
+        this.productInterestRate = productInterestRate;
         this.productLimit = productLimit;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -77,22 +77,22 @@ public class Product {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Product product)) return false;
-        return Objects.equals(name, product.name);
+        return Objects.equals(productName, product.productName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(productName);
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
+                ", name='" + productName + '\'' +
+                ", status=" + productStatus +
                 ", currencyCode=" + currencyCode +
-                ", interestRate=" + interestRate +
+                ", interestRate=" + productInterestRate +
                 ", productLimit=" + productLimit +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

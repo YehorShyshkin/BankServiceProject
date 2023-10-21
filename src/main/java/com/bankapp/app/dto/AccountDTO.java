@@ -7,7 +7,6 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class AccountDTO {
-
     /**
      * Account
      */
@@ -21,17 +20,7 @@ public class AccountDTO {
     /**
      * Client
      */
-
     private String clientStatus;
     private String firstName;
     private String lastName;
-
-    /**
-     * Agreement
-     */
-
-/*
-    private String agreementSum;
-*/
-
 }
