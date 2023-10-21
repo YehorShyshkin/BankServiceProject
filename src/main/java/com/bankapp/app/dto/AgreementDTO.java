@@ -42,5 +42,5 @@ public class AgreementDTO {
      * Client
      */
     private String clientStatus;
-    private String firstName;
+    private String clientLastName;
 }
