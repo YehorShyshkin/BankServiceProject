@@ -11,8 +11,6 @@ import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.UUID;
 
-import static jakarta.persistence.CascadeType.*;
-
 @Entity
 @Table(name = "transactions")
 @NoArgsConstructor
@@ -27,60 +25,60 @@ public class Transaction {
 
     @Column(name = "transaction_type")
     @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    private TransactionType transactionType;
 
     @Column(name = "amount")
-    private BigDecimal amount;
+    private BigDecimal transactionAmount;
 
     @Column(name = "description")
-    private String description;
+    private String transactionDescription;
 
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private Timestamp transactionCreatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
-    private Account debitAccount;
+    private Account transactionDebitAccount;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
-    private Account creditAccount;
+    private Account transactionCreditAccount;
 
-    public Transaction(UUID id, TransactionType type,
-                       BigDecimal amount, String description,
-                       Timestamp createdAt, Account debitAccount,
-                       Account creditAccount) {
+    public Transaction(UUID id, TransactionType transactionType,
+                       BigDecimal transactionAmount, String transactionDescription,
+                       Timestamp transactionCreatedAt, Account transactionDebitAccount,
+                       Account transactionCreditAccount) {
         this.id = id;
-        this.type = type;
-        this.amount = amount;
-        this.description = description;
-        this.createdAt = createdAt;
-        this.debitAccount = debitAccount;
-        this.creditAccount = creditAccount;
+        this.transactionType = transactionType;
+        this.transactionAmount = transactionAmount;
+        this.transactionDescription = transactionDescription;
+        this.transactionCreatedAt = transactionCreatedAt;
+        this.transactionDebitAccount = transactionDebitAccount;
+        this.transactionCreditAccount = transactionCreditAccount;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Transaction that)) return false;
-        return type == that.type;
+        return transactionType == that.transactionType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type);
+        return Objects.hash(transactionType);
     }
 
     @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
-                ", type=" + type +
-                ", amount=" + amount +
-                ", description='" + description + '\'' +
-                ", createdAt=" + createdAt +
-                ", debitAccount=" + debitAccount +
-                ", creditAccount=" + creditAccount +
+                ", type=" + transactionType +
+                ", amount=" + transactionAmount +
+                ", description='" + transactionDescription + '\'' +
+                ", createdAt=" + transactionCreatedAt +
+                ", debitAccount=" + transactionDebitAccount +
+                ", creditAccount=" + transactionCreditAccount +
                 '}';
     }
 }

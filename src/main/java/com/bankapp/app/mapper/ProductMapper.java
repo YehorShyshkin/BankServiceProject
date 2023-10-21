@@ -1,6 +1,5 @@
 package com.bankapp.app.mapper;
 
-import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.dto.ProductDTO;
 import com.bankapp.app.entity.Product;
 import org.mapstruct.Mapper;
