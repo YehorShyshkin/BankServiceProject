@@ -59,10 +59,10 @@ public class Account {
     @OneToMany(mappedBy = "account")
     private List<Agreement> agreementList;
 
-    @OneToMany(mappedBy = "debitAccount")
+    @OneToMany(mappedBy = "transactionDebitAccount")
     private Set<Transaction> debitTransaction;
 
-    @OneToMany(mappedBy = "creditAccount")
+    @OneToMany(mappedBy = "transactionCreditAccount")
     private Set<Transaction> creditTransaction;
 
     public Account(UUID id, String accountName, AccountType accountType,
