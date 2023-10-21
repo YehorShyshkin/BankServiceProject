@@ -18,7 +18,6 @@ public class AccountController {
 
     private final AccountService accountService;
 
-
     @GetMapping("/finding")
     public Account getAccountById(String id) {
         return accountService.getAccountById(id);
