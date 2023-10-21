@@ -52,20 +52,16 @@ public class Account {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    //@JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    //@JsonIgnore
     @OneToMany(mappedBy = "account")
     private List<Agreement> agreementList;
 
-    //@JsonIgnore
     @OneToMany(mappedBy = "debitAccount")
     private Set<Transaction> debitTransaction;
 
-    //@JsonIgnore
     @OneToMany(mappedBy = "creditAccount")
     private Set<Transaction> creditTransaction;
 

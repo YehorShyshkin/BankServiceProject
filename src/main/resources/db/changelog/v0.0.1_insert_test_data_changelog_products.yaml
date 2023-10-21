@@ -1,0 +1,137 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-products-data
+      author: admin
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('9cccf17a-6b5b-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Personal Loan"
+              - column:
+                  name: product_status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: interest_rate
+                  value: "0.0600"
+              - column:
+                  name: product_limit
+                  value: "10000"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: manager_id
+                  valueComputed: "UUID_TO_BIN('0f349214-6b5b-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-products-data2
+      author: admin
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('1c66b63e-6b5f-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Auto Loan"
+              - column:
+                  name: product_status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: interest_rate
+                  value: "0.0550"
+              - column:
+                  name: product_limit
+                  value: "20000"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: manager_id
+                  valueComputed: "UUID_TO_BIN('b9ef38a2-6b5c-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-products-data3
+      author: admin
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('370ea51e-6b5f-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Personal Loan"
+              - column:
+                  name: product_status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: interest_rate
+                  value: "0.0600"
+              - column:
+                  name: product_limit
+                  value: "15000"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 14:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 14:00:00"
+              - column:
+                  name: manager_id
+                  valueComputed: "UUID_TO_BIN('d28d955c-6b5c-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-products-data4
+      author: admin
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('52826876-6b5f-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Home Mortgage"
+              - column:
+                  name: product_status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: interest_rate
+                  value: "0.0300"
+              - column:
+                  name: product_limit
+                  value: "300000"
+              - column:
+                  name: created_at
+                  value: "2023-09-22 14:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-22 14:00:00"
+              - column:
+                  name: manager_id
+                  valueComputed: "UUID_TO_BIN('e8268ff4-6b5c-11ee-b962-0242ac120002')"

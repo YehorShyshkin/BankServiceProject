@@ -1,0 +1,137 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-accounts-data
+      author: admin
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('6ff5fa70-6b5b-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Savings Account"
+              - column:
+                  name: account_type
+                  value: "CHECKING_ACCOUNT"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: balance
+                  value: "1000.00"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: client_id
+                  valueComputed: "UUID_TO_BIN('326561aa-6b5b-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-accounts-data2
+      author: admin
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('032a7a08-6b5e-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Checking Account"
+              - column:
+                  name: account_type
+                  value: "CHECKING_ACCOUNT"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "USD"
+              - column:
+                  name: balance
+                  value: "2500.00"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: client_id
+                  valueComputed: "UUID_TO_BIN('3246c9aa-6b5d-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-accounts-data3
+      author: admin
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('2dadc140-6b5e-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "John Smith"
+              - column:
+                  name: account_type
+                  value: "CERTIFICATE_OF_DEPOSIT"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "EUR"
+              - column:
+                  name: balance
+                  value: "5000.00"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 10:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 10:00:00"
+              - column:
+                  name: client_id
+                  valueComputed: "UUID_TO_BIN('56a3dacc-6b5d-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-accounts-data4
+      author: admin
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('4c991dde-6b5e-11ee-b962-0242ac120002')"
+              - column:
+                  name: name
+                  value: "Credit Card"
+              - column:
+                  name: account_type
+                  value: "CREDIT_CARD"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: currency_code
+                  value: "GBP"
+              - column:
+                  name: balance
+                  value: "-500.00"
+              - column:
+                  name: created_at
+                  value: "2023-09-22 10:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-22 10:00:00"
+              - column:
+                  name: client_id
+                  valueComputed: "UUID_TO_BIN('73245794-6b5d-11ee-b962-0242ac120002')"

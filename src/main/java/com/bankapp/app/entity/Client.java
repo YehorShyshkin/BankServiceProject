@@ -54,7 +54,7 @@ public class Client {
     @OneToMany(mappedBy = "client")
     private List<Account> accounts;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
@@ -85,7 +85,7 @@ public class Client {
 
     @Override
     public int hashCode() {
-        return Objects.hash(taxCode, phoneNumber); // Исправлено на phoneNumber
+        return Objects.hash(taxCode, phoneNumber);
     }
 
     @Override

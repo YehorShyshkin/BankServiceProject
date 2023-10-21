@@ -24,11 +24,11 @@ public class Agreement {
     private UUID id;
 
     @Column(name = "interest_rate")
-    private BigDecimal interestRate;
+    private BigDecimal agreementInterestRate;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private AccountStatus status;
+    private AccountStatus agreementStatus;
 
     @Column(name = "sum")
     private BigDecimal agreementSum;
@@ -39,23 +39,23 @@ public class Agreement {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public Agreement(UUID id, BigDecimal interestRate, AccountStatus status,
+    public Agreement(UUID id, BigDecimal agreementInterestRate, AccountStatus agreementStatus,
                      BigDecimal agreementSum, Timestamp createdAt,
                      Timestamp updatedAt,
                      Product product,
                      Account account) {
         this.id = id;
-        this.interestRate = interestRate;
-        this.status = status;
+        this.agreementInterestRate = agreementInterestRate;
+        this.agreementStatus = agreementStatus;
         this.agreementSum = agreementSum;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -67,20 +67,20 @@ public class Agreement {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Agreement agreement)) return false;
-        return status == agreement.status;
+        return agreementStatus == agreement.agreementStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(status);
+        return Objects.hash(agreementStatus);
     }
 
     @Override
     public String toString() {
         return "Agreement{" +
                 "id=" + id +
-                ", interestRate=" + interestRate +
-                ", status=" + status +
+                ", interestRate=" + agreementInterestRate +
+                ", status=" + agreementStatus +
                 ", sum=" + agreementSum +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
