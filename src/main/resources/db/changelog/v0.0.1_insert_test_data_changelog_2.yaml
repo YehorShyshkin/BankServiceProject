@@ -1,0 +1,194 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-managers-data
+      author: admin
+      changes:
+        - insert:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: first_name
+                  value: 'Michael'
+              - column:
+                  name: last_name
+                  value: 'Johnson'
+              - column:
+                  name: manager_status
+                  value: 'ACTIVE'
+              - column:
+                  name: created_at
+                  value: '2023-09-20 15:00:00'
+              - column:
+                  name: updated_at
+                  value: '2023-09-20 15:00:00'
+  - changeSet:
+      id: insert-clients-data
+      author: admin
+      changes:
+        - insert:
+            tableName: clients
+            columns:
+              - column:
+                  name: id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: client_status
+                  value: 'ACTIVE'
+              - column:
+                  name: tax_code
+                  value: '9876543210'
+              - column:
+                  name: first_name
+                  value: 'Emily'
+              - column:
+                  name: last_name
+                  value: 'Davis'
+              - column:
+                  name: email
+                  value: 'emily@example.com'
+              - column:
+                  name: address
+                  value: '456 Elm St'
+              - column:
+                  name: phone_number
+                  value: '+1 555-987-6543'
+              - column:
+                  name: created_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: updated_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: manager_id
+                  valueComputed: (SELECT id FROM managers LIMIT 1)
+  - changeSet:
+      id: insert-accounts-data
+      author: admin
+      changes:
+        - insert:
+            tableName: accounts
+            columns:
+              - column:
+                  name: id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: name
+                  value: 'Checking Account'
+              - column:
+                  name: account_type
+                  value: 'CHECKING_ACCOUNT'
+              - column:
+                  name: status
+                  value: 'ACTIVE'
+              - column:
+                  name: currency_code
+                  value: 'USD'
+              - column:
+                  name: balance
+                  value: '2500.00'
+              - column:
+                  name: created_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: updated_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: client_id
+                  valueComputed: (SELECT id FROM clients LIMIT 1)
+  - changeSet:
+      id: insert-agreements-data
+      author: admin
+      changes:
+        - insert:
+            tableName: agreements
+            columns:
+              - column:
+                  name: id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: interest_rate
+                  value: '0.0350'
+              - column:
+                  name: status
+                  value: 'ACTIVE'
+              - column:
+                  name: sum
+                  value: '75000.00'
+              - column:
+                  name: created_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: updated_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: client_id
+                  valueComputed: (SELECT id FROM clients LIMIT 1)
+
+  - changeSet:
+      id: insert-products-data
+      author: admin
+      changes:
+        - insert:
+            tableName: products
+            columns:
+              - column:
+                  name: id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: name
+                  value: 'Auto Loan'
+              - column:
+                  name: product_status
+                  value: 'ACTIVE'
+              - column:
+                  name: currency_code
+                  value: 'USD'
+              - column:
+                  name: interest_rate
+                  value: '0.0550'
+              - column:
+                  name: product_limit
+                  value: '20000'
+              - column:
+                  name: created_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: updated_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: manager_id
+                  valueComputed: (SELECT id FROM managers LIMIT 1)
+
+  - changeSet:
+      id: insert-transactions-data
+      author: admin
+      changes:
+        - insert:
+            tableName: transactions
+            columns:
+              - column:
+                  name: transaction_id
+                  valueComputed: 'UUID_TO_BIN(UUID())'
+              - column:
+                  name: transaction_type
+                  value: 'TRANSFER'
+              - column:
+                  name: amount
+                  value: '1000.00'
+              - column:
+                  name: description
+                  value: 'Initial TRANSFER'
+              - column:
+                  name: created_at
+                  value: '2023-09-18 12:00:00'
+              - column:
+                  name: debit_account_id
+                  valueComputed: (SELECT id FROM accounts WHERE name = 'Checking Account' LIMIT 1)
+              - column:
+                  name: credit_account_id
+                  valueComputed: (SELECT id FROM accounts WHERE name = 'Checking Account' LIMIT 1)
+
+

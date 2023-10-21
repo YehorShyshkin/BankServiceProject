@@ -49,7 +49,7 @@ public class Product {
     @Column(name = "updated_at")
     private Timestamp updatedAt; // Временная метка обновления продукта.
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
