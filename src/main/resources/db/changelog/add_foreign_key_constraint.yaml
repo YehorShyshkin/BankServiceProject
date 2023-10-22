@@ -76,3 +76,25 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_transactions1_accounts
             onDelete: NO ACTION
+  - changeSet:
+      id: "cards-accounts"
+      author: admin
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+            constraintName: fk_cards1_accounts
+            onDelete: NO ACTION
+  - changeSet:
+      id: "cards1-accounts"
+      author: admin
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: account_id
+            referencedTableName: accounts
+            referencedColumnNames: id
+            constraintName: fk_cards_accounts
+            onDelete: NO ACTION
