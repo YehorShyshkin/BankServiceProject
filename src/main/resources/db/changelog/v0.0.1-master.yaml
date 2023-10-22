@@ -18,6 +18,9 @@ databaseChangeLog:
       file: db/changelog/v0.0.1_insert_test_data_changelog_accounts.yaml
       context: addAccounts
   - include:
+      file: db/changelog/v0.0.1_insert_test_data_changelog_card.yaml
+      context: addCard
+  - include:
       file: db/changelog/v0.0.1_insert_test_data_changelog_agreements.yaml
       context: addAgreements
   - include:

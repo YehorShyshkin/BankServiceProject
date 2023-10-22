@@ -26,7 +26,7 @@ public class ManagerController {
         return managerService.getManagerDTO(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/managers")
     public ResponseEntity<String> get(@PathVariable("id") String id) {
 
         String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";

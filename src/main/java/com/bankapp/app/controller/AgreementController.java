@@ -26,7 +26,7 @@ public class AgreementController {
     public AgreementDTO getAgreementDTO(@PathVariable("id") String id) {
         return agreementService.getAgreementDTO(id);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/agreements")
     public ResponseEntity<String> get(@PathVariable("id") String id) {
 
         String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";

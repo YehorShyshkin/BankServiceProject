@@ -16,34 +16,63 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+ /**
+ * Представлять собой информацию о банковских соглашениях,
+ * связанных с банковскими картами или аккаунтами.
+ */
 public class Agreement {
 
+    /**
+     * Идентификации уникальной записи или объекта в базе данных
+     */
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
     private UUID id;
 
+    /**
+     * Процентная ставка, применимая к соглашению.
+     */
     @Column(name = "interest_rate")
     private BigDecimal agreementInterestRate;
 
+    /**
+     * Текущий статус соглашения (например, активное, закрытое и т. д.).
+     */
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private AccountStatus agreementStatus;
 
+    /**
+     * Сумма соглашения, то есть сумма денег, оговоренная в соглашении.
+     */
     @Column(name = "sum")
     private BigDecimal agreementSum;
 
+    /**
+     * Дата и время создания записи о соглашении.
+     */
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    /**
+     * Дата и время последнего обновления записи о соглашении.
+     */
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    /**
+     * Означает продукт или услугу, предлагаемую банком
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
 
+    /**
+     * Это поле используется для хранения информации о банковском счете,
+     * связанном с объектом данного класса.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;

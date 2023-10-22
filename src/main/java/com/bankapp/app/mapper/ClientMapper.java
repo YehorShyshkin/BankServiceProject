@@ -2,12 +2,15 @@ package com.bankapp.app.mapper;
 
 import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.entity.Client;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
+
+@Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR, uses = {AccountMapper.class})
 public interface ClientMapper {
 
     @Mapping(source = "clientStatus", target = "clientStatus")

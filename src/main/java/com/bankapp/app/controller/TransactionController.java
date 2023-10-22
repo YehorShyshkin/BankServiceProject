@@ -26,7 +26,7 @@ public class TransactionController {
         return transactionService.getTransactionDTO(id);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/transactions")
     public ResponseEntity<String> get(@PathVariable("id") String id) {
 
         String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
