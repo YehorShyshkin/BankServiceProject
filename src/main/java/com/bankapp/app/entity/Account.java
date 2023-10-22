@@ -3,11 +3,11 @@ package com.bankapp.app.entity;
 import com.bankapp.app.enums.AccountStatus;
 import com.bankapp.app.enums.AccountType;
 import com.bankapp.app.enums.CurrencyCode;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -21,6 +21,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Account {
 
     @Id
@@ -65,13 +66,10 @@ public class Account {
     @OneToMany(mappedBy = "transactionCreditAccount")
     private Set<Transaction> creditTransaction;
 
-    public Account(UUID id, String accountName, AccountType accountType,
-                   AccountStatus accountStatus, CurrencyCode currencyCode,
-                   BigDecimal accountBalance, Timestamp createdAt,
-                   Timestamp updatedAt, Client client,
-                   List<Agreement> agreementList,
-                   Set<Transaction> debitTransaction,
-                   Set<Transaction> creditTransaction) {
+    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER)
+    private Card accountCard;
+
+    public Account(UUID id, String accountName, AccountType accountType, AccountStatus accountStatus, CurrencyCode currencyCode, BigDecimal accountBalance, Timestamp createdAt, Timestamp updatedAt, Client client, List<Agreement> agreementList, Set<Transaction> debitTransaction, Set<Transaction> creditTransaction, Card accountCard) {
         this.id = id;
         this.accountName = accountName;
         this.accountType = accountType;
@@ -84,6 +82,7 @@ public class Account {
         this.agreementList = agreementList;
         this.debitTransaction = debitTransaction;
         this.creditTransaction = creditTransaction;
+        this.accountCard = accountCard;
     }
 
     @Override
@@ -96,23 +95,5 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(accountName, accountStatus);
-    }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "id=" + id +
-                ", name='" + accountName + '\'' +
-                ", type=" + accountType +
-                ", status=" + accountStatus +
-                ", currencyCode=" + currencyCode +
-                ", balance=" + accountBalance +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", clients=" + client +
-                ", agreementList=" + agreementList +
-                ", debitTransaction=" + debitTransaction +
-                ", creditTransaction=" + creditTransaction +
-                '}';
     }
 }

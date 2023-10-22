@@ -209,6 +209,81 @@ databaseChangeLog:
                   name: client_id
                   type: binary(16)
   - changeSet:
+      id: create cards table
+      author: admin
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: binary(16)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: card_number
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: holder_name
+                  type: varchar(250)
+              - column:
+                  name: expiration_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: decimal(15,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: transaction_limit
+                  type: decimal(15,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: delivery_point
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_digital_wallet
+                  type: boolean
+              - column:
+                  name: is_virtual_wallet
+                  type: boolean
+              - column:
+                  name: co_brand
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: payment_system
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: account_id
+                  type: binary(16)
+  - changeSet:
       id: create agreements table
       author: admin
       changes:
@@ -252,7 +327,6 @@ databaseChangeLog:
               - column:
                   name: account_id
                   type: binary(16)
-
   - changeSet:
       id: create transactions table
       author: admin
