@@ -25,41 +25,83 @@ public class Card {
     @Column(name = "id")
     private UUID id;
 
+    /**
+     * Номер карты
+     */
     @Column(name = "card_number")
     private String cardNumber;
 
+    /**
+     * Имя держателя
+     */
     @Column(name = "holder_name")
     private String holderName;
+
+    /**
+     * Срок действия карты
+     */
 
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
+    /**
+     * Баланс карты
+     */
     @Column(name = "balance")
     private BigDecimal cardBalance;
 
+    /**
+     * Лимит на сумму транзакций, которые могут быть совершены с данной
+     * банковской карты.
+     */
     @Column(name = "transaction_limit")
     private BigDecimal cardTransactionLimit;
 
+    /**
+     * Имя получателя денег
+     */
     @Column(name = "delivery_point")
     private String cardDeliveryPoint;
 
+    /**
+     * Является ли банковская карта цифровым кошельком
+     */
     @Column(name = "is_digital_wallet")
     private boolean cardDigitalWallet;
 
+    /**
+     * Является ли банковская карта виртуальным кошельком
+     */
     @Column(name = "is_virtual_wallet")
     private boolean cardVirtualWallet;
 
+    /**
+     * Через что была проведена транзакция
+     */
     @Column(name = "co_brand")
     private String cardCoBrand;
 
+    /**
+     * Указывает на платежную систему, к которой относится данная банковская карта.
+     */
     @Column(name = "payment_system")
     @Enumerated(EnumType.STRING)
     private PaymentSystem cardPaymentSystem;
 
+    /**
+     * Указывает на текущий статус банковской карты
+     */
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private CardStatus cardStatus;
 
+    /**
+     * Это ссылка на связанный счет, к которому привязана данная банковская карта.
+     * Он обозначает связь между банковской картой и банковским счетом,
+     * на котором хранятся деньги. Благодаря этой связи система знает,
+     * с каким счетом ассоциированы финансовые операции,
+     * производимые с помощью данной карты.
+     */
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
