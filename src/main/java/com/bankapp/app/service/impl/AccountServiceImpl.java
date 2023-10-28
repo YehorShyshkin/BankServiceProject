@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -19,24 +21,30 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
+
     @Override
     @Transactional
     public Account getAccountById(String id) {
         return accountRepository.findById(UUID.fromString(id)).orElseThrow();
     }
+
     @Override
     @Transactional
     public AccountDTO getAccountDTO(String id) {
-        return accountMapper.toDTO(accountRepository.findById(UUID.fromString(id)).orElseThrow());
+        Optional<Account> accountOptional = accountRepository.findById(UUID.fromString(id));
+        Account account = accountOptional.orElseThrow(() -> new NoSuchElementException("Account not found!"));
+        return accountMapper.toDTO(account);
     }
+
     @Override
     @Transactional
     public List<AccountDTO> findAll() {
         return accountMapper.toDTO(accountRepository.findAll());
     }
+
     @Override
     @Transactional
     public Account getById(String id) {
-        return accountRepository.getById(UUID.fromString(id));
+        return accountRepository.getReferenceById(UUID.fromString(id));
     }
 }

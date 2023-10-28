@@ -1,7 +1,7 @@
 package com.bankapp.app.service.impl;
 
-import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.dto.ProductDTO;
+import com.bankapp.app.entity.Product;
 import com.bankapp.app.mapper.ProductMapper;
 import com.bankapp.app.repository.ProductRepository;
 import com.bankapp.app.service.ProductService;
@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +27,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO getProductDTO(String id) {
-        return productMapper.toDTO(productRepository.findById(UUID.fromString(id)).orElseThrow());
+        Optional<Product> productOptional = productRepository.findById(UUID.fromString(id));
+        Product product = productOptional.orElseThrow(() -> new NoSuchElementException("Product not found!"));
+        return productMapper.toDTO(product);
     }
+
+
 }

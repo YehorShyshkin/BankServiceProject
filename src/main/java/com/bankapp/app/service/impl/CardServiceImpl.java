@@ -1,6 +1,7 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.CardDTO;
+import com.bankapp.app.entity.Card;
 import com.bankapp.app.mapper.CardMapper;
 import com.bankapp.app.repository.CardRepository;
 import com.bankapp.app.service.CardService;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -24,6 +27,8 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDTO getCardDTO(String id) {
-        return cardMapper.toDTO(cardRepository.findById(UUID.fromString(id)).orElseThrow());
+        Optional<Card> cardOptional = cardRepository.findById(UUID.fromString(id));
+        Card card = cardOptional.orElseThrow(() -> new NoSuchElementException("Card not found"));
+        return cardMapper.toDTO(card);
     }
 }
