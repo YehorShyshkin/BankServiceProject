@@ -8,9 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.security.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -22,6 +24,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+
 /**
  * Это сущность, которая представляет собой аккаунт (счет) в банковской системе.
  * Эта сущность содержит информацию о конкретном счете и связанных с ним данных.
@@ -77,13 +80,15 @@ public class Account {
     /**
      * Дата и время создания счета.
      */
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp createdAt;
 
     /**
      * Дата и временя последнего обновления записи в базе данных.
      */
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
     /**
@@ -96,7 +101,7 @@ public class Account {
     /**
      * Список договоров или соглашений, связанных с этим счетом.
      */
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<Agreement> agreementList;
 
     /**

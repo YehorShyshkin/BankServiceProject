@@ -1,6 +1,7 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.entity.Client;
 import com.bankapp.app.mapper.ClientMapper;
 import com.bankapp.app.repository.ClientRepository;
 import com.bankapp.app.service.ClientService;
@@ -8,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -21,8 +24,12 @@ public class ClientServiceImpl implements ClientService {
     public List<ClientDTO> findAll() {
         return clientMapper.toDTO(clientRepository.findAll());
     }
+
     @Override
     public ClientDTO getClientDTO(String id) {
-        return clientMapper.toDTO(clientRepository.findById(UUID.fromString(id)).orElseThrow());
+        Optional<Client> clientOptional = clientRepository.findById(UUID.fromString(id));
+        Client client = clientOptional.orElseThrow(() -> new NoSuchElementException("Client not found!"));
+        return clientMapper.toDTO(client);
     }
+
 }
