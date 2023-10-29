@@ -24,6 +24,10 @@ public class CardController {
 
     @GetMapping("/{id}")
     private CardDTO getCardDTO(@PathVariable("id") String id) {
+        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+        if (!id.matches(uuidPattern)) {
+            throw new IllegalArgumentException("ID is not a valid UUID");
+        }
         return cardService.getCardDTO(id);
     }
 }
