@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -52,13 +54,15 @@ public class Agreement {
     /**
      * Дата и время создания записи о соглашении.
      */
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp createdAt;
 
     /**
      * Дата и время последнего обновления записи о соглашении.
      */
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
     /**

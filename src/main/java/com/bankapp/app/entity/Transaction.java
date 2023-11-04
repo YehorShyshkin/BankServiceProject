@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -33,7 +34,8 @@ public class Transaction {
     @Column(name = "description")
     private String transactionDescription;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp transactionCreatedAt;
 
     @ManyToOne(fetch = FetchType.EAGER)

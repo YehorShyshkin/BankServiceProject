@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -43,10 +45,12 @@ public class Product {
     @Column(name = "product_limit")
     private BigDecimal productLimit; // Лимит, связанный с продуктом.
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp createdAt; // Временная метка создания продукта.
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private Timestamp updatedAt; // Временная метка обновления продукта.
 
     @ManyToOne(fetch = FetchType.EAGER)

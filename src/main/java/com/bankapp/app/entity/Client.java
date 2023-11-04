@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -88,13 +90,15 @@ public class Client  {
     /**
      * Дата и время создания клиента.
      */
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
     private Timestamp createdAt;
 
     /**
      * Дата и временя последнего обновления записи в базе данных.
      */
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private Timestamp updatedAt;
 
 
