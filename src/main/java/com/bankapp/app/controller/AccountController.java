@@ -58,4 +58,9 @@ public class AccountController {
         }
     }
 
+    @DeleteMapping("delete_account/{id}")
+    public void deleteAccount(@PathVariable UUID id){
+        accountService.deleteAccount(id);
+    }
+
 }
