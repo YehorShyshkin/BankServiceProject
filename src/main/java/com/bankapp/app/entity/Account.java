@@ -121,10 +121,16 @@ public class Account {
      * Представляет собой класс с различными свойствами,
      * представляющими информацию о банковской карте.
      */
-    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER)
-    private Card accountCard;
+//    @OneToOne(mappedBy = "account", fetch = FetchType.EAGER)
+//    private Card accountCard;
 
-    public Account(UUID id, String accountName, AccountType accountType, AccountStatus accountStatus, CurrencyCode currencyCode, BigDecimal accountBalance, Timestamp createdAt, Timestamp updatedAt, Client client, List<Agreement> agreementList, Set<Transaction> debitTransaction, Set<Transaction> creditTransaction, Card accountCard) {
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    private List<Card> cards;
+
+    public Account(UUID id, String accountName, AccountType accountType, AccountStatus accountStatus,
+                   CurrencyCode currencyCode, BigDecimal accountBalance, Timestamp createdAt, Timestamp updatedAt,
+                   Client client, List<Agreement> agreementList, Set<Transaction> debitTransaction,
+                   Set<Transaction> creditTransaction, List<Card> cards) {
         this.id = id;
         this.accountName = accountName;
         this.accountType = accountType;
@@ -137,7 +143,7 @@ public class Account {
         this.agreementList = agreementList;
         this.debitTransaction = debitTransaction;
         this.creditTransaction = creditTransaction;
-        this.accountCard = accountCard;
+        this.cards = cards;
     }
 
     @Override

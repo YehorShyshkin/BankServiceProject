@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "clients")
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 /**
@@ -105,7 +107,7 @@ public class Client  {
     /**
      * Представляют собой счета клиентов, на которых хранятся и управляются денежными средствами.
      */
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private List<Account> accounts;
 
     /**
@@ -116,8 +118,10 @@ public class Client  {
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    public Client(UUID id, ClientStatus clientStatus, String taxCode, String clientFirstName,
-                  String clientLastName, String email, String address, String phone,
+    public Client(UUID id, ClientStatus clientStatus,
+                  String taxCode, String clientFirstName,
+                  String clientLastName, String email,
+                  String address, String phoneNumber,
                   Timestamp createdAt, Timestamp updatedAt,
                   List<Account> accounts, Manager manager) {
         this.id = id;
@@ -127,7 +131,7 @@ public class Client  {
         this.clientLastName = clientLastName;
         this.email = email;
         this.address = address;
-        this.phoneNumber = phone;
+        this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.accounts = accounts;
@@ -146,21 +150,4 @@ public class Client  {
         return Objects.hash(taxCode, phoneNumber);
     }
 
-    @Override
-    public String toString() {
-        return "Client{" +
-                "id=" + id +
-                ", status=" + clientStatus +
-                ", taxCode=" + taxCode +
-                ", firstName='" + clientFirstName + '\'' +
-                ", lastName='" + clientLastName + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", phone='" + phoneNumber + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", accounts=" + accounts +
-                ", manager=" + manager +
-                '}';
-    }
 }

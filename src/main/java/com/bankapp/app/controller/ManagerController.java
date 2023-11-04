@@ -25,8 +25,6 @@ public class ManagerController {
         if (!id.matches(uuidPattern)) {
             throw new IllegalArgumentException("ID is not a valid UUID");
         }
-
         return managerService.getManagerDTO(id);
     }
-
 }

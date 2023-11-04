@@ -10,11 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CardMapper {
 
-    @Mapping(source = "cardNumber", target = "cardNumber")
-    @Mapping(source = "holderName", target = "holderName")
-    @Mapping(source = "cardBalance", target = "cardBalance")
-    @Mapping(source = "cardPaymentSystem", target = "cardPaymentSystem")
-    @Mapping(source = "cardStatus", target = "cardStatus")
     @Mapping(source = "account.accountName", target = "accountName")
     @Mapping(source = "account.accountType", target = "accountType")
     @Mapping(source = "account.accountStatus", target = "accountStatus")
@@ -24,6 +19,5 @@ public interface CardMapper {
     @Mapping(source = "account.client.clientLastName", target = "clientLastName")
 
     CardDTO toDTO(Card card);
-
     List<CardDTO> toDTO(List<Card> cardList);
 }

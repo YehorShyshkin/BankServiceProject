@@ -1,6 +1,7 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Client;
 import com.bankapp.app.mapper.ClientMapper;
 import com.bankapp.app.repository.ClientRepository;
@@ -8,10 +9,7 @@ import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,16 +32,22 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClient(UUID id) {
-        Optional<Client> clientOptional = clientRepository.findById(id);
-        if (clientOptional.isPresent()){
-            return clientOptional.get();
-        }
-        return null;
+        return clientRepository.findById(id).orElseThrow(null);
     }
 
     @Override
     public void save(Client client) {
         clientRepository.save(client);
     }
+
+    @Override
+    public List<Account> getAccountsForClient(UUID clientId) {
+        Client client = getClient(clientId);
+        if (client != null) {
+            return client.getAccounts();
+        }
+        return Collections.emptyList();
+    }
+
 
 }
