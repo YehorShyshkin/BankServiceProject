@@ -2,8 +2,10 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.entity.Client;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +30,12 @@ public class ClientController {
         }
         return clientService.getClientDTO(id);
     }
+
+    @PostMapping("/create_clients")
+    public ResponseEntity<String> createClient (@RequestBody Client client){
+        clientService.save(client);
+        return ResponseEntity.ok("Client was create! Success!");
+    }
+
 
 }
