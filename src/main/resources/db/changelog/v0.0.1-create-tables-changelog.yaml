@@ -224,16 +224,8 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: holder_name
-                  type: varchar(250)
-              - column:
                   name: expiration_date
                   type: date
-                  constraints:
-                    nullable: false
-              - column:
-                  name: balance
-                  type: decimal(15,2)
                   constraints:
                     nullable: false
               - column:
@@ -242,18 +234,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: delivery_point
-                  type: varchar(100)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_digital_wallet
-                  type: boolean
-              - column:
-                  name: is_virtual_wallet
-                  type: boolean
-              - column:
-                  name: co_brand
+                  name: card_type
                   type: varchar(50)
                   constraints:
                     nullable: false

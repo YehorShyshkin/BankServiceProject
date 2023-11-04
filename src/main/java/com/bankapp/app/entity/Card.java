@@ -1,14 +1,20 @@
 package com.bankapp.app.entity;
 
 import com.bankapp.app.enums.CardStatus;
+import com.bankapp.app.enums.CardType;
 import com.bankapp.app.enums.PaymentSystem;
+import com.bankapp.app.generator.CardGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
@@ -19,7 +25,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
- /**
+/**
  * Банковская карта - это финансовый инструмент,
  * который клиенты банка используют для осуществления платежей,
  * снятия наличных денег, онлайн-транзакций и других финансовых операций.
@@ -41,12 +47,6 @@ public class Card {
     private String cardNumber;
 
     /**
-     * Имя держателя
-     */
-    @Column(name = "holder_name")
-    private String holderName;
-
-    /**
      * Срок действия карты
      */
 
@@ -54,10 +54,18 @@ public class Card {
     private LocalDate expirationDate;
 
     /**
-     * Баланс карты
+     * Дата и время создания карты.
      */
-    @Column(name = "balance")
-    private BigDecimal cardBalance;
+    @Column(name = "created_at", updatable = false)
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    /**
+     * Дата и временя последнего обновления записи в базе данных.
+     */
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
     /**
      * Лимит на сумму транзакций, которые могут быть совершены с данной
@@ -67,28 +75,11 @@ public class Card {
     private BigDecimal cardTransactionLimit;
 
     /**
-     * Имя получателя денег
+     * Тип банковской карты, кредитная карта, дебетовая карта и т.д.
      */
-    @Column(name = "delivery_point")
-    private String cardDeliveryPoint;
-
-    /**
-     * Является ли банковская карта цифровым кошельком
-     */
-    @Column(name = "is_digital_wallet")
-    private boolean cardDigitalWallet;
-
-    /**
-     * Является ли банковская карта виртуальным кошельком
-     */
-    @Column(name = "is_virtual_wallet")
-    private boolean cardVirtualWallet;
-
-    /**
-     * Через что была проведена транзакция
-     */
-    @Column(name = "co_brand")
-    private String cardCoBrand;
+    @Column(name = "card_type")
+    @Enumerated(EnumType.STRING)
+    private CardType cardType;
 
     /**
      * Указывает на платежную систему, к которой относится данная банковская карта.
@@ -111,21 +102,25 @@ public class Card {
      * с каким счетом ассоциированы финансовые операции,
      * производимые с помощью данной карты.
      */
-    @OneToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonIgnore
     private Account account;
 
-    public Card(UUID id, String cardNumber, String holderName, LocalDate expirationDate, BigDecimal cardBalance, BigDecimal cardTransactionLimit, String cardDeliveryPoint, boolean cardDigitalWallet, boolean cardVirtualWallet, String cardCoBrand, PaymentSystem cardPaymentSystem, CardStatus cardStatus, Account account) {
+
+    public Card(UUID id, String cardNumber, LocalDate expirationDate,
+                Timestamp createdAt, Timestamp updatedAt,
+                BigDecimal cardTransactionLimit, CardType cardType,
+                PaymentSystem cardPaymentSystem, CardStatus cardStatus,
+                Account account) {
         this.id = id;
         this.cardNumber = cardNumber;
-        this.holderName = holderName;
-        this.expirationDate = expirationDate;
-        this.cardBalance = cardBalance;
+        this.expirationDate = CardGenerator.generateCardExpirationDate();
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.cardTransactionLimit = cardTransactionLimit;
-        this.cardDeliveryPoint = cardDeliveryPoint;
-        this.cardDigitalWallet = cardDigitalWallet;
-        this.cardVirtualWallet = cardVirtualWallet;
-        this.cardCoBrand = cardCoBrand;
+        this.cardType = cardType;
         this.cardPaymentSystem = cardPaymentSystem;
         this.cardStatus = cardStatus;
         this.account = account;
@@ -142,5 +137,6 @@ public class Card {
     public int hashCode() {
         return Objects.hash(cardNumber, account);
     }
-
 }
+
+

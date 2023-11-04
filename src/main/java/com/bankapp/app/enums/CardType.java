@@ -1,6 +1,6 @@
 package com.bankapp.app.enums;
 
-public enum СardType {
+public enum CardType {
     CREDIT_CARDS, // Кредитные карты
     DEBIT_CARDS, // Дебетовые карты
     BUSINESS_CARDS, // Бизнес-карты

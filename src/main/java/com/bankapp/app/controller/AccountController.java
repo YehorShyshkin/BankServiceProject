@@ -1,7 +1,6 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.AccountDTO;
-import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Client;
 import com.bankapp.app.service.AccountService;
@@ -49,9 +48,13 @@ public class AccountController {
     @PostMapping("/create_account/{client_id}")
     public ResponseEntity<String> createAccount(@RequestBody Account account, @PathVariable("client_id") UUID clientId) {
         Client client = clientService.getClient(clientId);
-        account.setClient(client);
-        accountService.save(account);
-        return ResponseEntity.ok("Account was create! Success!");
+        if (client != null) {
+            account.setClient(client);
+            accountService.save(account);
+            return ResponseEntity.ok("Account was create! Success!");
+        } else {
+            return ResponseEntity.badRequest().body("Client was not found!");
+        }
     }
 
     @PostMapping("/update_account/{id}")
@@ -73,5 +76,4 @@ public class AccountController {
             return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
         }
     }
-
 }
