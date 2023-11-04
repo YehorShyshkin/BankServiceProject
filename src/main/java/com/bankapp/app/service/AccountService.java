@@ -17,6 +17,6 @@ public interface AccountService {
 
     Account updateAccount(UUID id, AccountDTO accountDTO);
 
-    void deleteAccount(UUID id);
+    boolean deleteAccount(UUID id);
 }
 

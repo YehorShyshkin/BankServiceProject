@@ -76,8 +76,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccount(UUID id) {
-        accountRepository.deleteById(id);
+    public boolean deleteAccount(UUID id) {
+        if (accountRepository.existsById(id)) {
+            accountRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
