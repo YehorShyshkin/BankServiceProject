@@ -3,7 +3,6 @@ package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Card;
 import com.bankapp.app.enums.AccountStatus;
 import com.bankapp.app.enums.AccountType;
 import com.bankapp.app.enums.CurrencyCode;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
