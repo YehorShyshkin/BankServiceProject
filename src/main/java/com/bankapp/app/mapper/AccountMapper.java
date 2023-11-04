@@ -16,19 +16,12 @@ import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 
 @Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR, uses = {AgreementMapper.class})
 public interface AccountMapper {
-    @Mapping(source = "accountName", target = "accountName")
-    @Mapping(source = "accountType", target = "accountType")
-    @Mapping(source = "accountStatus", target = "accountStatus")
-    @Mapping(source = "currencyCode", target = "currencyCode")
-    @Mapping(source = "accountBalance", target = "accountBalance")
-    @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "client.clientStatus", target = "clientStatus")
     @Mapping(source = "client.clientLastName", target = "clientLastName")
     @Mapping(target = "agreementInterestRate", ignore = true)
     @Mapping(target = "agreementStatus", ignore = true)
     @Mapping(target = "agreementSum", ignore = true)
     AccountDTO toDTO(Account account);
-
     @AfterMapping
     default void mapAgreements(@MappingTarget AccountDTO accountDTO, Account account) {
         if (account != null && account.getAgreementList() != null) {

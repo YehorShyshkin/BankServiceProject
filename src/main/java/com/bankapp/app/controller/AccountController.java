@@ -4,9 +4,12 @@ import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/accounts")
@@ -37,6 +40,22 @@ public class AccountController {
     @GetMapping("/getuid")
     public Account getById(String id) {
         return accountService.getById(id);
+    }
+
+    @PostMapping("/create_account")
+    public ResponseEntity<String> createAccount(@RequestBody Account account) {
+        accountService.save(account);
+        return ResponseEntity.ok("Account was create! Success!");
+    }
+
+    @PostMapping("/update_account/{id}")
+    public ResponseEntity<Account> updateAccount(@PathVariable UUID id, @RequestBody AccountDTO accountDTO) {
+        Account updateAccount = accountService.updateAccount(id, accountDTO);
+        if (updateAccount != null) {
+            return new ResponseEntity<>(updateAccount, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 }
