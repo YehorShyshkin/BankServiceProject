@@ -14,7 +14,7 @@ public class CardDTO {
      */
 
     private String cardNumber;
-    private String holderName;
+//    private String holderName;
     private String cardBalance;
     private String cardPaymentSystem;
     private String cardStatus;

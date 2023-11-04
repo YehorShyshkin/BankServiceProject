@@ -1,6 +1,7 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Client;
 
 import java.util.List;
@@ -13,5 +14,7 @@ public interface ClientService {
     Client getClient(UUID id);
 
     void save(Client client);
+
+    List<Account> getAccountsForClient(UUID clientId);
 
 }

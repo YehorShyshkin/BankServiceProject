@@ -98,3 +98,48 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_cards_accounts
             onDelete: NO ACTION
+  - changeSet:
+      id: "cards-clients"
+      author: admin
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: holderName_id
+            referencedTableName: clients
+            referencedColumnNames: id
+            constraintName: fk_cards_clients
+            onDelete: NO ACTION
+
+  - changeSet:
+      id: "cards-card_delivery_points"
+      author: admin
+      changes:
+        - createTable:
+            tableName: card_delivery_points
+            columns:
+              - column:
+                  name: card_id
+                  type: "UUID"
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: client_id
+                  type: "UUID"
+                  constraints:
+                    primaryKey: true
+
+        - addForeignKeyConstraint:
+            baseTableName: card_delivery_points
+            baseColumnNames: card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            constraintName: fk_card_delivery_points_cards
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: card_delivery_points
+            baseColumnNames: client_id
+            referencedTableName: clients
+            referencedColumnNames: id
+            constraintName: fk_card_delivery_points_clients
+            onDelete: CASCADE

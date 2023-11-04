@@ -31,4 +31,9 @@ public class CardServiceImpl implements CardService {
         Card card = cardOptional.orElseThrow(() -> new NoSuchElementException("Card not found"));
         return cardMapper.toDTO(card);
     }
+
+    @Override
+    public void save(Card card) {
+        cardRepository.save(card);
+    }
 }

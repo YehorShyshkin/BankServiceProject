@@ -11,7 +11,7 @@ import java.util.List;
 public interface CardMapper {
 
     @Mapping(source = "cardNumber", target = "cardNumber")
-    @Mapping(source = "holderName", target = "holderName")
+//    @Mapping(source = "card.holderName", target = "holderName")
     @Mapping(source = "cardBalance", target = "cardBalance")
     @Mapping(source = "cardPaymentSystem", target = "cardPaymentSystem")
     @Mapping(source = "cardStatus", target = "cardStatus")
