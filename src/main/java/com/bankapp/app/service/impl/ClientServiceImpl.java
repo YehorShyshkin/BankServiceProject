@@ -32,4 +32,18 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.toDTO(client);
     }
 
+    @Override
+    public Client getClient(UUID id) {
+        Optional<Client> clientOptional = clientRepository.findById(id);
+        if (clientOptional.isPresent()){
+            return clientOptional.get();
+        }
+        return null;
+    }
+
+    @Override
+    public void save(Client client) {
+        clientRepository.save(client);
+    }
+
 }
