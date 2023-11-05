@@ -111,7 +111,11 @@ public class Card {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public Card(UUID id, String cardNumber, LocalDate expirationDate, Timestamp createdAt, Timestamp updatedAt, BigDecimal cardBalance, BigDecimal cardTransactionLimit, CardType cardType, PaymentSystem cardPaymentSystem, CardStatus cardStatus, Account account) {
+    public Card(UUID id, String cardNumber, LocalDate expirationDate,
+                Timestamp createdAt, Timestamp updatedAt, BigDecimal cardBalance,
+                BigDecimal cardTransactionLimit, CardType cardType,
+                PaymentSystem cardPaymentSystem, CardStatus cardStatus,
+                Account account) {
         this.id = id;
         this.cardNumber = cardNumber;
         this.expirationDate = expirationDate;
@@ -195,6 +199,10 @@ public class Card {
         LocalDate expirationDate = currentDate.plusYears(yearsToAdd);
 
         return expirationDate;
+    }
+
+    public BigDecimal getBalance() {
+        return cardBalance;
     }
 }
 

@@ -8,6 +8,7 @@ import com.bankapp.app.enums.PaymentSystem;
 import com.bankapp.app.service.CardService;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,5 +60,12 @@ public class CardController {
         } else {
             return ResponseEntity.badRequest().body("Client was not found!");
         }
+    }
+
+    @DeleteMapping("delete_card/{id}")
+    public ResponseEntity<String> deleteCard(@PathVariable UUID id) {
+        ResponseEntity<String> deleteCard = cardService.deleteCard(id);
+        return deleteCard;
+
     }
 }
