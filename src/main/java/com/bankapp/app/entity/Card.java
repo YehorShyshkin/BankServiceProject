@@ -14,7 +14,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
@@ -141,7 +140,6 @@ public class Card {
     public String generateCardNumber(PaymentSystem paymentSystem) {
         Random random = new Random();
 
-        // Выберите IIN для конкретного типа карты (например, Visa - 4, MasterCard - 5, American Express - 3 и т. д.)
         String iin = switch (paymentSystem) {
             case VISA -> "4";
             case MASTERCARD -> "5";
@@ -151,14 +149,11 @@ public class Card {
             case GOOGLE_PAY -> "8";
             case SEPA -> "9";
         };
-
-        // Генерация оставшихся 15 - длина IIN - 1 цифр
         StringBuilder cardNumber = new StringBuilder(iin);
         for (int i = 0; i < 15 - iin.length(); i++) {
             cardNumber.append(random.nextInt(10)); // Генерация случайной цифры от 0 до 9
         }
 
-        // Вычисление последней цифры с использованием алгоритма Луна (Luhn algorithm)
         String cardNumberWithoutCheckDigit = cardNumber.toString();
         int checkDigit = calculateLuhnCheckDigit(cardNumberWithoutCheckDigit);
         cardNumber.append(checkDigit);
@@ -189,6 +184,17 @@ public class Card {
         } else {
             return 10 - mod;
         }
+    }
+
+    public LocalDate generateCardExpirationDate() {
+        int yearsToAdd = 5;
+        // Получаем текущую дату
+        LocalDate currentDate = LocalDate.now();
+
+        // Добавляем указанное количество лет к текущей дате
+        LocalDate expirationDate = currentDate.plusYears(yearsToAdd);
+
+        return expirationDate;
     }
 }
 

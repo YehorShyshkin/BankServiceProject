@@ -46,15 +46,11 @@ public class CardController {
 
             List<Account> clientAccounts = client.getAccounts();
             if (!clientAccounts.isEmpty()) {
-                // Выберите счет, который хотите связать с картой (например, первый счет)
                 Account clientAccount = clientAccounts.get(0);
 
-                // Установите этот счет в карту
                 card.setAccount(clientAccount);
 
-                // Задайте срок действия карты
-                card.setExpirationDate(LocalDate.of(2025, 12, 31));
-
+                card.setExpirationDate(card.generateCardExpirationDate());
                 cardService.save(card);
                 return ResponseEntity.ok("Card was created! Success!");
             } else {
@@ -63,21 +59,5 @@ public class CardController {
         } else {
             return ResponseEntity.badRequest().body("Client was not found!");
         }
-
-
-
-
-//        Client client = clientService.getClient(id);
-//        if (client != null) {
-//            String generatedCardNumber = card.generateCardNumber(PaymentSystem.VISA);
-//            card.setCardNumber(generatedCardNumber);
-//            Account clientAccount = client.getAccount();
-//
-//            card.setExpirationDate(LocalDate.of(2025, 12, 31));
-//            cardService.save(card);
-//            return ResponseEntity.ok("Card was create! Success!");
-//        } else {
-//            return ResponseEntity.badRequest().body("Card was not found!");
-//        }
     }
 }
