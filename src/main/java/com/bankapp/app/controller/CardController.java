@@ -8,11 +8,9 @@ import com.bankapp.app.enums.PaymentSystem;
 import com.bankapp.app.service.CardService;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -64,8 +62,7 @@ public class CardController {
 
     @DeleteMapping("delete_card/{id}")
     public ResponseEntity<String> deleteCard(@PathVariable UUID id) {
-        ResponseEntity<String> deleteCard = cardService.deleteCard(id);
-        return deleteCard;
+        return cardService.deleteCard(id);
 
     }
 }
