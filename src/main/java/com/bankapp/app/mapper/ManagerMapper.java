@@ -4,6 +4,7 @@ import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.entity.Manager;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -15,5 +16,7 @@ public interface ManagerMapper {
 
     ManagerDTO toDTO(Manager manager);
     List<ManagerDTO> toDTO(List<Manager> managerList);
+
+    Manager updateManagerFromDTO(ManagerDTO managerDTO, @MappingTarget Manager manager);
 
 }
