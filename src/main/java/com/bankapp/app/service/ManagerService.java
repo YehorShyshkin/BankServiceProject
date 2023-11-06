@@ -19,4 +19,5 @@ public interface ManagerService {
 
     boolean deleteManager(UUID id);
 
+    boolean mergeManagerAndClient(UUID clientId, UUID managerId);
 }
