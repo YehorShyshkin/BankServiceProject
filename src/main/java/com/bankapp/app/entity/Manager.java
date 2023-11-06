@@ -43,10 +43,10 @@ public class Manager {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    @OneToMany(mappedBy = "manager")
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private List<Client> listClients;
 
-    @OneToMany(mappedBy = "manager")
+    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private List<Product> listProducts;
 
     public Manager(UUID id, String managerFirstName, String last_name, ManagerStatus managerStatus, Timestamp createdAt, Timestamp updatedAt, List<Client> listClients, List<Product> listProducts) {

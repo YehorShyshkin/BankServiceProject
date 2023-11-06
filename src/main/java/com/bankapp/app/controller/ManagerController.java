@@ -1,11 +1,15 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.entity.Manager;
 import com.bankapp.app.service.ManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/managers")
@@ -27,4 +31,33 @@ public class ManagerController {
         }
         return managerService.getManagerDTO(id);
     }
+
+    @PostMapping("/create_managers")
+    public ResponseEntity<String> createManager (@RequestBody Manager manager){
+        managerService.save(manager);
+        return ResponseEntity.ok("Manager was create! Sucess!");
+    }
+    @PostMapping("/update_manager/{id}")
+    public ResponseEntity<Manager> updateManager(@PathVariable UUID id, @RequestBody ManagerDTO managerDTO){
+        Manager updateManager = managerService.updateManager(id, managerDTO);
+        if (updateManager!=null){
+            return new ResponseEntity<>(updateManager, HttpStatus.ACCEPTED);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("delete_manager/{id}")
+    public ResponseEntity<String> deleteManager (@PathVariable UUID id)
+    {
+        boolean deleteManager = managerService.deleteManager(id);
+        if (deleteManager){
+            return new ResponseEntity<>("Manager deleted successfully!", HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Manager not found!", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

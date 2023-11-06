@@ -5,6 +5,7 @@ import com.bankapp.app.entity.Manager;
 import com.bankapp.app.mapper.ManagerMapper;
 import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.service.ManagerService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,35 @@ public class ManagerServiceImpl implements ManagerService {
         Optional<Manager> managerOptional = managerRepository.findById(UUID.fromString(id));
         Manager manager = managerOptional.orElseThrow(() -> new NoSuchElementException("Manager not found!"));
         return managerMapper.toDTO(manager);
+    }
+
+    @Override
+    public void save(Manager manager) {
+        managerRepository.save(manager);
+    }
+
+    @Override
+    public Manager findManagerById(UUID managerId) {
+        return managerRepository.findById(managerId)
+                .orElseThrow(() -> new EntityNotFoundException("Manager not found!"));
+    }
+
+    @Override
+    public Manager updateManager(UUID id, ManagerDTO managerDTO) {
+        Manager currentManager = findManagerById(id);
+        Manager updateManager = managerMapper.updateManagerFromDTO(managerDTO, currentManager);
+        return managerRepository.save(updateManager);
+    }
+
+    @Override
+    public boolean deleteManager(UUID id) {
+        if (managerRepository.existsById(id)){
+            managerRepository.deleteById(id);
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 
