@@ -1,9 +1,11 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.entity.Client;
 import com.bankapp.app.entity.Manager;
 import com.bankapp.app.mapper.ManagerMapper;
 import com.bankapp.app.repository.ManagerRepository;
+import com.bankapp.app.service.ClientService;
 import com.bankapp.app.service.ManagerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class ManagerServiceImpl implements ManagerService {
     private final ManagerRepository managerRepository;
     private final ManagerMapper managerMapper;
+    private final ClientService clientService;
 
     @Override
     public List<ManagerDTO> findAll() {
@@ -52,14 +55,23 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public boolean deleteManager(UUID id) {
-        if (managerRepository.existsById(id)){
+        if (managerRepository.existsById(id)) {
             managerRepository.deleteById(id);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
 
-
+    @Override
+    public boolean mergeManagerAndClient(UUID clientId, UUID managerId) {
+        Client client = clientService.getClient(clientId); // Получаем клиента по его ID
+        Manager manager = findManagerById(managerId); // Получаем менеджера по его ID
+        if (client != null && manager != null) {
+            client.setManager(manager); // Устанавливаем менеджера для клиента
+            clientService.save(client); // Сохраняем клиента в базу данных
+            return true; // Возвращаем true, чтобы показать, что операция выполнена успешно
+        }
+        return false; // Возвращаем false, если клиент или менеджер не найдены
+    }
 }
