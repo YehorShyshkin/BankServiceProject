@@ -229,11 +229,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: balance
-                  type: decimal(15,2)
-                  constraints:
-                    nullable: false
-              - column:
                   name: transaction_limit
                   type: decimal(15,2)
                   constraints:

@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
             account.setAccountBalance(new BigDecimal(accountDTO.getAccountBalance()));
             return accountRepository.save(account);
         } else {
-            throw new EntityNotFoundException("Account not found");
+            throw new EntityNotFoundException("Account not found!");
         }
     }
 

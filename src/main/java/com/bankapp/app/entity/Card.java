@@ -3,6 +3,8 @@ package com.bankapp.app.entity;
 import com.bankapp.app.enums.CardStatus;
 import com.bankapp.app.enums.CardType;
 import com.bankapp.app.enums.PaymentSystem;
+import com.bankapp.app.generator.CardGenerator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
 @Entity
@@ -67,12 +68,6 @@ public class Card {
     private Timestamp updatedAt;
 
     /**
-     * Баланс карты
-     */
-    @Column(name = "balance")
-    private BigDecimal cardBalance;
-
-    /**
      * Лимит на сумму транзакций, которые могут быть совершены с данной
      * банковской карты.
      */
@@ -80,7 +75,7 @@ public class Card {
     private BigDecimal cardTransactionLimit;
 
     /**
-     * Является ли банковская карта цифровым кошельком
+     * Тип банковской карты, кредитная карта, дебетовая карта и т.д.
      */
     @Column(name = "card_type")
     @Enumerated(EnumType.STRING)
@@ -107,21 +102,23 @@ public class Card {
      * с каким счетом ассоциированы финансовые операции,
      * производимые с помощью данной карты.
      */
-    @OneToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
+    @JsonIgnore
     private Account account;
 
+
     public Card(UUID id, String cardNumber, LocalDate expirationDate,
-                Timestamp createdAt, Timestamp updatedAt, BigDecimal cardBalance,
+                Timestamp createdAt, Timestamp updatedAt,
                 BigDecimal cardTransactionLimit, CardType cardType,
                 PaymentSystem cardPaymentSystem, CardStatus cardStatus,
                 Account account) {
         this.id = id;
         this.cardNumber = cardNumber;
-        this.expirationDate = expirationDate;
+        this.expirationDate = CardGenerator.generateCardExpirationDate();
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.cardBalance = cardBalance;
         this.cardTransactionLimit = cardTransactionLimit;
         this.cardType = cardType;
         this.cardPaymentSystem = cardPaymentSystem;
@@ -139,70 +136,6 @@ public class Card {
     @Override
     public int hashCode() {
         return Objects.hash(cardNumber, account);
-    }
-
-    public String generateCardNumber(PaymentSystem paymentSystem) {
-        Random random = new Random();
-
-        String iin = switch (paymentSystem) {
-            case VISA -> "4";
-            case MASTERCARD -> "5";
-            case AMERICAN_EXPRESS -> "3";
-            case PAYPAL -> "6";
-            case APPLE_PAY -> "7";
-            case GOOGLE_PAY -> "8";
-            case SEPA -> "9";
-        };
-        StringBuilder cardNumber = new StringBuilder(iin);
-        for (int i = 0; i < 15 - iin.length(); i++) {
-            cardNumber.append(random.nextInt(10)); // Генерация случайной цифры от 0 до 9
-        }
-
-        String cardNumberWithoutCheckDigit = cardNumber.toString();
-        int checkDigit = calculateLuhnCheckDigit(cardNumberWithoutCheckDigit);
-        cardNumber.append(checkDigit);
-
-        return cardNumber.toString();
-    }
-
-    private int calculateLuhnCheckDigit(String cardNumber) {
-        int sum = 0;
-        boolean doubleDigit = false;
-
-        for (int i = cardNumber.length() - 1; i >= 0; i--) {
-            int digit = Integer.parseInt(String.valueOf(cardNumber.charAt(i)));
-            if (doubleDigit) {
-                digit *= 2;
-                if (digit > 9) {
-                    digit -= 9;
-                }
-            }
-
-            sum += digit;
-            doubleDigit = !doubleDigit;
-        }
-
-        int mod = sum % 10;
-        if (mod == 0) {
-            return 0;
-        } else {
-            return 10 - mod;
-        }
-    }
-
-    public LocalDate generateCardExpirationDate() {
-        int yearsToAdd = 5;
-        // Получаем текущую дату
-        LocalDate currentDate = LocalDate.now();
-
-        // Добавляем указанное количество лет к текущей дате
-        LocalDate expirationDate = currentDate.plusYears(yearsToAdd);
-
-        return expirationDate;
-    }
-
-    public BigDecimal getBalance() {
-        return cardBalance;
     }
 }
 

@@ -9,11 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AgreementMapper {
-
-//    @Mapping(source = "agreementInterestRate", target = "agreementInterestRate")
-//    @Mapping(source = "agreementStatus", target = "agreementStatus")
-//    @Mapping(source = "agreementSum", target = "agreementSum")
-//    @Mapping(source = "createdAt", target = "createdAt")
     @Mapping(source = "product.productName", target = "productName")
     @Mapping(source = "product.productStatus", target = "productStatus")
     @Mapping(source = "product.currencyCode", target = "currencyCode")

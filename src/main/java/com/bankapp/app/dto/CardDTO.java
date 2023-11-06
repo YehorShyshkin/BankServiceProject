@@ -14,7 +14,6 @@ public class CardDTO {
      */
 
     private String cardNumber;
-//    private String holderName;
     private String cardBalance;
     private String cardPaymentSystem;
     private String cardStatus;
@@ -22,7 +21,7 @@ public class CardDTO {
     /**
      * Account
      */
-
+//       private UUID accountId;
     private String accountName;
     private String accountType;
     private String accountStatus;
@@ -37,3 +36,6 @@ public class CardDTO {
     private String clientLastName;
 
 }
+
+
+
