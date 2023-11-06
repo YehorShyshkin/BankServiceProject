@@ -47,5 +47,17 @@ public class ManagerController {
         }
     }
 
+    @DeleteMapping("delete_manager/{id}")
+    public ResponseEntity<String> deleteManager (@PathVariable UUID id)
+    {
+        boolean deleteManager = managerService.deleteManager(id);
+        if (deleteManager){
+            return new ResponseEntity<>("Manager deleted successfully!", HttpStatus.ACCEPTED);
+        }
+        else {
+            return new ResponseEntity<>("Manager not found!", HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }

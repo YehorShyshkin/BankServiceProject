@@ -71,9 +71,9 @@ public class AccountController {
     public ResponseEntity<String> deleteAccount(@PathVariable UUID id) {
         boolean deleteAccount = accountService.deleteAccount(id);
         if (deleteAccount) {
-            return new ResponseEntity<>("Account deleted successfully", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Account deleted successfully !", HttpStatus.ACCEPTED);
         } else {
-            return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Account not found !", HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -50,5 +50,16 @@ public class ManagerServiceImpl implements ManagerService {
         return managerRepository.save(updateManager);
     }
 
+    @Override
+    public boolean deleteManager(UUID id) {
+        if (managerRepository.existsById(id)){
+            managerRepository.deleteById(id);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 
 }
