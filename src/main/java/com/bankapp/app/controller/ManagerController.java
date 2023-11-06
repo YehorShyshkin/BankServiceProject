@@ -1,8 +1,10 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.entity.Manager;
 import com.bankapp.app.service.ManagerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,4 +29,12 @@ public class ManagerController {
         }
         return managerService.getManagerDTO(id);
     }
+
+    @PostMapping("/create_managers")
+    public ResponseEntity<String> createManager (@RequestBody Manager manager){
+        managerService.save(manager);
+        return ResponseEntity.ok("Manager was create! Sucess!");
+    }
+
+
 }

@@ -31,5 +31,10 @@ public class ManagerServiceImpl implements ManagerService {
         return managerMapper.toDTO(manager);
     }
 
+    @Override
+    public void save(Manager manager) {
+        managerRepository.save(manager);
+    }
+
 
 }
