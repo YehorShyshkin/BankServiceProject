@@ -1,10 +1,12 @@
 package com.bankapp.app.generator;
 
 import com.bankapp.app.enums.PaymentSystem;
+import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.util.Random;
 
+@UtilityClass
 public class CardGenerator {
     public static String generateCardNumber(PaymentSystem paymentSystem) {
         Random random = new Random();
