@@ -6,6 +6,7 @@ import com.bankapp.app.entity.Client;
 import com.bankapp.app.mapper.ClientMapper;
 import com.bankapp.app.repository.ClientRepository;
 import com.bankapp.app.service.ClientService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +32,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClient(UUID id) {
-        return clientRepository.findById(id).orElseThrow(null);
+    public Client findClientById(UUID clientId) {
+        return clientRepository.findById(clientId)
+                .orElseThrow(()->new EntityNotFoundException("Client not found!"));
     }
+
 
     @Override
     public void save(Client client) {
@@ -42,12 +45,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Account> getAccountsForClient(UUID clientId) {
-        Client client = getClient(clientId);
+        Client client = findClientById(clientId);
         if (client != null) {
             return client.getAccounts();
         }
         return Collections.emptyList();
     }
-
-
 }

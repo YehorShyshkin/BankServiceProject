@@ -22,6 +22,7 @@ public interface AccountMapper {
     @Mapping(target = "agreementStatus", ignore = true)
     @Mapping(target = "agreementSum", ignore = true)
     AccountDTO toDTO(Account account);
+
     @AfterMapping
     default void mapAgreements(@MappingTarget AccountDTO accountDTO, Account account) {
         if (account != null && account.getAgreementList() != null) {
@@ -42,6 +43,8 @@ public interface AccountMapper {
     }
 
     List<AccountDTO> toDTO(List<Account> accountList);
+
+    Account updateAccountFromDTO(AccountDTO accountDTO, @MappingTarget Account account);
 }
 
 
