@@ -35,6 +35,12 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public Card findCardByID(UUID cardId) {
+        return cardRepository.findById(cardId)
+                .orElseThrow(() -> new EntityNotFoundException("Card not found!"));
+    }
+
+    @Override
     public void save(Card card) {
         cardRepository.save(card);
     }

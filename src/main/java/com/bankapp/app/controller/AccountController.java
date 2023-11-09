@@ -47,7 +47,7 @@ public class AccountController {
 
     @PostMapping("/create_account/{client_id}")
     public ResponseEntity<String> createAccount(@RequestBody Account account, @PathVariable("client_id") UUID clientId) {
-        Client client = clientService.getClient(clientId);
+        Client client = clientService.findClientById(clientId);
         if (client != null) {
             account.setClient(client);
             accountService.save(account);

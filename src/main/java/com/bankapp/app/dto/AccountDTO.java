@@ -15,7 +15,7 @@ public class AccountDTO {
     private String accountStatus;
     private String currencyCode;
     private String accountBalance;
-    private String createdAt;
+//    private String createdAt;
 
     /**
      * Client

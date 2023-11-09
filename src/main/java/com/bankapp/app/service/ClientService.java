@@ -11,7 +11,7 @@ public interface ClientService {
     List<ClientDTO> findAll();
     ClientDTO getClientDTO(String id);
 
-    Client getClient(UUID id);
+    Client findClientById(UUID id);
 
     void save(Client client);
 

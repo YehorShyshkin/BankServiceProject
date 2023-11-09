@@ -15,6 +15,8 @@ public interface AccountService {
 
     Account save(Account account);
 
+    Account findAccountById(UUID accountId);
+
     Account updateAccount(UUID id, AccountDTO accountDTO);
 
     boolean deleteAccount(UUID id);

@@ -72,6 +72,4 @@ public class ManagerController {
             return new ResponseEntity<>("Manager has not been successfully added to the client!", HttpStatus.NOT_FOUND);
         }
     }
-
-
 }

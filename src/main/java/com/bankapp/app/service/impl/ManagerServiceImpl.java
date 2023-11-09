@@ -65,11 +65,11 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public boolean mergeManagerAndClient(UUID clientId, UUID managerId) {
-        Client client = clientService.getClient(clientId); // Получаем клиента по его ID
-        Manager manager = findManagerById(managerId); // Получаем менеджера по его ID
-        if (client != null && manager != null) {
-            client.setManager(manager); // Устанавливаем менеджера для клиента
-            clientService.save(client); // Сохраняем клиента в базу данных
+        Client currentClient = clientService.findClientById(clientId); // Получаем клиента по его ID
+        Manager currentManager = findManagerById(managerId); // Получаем менеджера по его ID
+        if (currentClient != null && currentManager != null) {
+            currentClient.setManager(currentManager); // Устанавливаем менеджера для клиента
+            clientService.save(currentClient); // Сохраняем клиента в базу данных
             return true; // Возвращаем true, чтобы показать, что операция выполнена успешно
         }
         return false; // Возвращаем false, если клиент или менеджер не найдены

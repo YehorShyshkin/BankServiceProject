@@ -4,6 +4,7 @@ import com.bankapp.app.enums.CardStatus;
 import com.bankapp.app.enums.CardType;
 import com.bankapp.app.enums.PaymentSystem;
 import com.bankapp.app.generator.CardGenerator;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,7 +25,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 /**
  * Банковская карта - это финансовый инструмент,
  * который клиенты банка используют для осуществления платежей,
@@ -105,7 +105,8 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonBackReference
     private Account account;
 
 
@@ -136,6 +137,21 @@ public class Card {
     @Override
     public int hashCode() {
         return Objects.hash(cardNumber, account);
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id=" + id +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", expirationDate=" + expirationDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", cardTransactionLimit=" + cardTransactionLimit +
+                ", cardType=" + cardType +
+                ", cardPaymentSystem=" + cardPaymentSystem +
+                ", cardStatus=" + cardStatus +
+                '}';
     }
 }
 
