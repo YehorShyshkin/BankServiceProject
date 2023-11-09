@@ -3,9 +3,6 @@ package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
-import com.bankapp.app.enums.AccountStatus;
-import com.bankapp.app.enums.AccountType;
-import com.bankapp.app.enums.CurrencyCode;
 import com.bankapp.app.mapper.AccountMapper;
 import com.bankapp.app.repository.AccountRepository;
 import com.bankapp.app.service.AccountService;
@@ -14,7 +11,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -60,9 +56,19 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account findAccountById(UUID accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found!"));
+    }
+
+    @Override
     public Account updateAccount(UUID id, AccountDTO accountDTO) {
-        Optional<Account> optionalAccount = accountRepository.findById(id);
-        if (optionalAccount.isPresent()) {
+        Account currentAccount = findAccountById(id);
+        Account updateAccount = accountMapper.updateAccountFromDTO(accountDTO, currentAccount);
+        return accountRepository.save(updateAccount);
+        //Optional<Account> optionalAccount = accountRepository.findById(id);
+
+ /*       if (currentAccount.i) {
             Account account = optionalAccount.get();
             account.setAccountName(accountDTO.getAccountName());
             account.setAccountType(AccountType.valueOf(accountDTO.getAccountType()));
@@ -72,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
             return accountRepository.save(account);
         } else {
             throw new EntityNotFoundException("Account not found!");
-        }
+        }*/
     }
 
     @Override
