@@ -37,6 +37,16 @@ public class ProductController {
         return ResponseEntity.ok("Product was create! Success!");
     }
 
+    @PostMapping("/update_product/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable UUID id, @RequestBody ProductDTO productDTO) {
+        Product updateProduct = productService.updateProduct(id, productDTO);
+        if (updateProduct != null) {
+            return new ResponseEntity<>(updateProduct, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("delete_product/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable UUID id) {
         boolean deleteProduct = productService.deleteProduct(id);
