@@ -57,7 +57,7 @@ public class Product {
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Agreement> agreements;
 
     public Product(UUID id, String productName, ProductStatus productStatus,

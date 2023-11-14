@@ -53,4 +53,11 @@ public class ProductServiceImpl implements ProductService {
             return false;
         }
     }
+
+    @Override
+    public Product updateProduct(UUID id, ProductDTO productDTO) {
+        Product currentProduct = findProductById(id);
+        Product updateProduct = productMapper.updateManagerFromDTO(productDTO, currentProduct);
+        return productRepository.save(updateProduct);
+    }
 }
