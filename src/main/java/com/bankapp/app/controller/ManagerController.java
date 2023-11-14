@@ -36,7 +36,7 @@ public class ManagerController {
     @PostMapping("/create_managers")
     public ResponseEntity<String> createManager(@RequestBody Manager manager) {
         managerService.save(manager);
-        return ResponseEntity.ok("Manager was create! Sucess!");
+        return ResponseEntity.ok("Manager was create! Success!");
     }
 
     @PostMapping("/update_manager/{id}")
