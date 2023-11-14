@@ -43,4 +43,14 @@ public class ProductServiceImpl implements ProductService {
     public void save(Product product) {
         productRepository.save(product);
     }
+
+    @Override
+    public boolean deleteProduct(UUID id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
