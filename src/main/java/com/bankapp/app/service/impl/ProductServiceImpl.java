@@ -5,6 +5,7 @@ import com.bankapp.app.entity.Product;
 import com.bankapp.app.mapper.ProductMapper;
 import com.bankapp.app.repository.ProductRepository;
 import com.bankapp.app.service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +33,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDTO(product);
     }
 
+    @Override
+    public Product findProductById(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new EntityNotFoundException("Product not found!"));
+    }
 
+    @Override
+    public void save(Product product) {
+        productRepository.save(product);
+    }
 }
