@@ -1,8 +1,10 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ProductDTO;
+import com.bankapp.app.entity.Product;
 import com.bankapp.app.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,5 +28,13 @@ public class ProductController {
         }
         return productService.getProductDTO(id);
     }
+
+    @PostMapping("/create_product")
+    public ResponseEntity<String> createProduct(@RequestBody Product product){
+        productService.save(product);
+        return ResponseEntity.ok("Product was create! Success!");
+    }
+
+
 
 }
