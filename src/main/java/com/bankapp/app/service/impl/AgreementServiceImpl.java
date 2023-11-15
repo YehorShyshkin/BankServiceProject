@@ -36,4 +36,14 @@ public class AgreementServiceImpl implements AgreementService {
     public void save(Agreement agreement) {
         agreementRepository.save(agreement);
     }
+
+    @Override
+    public boolean deleteAgreement(UUID id) {
+        if (agreementRepository.existsById(id)) {
+            agreementRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
