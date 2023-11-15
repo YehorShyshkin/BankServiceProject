@@ -49,7 +49,7 @@ public class ManagerController {
         }
     }
 
-    @DeleteMapping("delete_manager/{id}")
+    @DeleteMapping("/delete_manager/{id}")
     public ResponseEntity<String> deleteManager(@PathVariable UUID id) {
         boolean deleteManager = managerService.deleteManager(id);
         if (deleteManager) {

@@ -5,10 +5,12 @@ import com.bankapp.app.dto.AgreementDTO;
 import com.bankapp.app.entity.Agreement;
 import com.bankapp.app.service.AgreementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/agreements")
@@ -33,8 +35,18 @@ public class AgreementController {
     }
 
     @PostMapping("/create_agreement")
-    public ResponseEntity<String> createAgreement(@RequestBody Agreement agreement){
+    public ResponseEntity<String> createAgreement(@RequestBody Agreement agreement) {
         agreementService.save(agreement);
         return ResponseEntity.ok("Agreement was create! Success! ");
+    }
+
+    @DeleteMapping("/delete_agreement/{id}")
+    public ResponseEntity<String> deleteAgreement(@PathVariable UUID id) {
+        boolean deleteAgreement = agreementService.deleteAgreement(id);
+        if (deleteAgreement) {
+            return new ResponseEntity<>("Agreement deleted successfully!", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("Agreement not found!", HttpStatus.NOT_FOUND);
+        }
     }
 }
