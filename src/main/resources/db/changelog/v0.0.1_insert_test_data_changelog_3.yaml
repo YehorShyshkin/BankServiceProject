@@ -1,0 +1,195 @@
+databaseChangeLog:
+    - changeSet:
+        id: insert-managers-data
+        author: admin
+        changes:
+          - insert:
+              tableName: managers
+              columns:
+                - column:
+                    name: id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: first_name
+                    value: 'John'
+                - column:
+                    name: last_name
+                    value: 'Smith'
+                - column:
+                    name: manager_status
+                    value: 'ACTIVE'
+                - column:
+                    name: created_at
+                    value: '2023-09-20 10:00:00'
+                - column:
+                    name: updated_at
+                    value: '2023-09-20 10:00:00'
+
+    - changeSet:
+        id: insert-clients-data
+        author: admin
+        changes:
+          - insert:
+              tableName: clients
+              columns:
+                - column:
+                    name: id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: client_status
+                    value: 'ACTIVE'
+                - column:
+                    name: tax_code
+                    value: '1234567890'
+                - column:
+                    name: first_name
+                    value: 'Jane'
+                - column:
+                    name: last_name
+                    value: 'Doe'
+                - column:
+                    name: email
+                    value: 'jane@example.com'
+                - column:
+                    name: address
+                    value: '123 Maple St'
+                - column:
+                    name: phone_number
+                    value: '+1 555-789-0123'
+                - column:
+                    name: created_at
+                    value: '2023-09-18 08:00:00'
+                - column:
+                    name: updated_at
+                    value: '2023-09-18 08:00:00'
+                - column:
+                    name: manager_id
+                    valueComputed: (SELECT id FROM managers LIMIT 1)
+
+    - changeSet:
+        id: insert-accounts-data
+        author: admin
+        changes:
+          - insert:
+              tableName: accounts
+              columns:
+                - column:
+                    name: id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: name
+                    value: 'John Smith'
+                - column:
+                    name: account_type
+                    value: 'CERTIFICATE_OF_DEPOSIT'
+                - column:
+                    name: status
+                    value: 'ACTIVE'
+                - column:
+                    name: currency_code
+                    value: 'EUR'
+                - column:
+                    name: balance
+                    value: '5000.00'
+                - column:
+                    name: created_at
+                    value: '2023-09-18 10:00:00'
+                - column:
+                    name: updated_at
+                    value: '2023-09-18 10:00:00'
+                - column:
+                    name: client_id
+                    valueComputed: (SELECT id FROM clients LIMIT 1)
+
+    - changeSet:
+        id: insert-agreements-data
+        author: admin
+        changes:
+          - insert:
+              tableName: agreements
+              columns:
+                - column:
+                    name: id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: interest_rate
+                    value: '0.0400'
+                - column:
+                    name: status
+                    value: 'ACTIVE'
+                - column:
+                    name: sum
+                    value: '100000.00'
+                - column:
+                    name: created_at
+                    value: '2023-09-18 12:00:00'
+                - column:
+                    name: updated_at
+                    value: '2023-09-18 12:00:00'
+                - column:
+                    name: client_id
+                    valueComputed: (SELECT id FROM clients LIMIT 1)
+
+    - changeSet:
+        id: insert-products-data
+        author: admin
+        changes:
+          - insert:
+              tableName: products
+              columns:
+                - column:
+                    name: id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: name
+                    value: 'Personal Loan'
+                - column:
+                    name: product_status
+                    value: 'ACTIVE'
+                - column:
+                    name: currency_code
+                    value: 'USD'
+                - column:
+                    name: interest_rate
+                    value: '0.0600'
+                - column:
+                    name: product_limit
+                    value: '15000'
+                - column:
+                    name: created_at
+                    value: '2023-09-18 14:00:00'
+                - column:
+                    name: updated_at
+                    value: '2023-09-18 14:00:00'
+                - column:
+                    name: manager_id
+                    valueComputed: (SELECT id FROM managers LIMIT 1)
+
+    - changeSet:
+        id: insert-transactions-data
+        author: admin
+        changes:
+          - insert:
+              tableName: transactions
+              columns:
+                - column:
+                    name: transaction_id
+                    valueComputed: 'UUID_TO_BIN(UUID())'
+                - column:
+                    name: transaction_type
+                    value: 'DEPOSIT'
+                - column:
+                    name: amount
+                    value: '2000.00'
+                - column:
+                    name: description
+                    value: 'Initial deposit'
+                - column:
+                    name: created_at
+                    value: '2023-09-18 16:00:00'
+                - column:
+                    name: debit_account_id
+                    valueComputed: (SELECT id FROM accounts WHERE name = 'John Smith' LIMIT 1)
+                - column:
+                    name: credit_account_id
+                    valueComputed: (SELECT id FROM accounts WHERE name = 'John Smith' LIMIT 1)
