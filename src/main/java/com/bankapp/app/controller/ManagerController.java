@@ -67,9 +67,9 @@ public class ManagerController {
         boolean merge = managerService.mergeManagerAndClient(clientId, managerId);
 
         if (merge) {
-            return new ResponseEntity<>("Manager has been successfully added to the client!", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Manager has been successfully added to the client!", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Manager has not been successfully added to the client!", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Manager has not been successfully added to the client!", HttpStatus.BAD_REQUEST);
         }
     }
 }
