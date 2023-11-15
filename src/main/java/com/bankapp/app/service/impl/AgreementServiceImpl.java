@@ -31,4 +31,9 @@ public class AgreementServiceImpl implements AgreementService {
         Agreement agreement = agreementOptional.orElseThrow(() -> new NoSuchElementException("Agreement not found"));
         return agreementMapper.toDTO(agreement);
     }
+
+    @Override
+    public void save(Agreement agreement) {
+        agreementRepository.save(agreement);
+    }
 }
