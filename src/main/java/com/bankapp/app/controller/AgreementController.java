@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -58,6 +59,20 @@ public class AgreementController {
             return new ResponseEntity<>("Agreement deleted successfully!", HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>("Agreement not found!", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/agreement_product_account/")
+    public ResponseEntity<String> mergeAgreementProductAndAccount(@RequestBody Map<String, UUID> request) {
+        UUID agreementId = request.get("agreementId");
+        UUID productId = request.get("productId");
+        UUID accountId = request.get("accountId");
+
+        boolean merge = agreementService.mergeAgreementProductAndAccount(accountId, productId, agreementId);
+        if (merge) {
+            return new ResponseEntity<>("Agreement has been successfully added to the product and account!", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Agreement has not been successfully added to the product and account!", HttpStatus.BAD_REQUEST);
         }
     }
 }
