@@ -5,6 +5,7 @@ import com.bankapp.app.entity.Agreement;
 import com.bankapp.app.mapper.AgreementMapper;
 import com.bankapp.app.repository.AgreementRepository;
 import com.bankapp.app.service.AgreementService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,12 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
+    public Agreement findAgreementById(UUID agreementId){
+        return agreementRepository.findById(agreementId)
+                .orElseThrow(()->new EntityNotFoundException("Agreement not found!"));
+    }
+
+    @Override
     public void save(Agreement agreement) {
         agreementRepository.save(agreement);
     }
@@ -45,5 +52,12 @@ public class AgreementServiceImpl implements AgreementService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Agreement updateAgreement(UUID id, AgreementDTO agreementDTO) {
+        Agreement currentAgreement = findAgreementById(id);
+        Agreement updateAgreement = agreementMapper.updateAgreementFromDTO(agreementDTO,currentAgreement);
+        return agreementRepository.save(updateAgreement);
     }
 }

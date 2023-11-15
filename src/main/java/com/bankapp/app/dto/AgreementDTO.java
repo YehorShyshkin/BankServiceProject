@@ -17,7 +17,7 @@ public class AgreementDTO {
     private String agreementInterestRate;
     private String agreementStatus;
     private String agreementSum;
-    private String createdAt;
+//    private String createdAt;
 
     /**
      * Product
