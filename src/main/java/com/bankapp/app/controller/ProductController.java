@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -56,6 +57,24 @@ public class ProductController {
             return new ResponseEntity<>("Product not found!", HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/product_manager/")
+    public ResponseEntity<String> mergeProductAndManager(@RequestBody Map<String,UUID> request){
+        UUID productId = request.get("productId");
+        UUID managerId = request.get("managerId");
+        if (managerId == null || productId == null){
+            return new ResponseEntity<>("Invalid request. ProductId or manager Id are required!", HttpStatus.BAD_REQUEST);
+        }
+
+        boolean merge = productService.mergeProductAndManager(managerId,productId);
+        if (merge){
+            return new ResponseEntity<>("Product has been successfully added to manager!", HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Product has not been successfully added to manager!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 }

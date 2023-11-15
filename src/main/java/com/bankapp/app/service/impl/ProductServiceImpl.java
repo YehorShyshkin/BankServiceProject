@@ -1,9 +1,11 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ProductDTO;
+import com.bankapp.app.entity.Manager;
 import com.bankapp.app.entity.Product;
 import com.bankapp.app.mapper.ProductMapper;
 import com.bankapp.app.repository.ProductRepository;
+import com.bankapp.app.service.ManagerService;
 import com.bankapp.app.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final ManagerService managerService;
 
     @Override
     public List<ProductDTO> findAll() {
@@ -60,4 +63,17 @@ public class ProductServiceImpl implements ProductService {
         Product updateProduct = productMapper.updateManagerFromDTO(productDTO, currentProduct);
         return productRepository.save(updateProduct);
     }
+
+    @Override
+    public boolean mergeProductAndManager(UUID managerId, UUID productId) {
+        Product currentProduct = findProductById(productId);
+        Manager currentManager = managerService.findManagerById(managerId);
+        if (currentProduct != null && currentManager != null) {
+            currentProduct.setManager(currentManager);
+            productRepository.save(currentProduct);
+            return true;
+        }
+        return false;
+    }
+
 }
