@@ -16,5 +16,8 @@ public interface AgreementService {
     void save(Agreement agreement);
 
     boolean deleteAgreement(UUID id);
+
     Agreement updateAgreement(UUID id, AgreementDTO agreementDTO);
+
+    boolean mergeAgreementProductAndAccount(UUID accountId, UUID productId, UUID agreementId);
 }
