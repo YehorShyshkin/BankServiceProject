@@ -11,7 +11,10 @@ public interface AgreementService {
 
     AgreementDTO getAgreementDTO(String id);
 
+    Agreement findAgreementById(UUID agreementId);
+
     void save(Agreement agreement);
 
     boolean deleteAgreement(UUID id);
+    Agreement updateAgreement(UUID id, AgreementDTO agreementDTO);
 }

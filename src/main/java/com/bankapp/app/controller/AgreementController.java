@@ -40,6 +40,17 @@ public class AgreementController {
         return ResponseEntity.ok("Agreement was create! Success! ");
     }
 
+
+    @PostMapping("/update_agreement/{id}")
+    public ResponseEntity<Agreement> updateAgreement(@PathVariable UUID id, @RequestBody AgreementDTO agreementDTO) {
+        Agreement updateAgreement = agreementService.updateAgreement(id, agreementDTO);
+        if (updateAgreement != null) {
+            return new ResponseEntity<>(updateAgreement, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @DeleteMapping("/delete_agreement/{id}")
     public ResponseEntity<String> deleteAgreement(@PathVariable UUID id) {
         boolean deleteAgreement = agreementService.deleteAgreement(id);
