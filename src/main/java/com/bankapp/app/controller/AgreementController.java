@@ -2,8 +2,10 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.AgreementDTO;
+import com.bankapp.app.entity.Agreement;
 import com.bankapp.app.service.AgreementService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,5 +32,9 @@ public class AgreementController {
         return agreementService.getAgreementDTO(id);
     }
 
-
+    @PostMapping("/create_agreement")
+    public ResponseEntity<String> createAgreement(@RequestBody Agreement agreement){
+        agreementService.save(agreement);
+        return ResponseEntity.ok("Agreement was create! Success! ");
+    }
 }
