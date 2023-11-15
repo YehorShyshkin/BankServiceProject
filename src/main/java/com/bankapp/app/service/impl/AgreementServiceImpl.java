@@ -1,10 +1,14 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.AgreementDTO;
+import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Agreement;
+import com.bankapp.app.entity.Product;
 import com.bankapp.app.mapper.AgreementMapper;
 import com.bankapp.app.repository.AgreementRepository;
+import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.AgreementService;
+import com.bankapp.app.service.ProductService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,8 @@ public class AgreementServiceImpl implements AgreementService {
 
     private final AgreementRepository agreementRepository;
     private final AgreementMapper agreementMapper;
+    private final AccountService accountService;
+    private final ProductService productService;
 
     @Override
     public List<AgreementDTO> findAll() {
@@ -34,9 +40,9 @@ public class AgreementServiceImpl implements AgreementService {
     }
 
     @Override
-    public Agreement findAgreementById(UUID agreementId){
+    public Agreement findAgreementById(UUID agreementId) {
         return agreementRepository.findById(agreementId)
-                .orElseThrow(()->new EntityNotFoundException("Agreement not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Agreement not found!"));
     }
 
     @Override
@@ -57,7 +63,22 @@ public class AgreementServiceImpl implements AgreementService {
     @Override
     public Agreement updateAgreement(UUID id, AgreementDTO agreementDTO) {
         Agreement currentAgreement = findAgreementById(id);
-        Agreement updateAgreement = agreementMapper.updateAgreementFromDTO(agreementDTO,currentAgreement);
+        Agreement updateAgreement = agreementMapper.updateAgreementFromDTO(agreementDTO, currentAgreement);
         return agreementRepository.save(updateAgreement);
+    }
+
+    @Override
+    public boolean mergeAgreementProductAndAccount(UUID accountId, UUID productId, UUID agreementId) {
+        Agreement currentAgreement = findAgreementById(agreementId);
+        Product currentProduct = productService.findProductById(productId);
+        Account currentAccount = accountService.findAccountById(accountId);
+        if (currentAgreement != null && currentProduct != null && currentAccount != null) {
+            currentAgreement.setAccount(currentAccount);
+            currentAgreement.setProduct(currentProduct);
+            agreementRepository.save(currentAgreement);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
