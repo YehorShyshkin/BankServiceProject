@@ -18,33 +18,100 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+
+/**
+ * ----- Russian ------
+ * Этот класс представляет собой менеджера в банковской системе.
+ *
+ *  ----- English -------
+ * This class represents a manager in the banking system.
+ */
 public class Manager {
 
+    /**
+     * ----- Russian ------
+     * Идентификации уникальной записи или объекта в базе данных.
+     *
+     * ----- English -------
+     * Unique identifier of the record or object in the database.
+     */
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
     private UUID id;
 
+    /**
+     * ----- Russian ------
+     * Имя менеджера.
+     *
+     * ----- English -------
+     * First name of the manager
+     */
+
     @Column(name = "first_name")
     private String managerFirstName;
 
+    /**
+     * ----- Russian ------
+     * Фамилия менеджера.
+     *
+     * ----- English -------
+     * Last name of the manager
+     */
     @Column(name = "last_name")
     private String managerLastName;
 
+    /**
+     * ----- Russian ------
+     * Статус менеджера (например, активен, неактивен и т. д.).
+     *
+     * ----- English -------
+     * Status of the manager (e.g., active, inactive, etc.).
+     */
     @Column(name = "manager_status")
     @Enumerated(EnumType.STRING)
     private ManagerStatus managerStatus;
 
+    /**
+     * ----- Russian ------
+     * Дата и время создания записи о менеджере.
+     *
+     * ----- English -------
+     * Date and time when the manager record was created.
+     */
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;
 
+    /**
+     * ----- Russian ------
+     * Дата и время последнего обновления записи о менеджере.
+     *
+     * ----- English -------
+     * Date and time of the last update to the manager record.
+     */
     @Column(name = "updated_at")
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+    /**
+     * ----- Russian ------
+     * Список клиентов, связанных с данным менеджером.
+     *
+     * ----- English -------
+     * List of clients associated with this manager.
+     */
+
     @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private List<Client> listClients;
+
+    /**
+     * ----- Russian ------
+     * Список продуктов, связанных с данным менеджером.
+     *
+     * ----- English -------
+     * List of products associated with this manager.
+     */
 
     @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private List<Product> listProducts;

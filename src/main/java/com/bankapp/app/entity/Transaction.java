@@ -17,31 +17,88 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+
+/**
+ * ----- Russian ------
+ * Этот класс представляет сущность "транзакция"
+ *
+ * ----- English -------
+ * This class represents the "Transaction".
+ */
 public class Transaction {
 
+    /**
+     * ----- Russian ------
+     * Идентификации уникальной записи или объекта в базе данных.
+     *
+     * ----- English -------
+     * Unique identifier of the record or object in the database.
+     */
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
     private UUID id;
 
+    /**
+     * ----- Russian ------
+     * Тип транзакции, представленный перечислением TransactionType.
+     *
+     * ----- English -------
+     * The type of the transaction, represented by the TransactionType enumeration.
+     */
     @Column(name = "transaction_type")
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
+    /**
+     * ----- Russian ------
+     * Сумма транзакции.
+     *
+     * ----- English -------
+     * The amount of the transaction.
+     */
     @Column(name = "amount")
     private BigDecimal transactionAmount;
 
+    /**
+     * ----- Russian ------
+     * Описание транзакции.
+     *
+     * ----- English -------
+     * The description of the transaction.
+     */
     @Column(name = "description")
     private String transactionDescription;
 
+    /**
+     * ----- Russian ------
+     * Дата и время создания транзакции
+     *
+     * ----- English -------
+     * Date and time of the transaction creation.
+     */
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
     private Timestamp transactionCreatedAt;
 
+    /**
+     * ----- Russian ------
+     * Ссылка на счет, связанный с дебетовой стороной транзакции.
+     *
+     * ----- English -------
+     * Reference to the account associated with the debit side of the transaction.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
     private Account transactionDebitAccount;
 
+    /**
+     * ----- Russian ------
+     * Ссылка на счет, связанный с кредитной стороной транзакции.
+     *
+     * ----- English -------
+     * Reference to the account associated with the credit side of the transaction.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
     private Account transactionCreditAccount;
