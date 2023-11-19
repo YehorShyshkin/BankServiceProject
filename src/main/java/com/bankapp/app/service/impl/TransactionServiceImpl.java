@@ -2,6 +2,7 @@ package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.TransactionDTO;
 import com.bankapp.app.entity.Transaction;
+import com.bankapp.app.enums.TransactionType;
 import com.bankapp.app.mapper.TransactionMapper;
 import com.bankapp.app.repository.TransactionRepository;
 import com.bankapp.app.service.AccountService;
@@ -37,6 +38,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
+    public Transaction getTransactionById(UUID uuid) {
+        return transactionRepository.findById(uuid).orElseThrow(() -> new NoSuchElementException("Transaction not found!"));
+    }
+
+    @Override
+    @Transactional
     public TransactionDTO transferTransactionDTO(TransactionDTO transaction) {
         Transaction thisTransaction = transactionMapper.toTransaction(transaction);
         transactionRepository.save(thisTransaction);
@@ -44,4 +51,30 @@ public class TransactionServiceImpl implements TransactionService {
         return transaction;
     }
 
+    @Override
+    @Transactional
+    public boolean deleteTransaction(UUID id) {
+        if (transactionRepository.existsById(id)) {
+            refundBalance(id);
+            transactionRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    @Transactional
+    public void refundBalance(UUID transaction) {
+        Transaction originalTransaction = getTransactionById(transaction);
+        Transaction refundTransaction = new Transaction();
+        refundTransaction.setTransactionAmount(originalTransaction.getTransactionAmount().negate());
+        refundTransaction.setTransactionDebitAccount(originalTransaction.getTransactionCreditAccount());
+        refundTransaction.setTransactionCreditAccount(originalTransaction.getTransactionDebitAccount());
+        refundTransaction.setTransactionDescription("REFUND!");
+        refundTransaction.setTransactionType(TransactionType.REFUND);
+        accountService.updateBalance(refundTransaction);
+        transactionRepository.save(refundTransaction);
+
+    }
 }
