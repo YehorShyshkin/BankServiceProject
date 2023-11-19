@@ -39,7 +39,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Transaction getTransactionById(UUID uuid) {
-        return transactionRepository.findById(uuid).orElseThrow(() -> new NoSuchElementException("Transaction not found!"));
+        return transactionRepository.findById(uuid)
+                .orElseThrow(() -> new NoSuchElementException("Transaction not found!"));
     }
 
     @Override
@@ -69,12 +70,11 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction originalTransaction = getTransactionById(transaction);
         Transaction refundTransaction = new Transaction();
         refundTransaction.setTransactionAmount(originalTransaction.getTransactionAmount().negate());
-        refundTransaction.setTransactionDebitAccount(originalTransaction.getTransactionCreditAccount());
-        refundTransaction.setTransactionCreditAccount(originalTransaction.getTransactionDebitAccount());
+        refundTransaction.setTransactionDebitAccount(originalTransaction.getTransactionDebitAccount());
+        refundTransaction.setTransactionCreditAccount(originalTransaction.getTransactionCreditAccount());
         refundTransaction.setTransactionDescription("REFUND!");
         refundTransaction.setTransactionType(TransactionType.REFUND);
         accountService.updateBalance(refundTransaction);
         transactionRepository.save(refundTransaction);
-
     }
 }
