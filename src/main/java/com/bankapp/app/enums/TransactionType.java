@@ -4,5 +4,6 @@ public enum TransactionType {
     DEPOSIT, // Внесение средств на счет
     WITHDRAWAL,  // Снятие средств со счета
     TRANSFER, // Перевод между счетами
-    PAYMENT // Платеж
+    PAYMENT, // Платеж
+    REFUND // Возврат денег
 }
