@@ -22,7 +22,7 @@ import java.util.UUID;
  * ---- Russian -------
  * Представлять собой информацию о банковских соглашениях,
  * связанных с банковскими картами или аккаунтами.
- *
+ * <p>
  * ----- English -------
  * Represents information about banking agreements
  * related to bank cards or accounts.

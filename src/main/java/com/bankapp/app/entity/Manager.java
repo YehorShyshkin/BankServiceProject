@@ -22,7 +22,7 @@ import java.util.UUID;
 /**
  * ----- Russian ------
  * Этот класс представляет собой менеджера в банковской системе.
- *
+ * <p>
  *  ----- English -------
  * This class represents a manager in the banking system.
  */
@@ -31,7 +31,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Идентификации уникальной записи или объекта в базе данных.
-     *
+     * <p>
      * ----- English -------
      * Unique identifier of the record or object in the database.
      */
@@ -43,7 +43,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Имя менеджера.
-     *
+     * <p>
      * ----- English -------
      * First name of the manager
      */
@@ -54,7 +54,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Фамилия менеджера.
-     *
+     * <p>
      * ----- English -------
      * Last name of the manager
      */
@@ -64,7 +64,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Статус менеджера (например, активен, неактивен и т. д.).
-     *
+     * <p>
      * ----- English -------
      * Status of the manager (e.g., active, inactive, etc.).
      */
@@ -75,7 +75,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Дата и время создания записи о менеджере.
-     *
+     * <p>
      * ----- English -------
      * Date and time when the manager record was created.
      */
@@ -86,7 +86,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Дата и время последнего обновления записи о менеджере.
-     *
+     * <p>
      * ----- English -------
      * Date and time of the last update to the manager record.
      */
@@ -97,7 +97,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Список клиентов, связанных с данным менеджером.
-     *
+     * <p>
      * ----- English -------
      * List of clients associated with this manager.
      */
@@ -108,7 +108,7 @@ public class Manager {
     /**
      * ----- Russian ------
      * Список продуктов, связанных с данным менеджером.
-     *
+     * <p>
      * ----- English -------
      * List of products associated with this manager.
      */

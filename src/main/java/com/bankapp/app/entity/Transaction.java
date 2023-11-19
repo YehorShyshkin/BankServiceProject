@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * ----- Russian ------
  * Этот класс представляет сущность "транзакция"
- *
+ * <p>
  * ----- English -------
  * This class represents the "Transaction".
  */
@@ -30,7 +30,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Идентификации уникальной записи или объекта в базе данных.
-     *
+     * <p>
      * ----- English -------
      * Unique identifier of the record or object in the database.
      */
@@ -42,7 +42,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Тип транзакции, представленный перечислением TransactionType.
-     *
+     * <p>
      * ----- English -------
      * The type of the transaction, represented by the TransactionType enumeration.
      */
@@ -53,7 +53,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Сумма транзакции.
-     *
+     * <p>
      * ----- English -------
      * The amount of the transaction.
      */
@@ -63,7 +63,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Описание транзакции.
-     *
+     * <p>
      * ----- English -------
      * The description of the transaction.
      */
@@ -73,7 +73,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Дата и время создания транзакции
-     *
+     * <p>
      * ----- English -------
      * Date and time of the transaction creation.
      */
@@ -84,7 +84,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Ссылка на счет, связанный с дебетовой стороной транзакции.
-     *
+     * <p>
      * ----- English -------
      * Reference to the account associated with the debit side of the transaction.
      */
@@ -95,7 +95,7 @@ public class Transaction {
     /**
      * ----- Russian ------
      * Ссылка на счет, связанный с кредитной стороной транзакции.
-     *
+     * <p>
      * ----- English -------
      * Reference to the account associated with the credit side of the transaction.
      */
