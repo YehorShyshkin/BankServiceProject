@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
@@ -18,40 +20,24 @@ public class TransactionDTO {
     private String transactionType;
     private String transactionAmount;
     private String transactionDescription;
-    private String transactionCreatedAt;
 
     /**
      * Account DebitAccount
      */
+    private UUID debitAccountId;
+//    private String debitAccountType;
+//    private String debitAccountStatus;
+//    private String debitAccountCurrencyCode;
+//    private String debitAccountBalance;
 
-    private String debitAccountName;
-    private String debitAccountType;
-    private String debitAccountStatus;
-    private String debitAccountCurrencyCode;
-    private String debitAccountBalance;
-
-    /**
-     * Client DebitClient
-     */
-
-    private String debitClientStatus;
-    private String debitClientLastName;
     /**
      * Account CreditAccount
      */
 
-    private String creditAccountName;
-    private String creditAccountType;
-    private String creditAccountStatus;
-    private String creditAccountCurrencyCode;
-    private String creditAccountBalance;
-
-    /**
-     * Client CreditClient
-     */
-
-    private String creditClientStatus;
-    private String creditClientLastName;
-
+    private UUID creditAccountId;
+//    private String creditAccountType;
+//    private String creditAccountStatus;
+//    private String creditAccountCurrencyCode;
+//    private String creditAccountBalance;
 
 }

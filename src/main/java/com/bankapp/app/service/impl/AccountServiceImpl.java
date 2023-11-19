@@ -3,6 +3,7 @@ package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
+import com.bankapp.app.entity.Transaction;
 import com.bankapp.app.mapper.AccountMapper;
 import com.bankapp.app.repository.AccountRepository;
 import com.bankapp.app.service.AccountService;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -66,19 +68,6 @@ public class AccountServiceImpl implements AccountService {
         Account currentAccount = findAccountById(id);
         Account updateAccount = accountMapper.updateAccountFromDTO(accountDTO, currentAccount);
         return accountRepository.save(updateAccount);
-        //Optional<Account> optionalAccount = accountRepository.findById(id);
-
- /*       if (currentAccount.i) {
-            Account account = optionalAccount.get();
-            account.setAccountName(accountDTO.getAccountName());
-            account.setAccountType(AccountType.valueOf(accountDTO.getAccountType()));
-            account.setAccountStatus(AccountStatus.valueOf(accountDTO.getAccountStatus()));
-            account.setCurrencyCode(CurrencyCode.valueOf(accountDTO.getCurrencyCode()));
-            account.setAccountBalance(new BigDecimal(accountDTO.getAccountBalance()));
-            return accountRepository.save(account);
-        } else {
-            throw new EntityNotFoundException("Account not found!");
-        }*/
     }
 
     @Override
@@ -91,4 +80,22 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    @Transactional
+    public void updateBalance(Transaction transaction) {
+        Account firstAccount = findAccountById(transaction.getTransactionDebitAccount().getId());
+        Account secondAccount = findAccountById(transaction.getTransactionCreditAccount().getId());
+
+        BigDecimal firstAccountBalance = firstAccount.getAccountBalance();
+        BigDecimal secondAccountBalance = secondAccount.getAccountBalance();
+        BigDecimal transactionAmount = transaction.getTransactionAmount();
+
+        BigDecimal newFirstAccountBalance = firstAccountBalance.subtract(transactionAmount);
+        BigDecimal newSecondAccountBalance = secondAccountBalance.add(transactionAmount);
+        firstAccount.setAccountBalance(newFirstAccountBalance);
+        secondAccount.setAccountBalance(newSecondAccountBalance);
+
+        accountRepository.save(firstAccount);
+        accountRepository.save(secondAccount);
+    }
 }
