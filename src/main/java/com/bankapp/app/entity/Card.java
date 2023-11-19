@@ -28,7 +28,7 @@ import java.util.UUID;
  * Банковская карта - это финансовый инструмент,
  * который клиенты банка используют для осуществления платежей,
  * снятия наличных денег, онлайн-транзакций и других финансовых операций.
- *
+ * <p>
  * ----- English -------
  * A bank card is a financial instrument that bank clients use
  * for making payments, withdrawing cash, online transactions,
