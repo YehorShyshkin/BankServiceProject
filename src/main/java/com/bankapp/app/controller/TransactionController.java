@@ -28,9 +28,19 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<TransactionDTO> transferTransactionDTO (@RequestBody TransactionDTO transaction){
+    public ResponseEntity<TransactionDTO> transferTransactionDTO(@RequestBody TransactionDTO transaction) {
         TransactionDTO newTransaction = transactionService.transferTransactionDTO(transaction);
         return new ResponseEntity<>(newTransaction, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/delete_transfer/{id}")
+    public ResponseEntity<String> deleteTransaction(@PathVariable UUID id) {
+        boolean deleteTransaction = transactionService.deleteTransaction(id);
+        if (deleteTransaction) {
+            return new ResponseEntity<>("Transaction deleted successfully!", HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<>("Transaction not found!", HttpStatus.NOT_FOUND);
+        }
     }
 
 }
