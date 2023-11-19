@@ -26,7 +26,7 @@ import java.util.UUID;
  * которые имеют отношения с банком и пользуются его услугами.
  * Клиенты могут выполнять различные операции и иметь разные виды банковских счетов
  * и продуктов.
- *
+ * <p>
  * ----- English -------
  * Clients are individuals or legal entities
  * who have relationships with the bank and use its services.
