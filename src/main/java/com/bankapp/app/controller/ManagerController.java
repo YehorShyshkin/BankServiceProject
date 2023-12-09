@@ -3,6 +3,7 @@ package com.bankapp.app.controller;
 import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.entity.Manager;
 import com.bankapp.app.service.ManagerService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @RestController
 @RequestMapping("/managers")
 @RequiredArgsConstructor
@@ -19,7 +22,7 @@ import java.util.UUID;
 public class ManagerController {
     private final ManagerService managerService;
 
-    @GetMapping("/all")
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<ManagerDTO> findAll() {
         return managerService.findAll();
     }
@@ -33,13 +36,16 @@ public class ManagerController {
         return managerService.getManagerDTO(id);
     }
 
-    @PostMapping("/create_managers")
-    public ResponseEntity<String> createManager(@RequestBody Manager manager) {
+    @RequestMapping(value = "/create_managers", method = POST)
+    public ResponseEntity<Void> createManager(@RequestBody Manager manager, HttpServletRequest httpServletRequest) {
+        if (manager == null) {
+            return ResponseEntity.badRequest().build();
+        }
         managerService.save(manager);
-        return ResponseEntity.ok("Manager was create! Success!");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/update_manager/{id}")
+    @RequestMapping(value = "/update_manager/{id}", method = POST)
     public ResponseEntity<Manager> updateManager(@PathVariable UUID id, @RequestBody ManagerDTO managerDTO) {
         Manager updateManager = managerService.updateManager(id, managerDTO);
         if (updateManager != null) {
@@ -49,7 +55,7 @@ public class ManagerController {
         }
     }
 
-    @DeleteMapping("/delete_manager/{id}")
+    @RequestMapping(value = "/delete_manager/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteManager(@PathVariable UUID id) {
         boolean deleteManager = managerService.deleteManager(id);
         if (deleteManager) {
@@ -59,7 +65,7 @@ public class ManagerController {
         }
     }
 
-    @PostMapping("/manager_client/")
+    @RequestMapping(value = "/manager_client/", method = POST)
     public ResponseEntity<String> mergeManagerAndClient(@RequestBody Map<String, UUID> request) {
         UUID managerId = request.get("managerId");
         UUID clientId = request.get("clientId");

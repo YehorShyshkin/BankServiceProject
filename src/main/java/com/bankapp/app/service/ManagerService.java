@@ -11,7 +11,7 @@ public interface ManagerService {
 
     ManagerDTO getManagerDTO(String id);
 
-    void save(Manager manager);
+    Manager save(Manager manager);
 
     Manager findManagerById(UUID managerId);
 

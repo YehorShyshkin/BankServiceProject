@@ -3,13 +3,14 @@ package com.bankapp.app.generator;
 import com.bankapp.app.enums.PaymentSystem;
 import lombok.experimental.UtilityClass;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Random;
 
 @UtilityClass
 public class CardGenerator {
     public static String generateCardNumber(PaymentSystem paymentSystem) {
-        Random random = new Random();
+        SecureRandom secureRandom = new SecureRandom();
         String iin = switch (paymentSystem) {
             case VISA -> "4";
             case MASTERCARD -> "5";
@@ -21,15 +22,15 @@ public class CardGenerator {
         };
         StringBuilder cardNumber = new StringBuilder(iin);
         for (int i = 0; i < 15 - iin.length(); i++) {
-            cardNumber.append(random.nextInt(10));
+            cardNumber.append(secureRandom.nextInt(10));
         }
         String cardNumberWithoutCheckDigit = cardNumber.toString();
-        int checkDigit = calculateLuhnCheckDigit(cardNumberWithoutCheckDigit);
+        int checkDigit = calculateLuanCheckDigit(cardNumberWithoutCheckDigit);
         cardNumber.append(checkDigit);
         return cardNumber.toString();
     }
 
-    private static int calculateLuhnCheckDigit(String cardNumber) {
+    private static int calculateLuanCheckDigit(String cardNumber) {
         int sum = 0;
         boolean doubleDigit = false;
         for (int i = cardNumber.length() - 1; i >= 0; i--) {
@@ -51,8 +52,35 @@ public class CardGenerator {
         }
     }
 
+    /**
+     * SecureRandom - это класс в языке Java, предоставляющий генерацию криптографически стойких
+     * случайных чисел. Он является частью пакета java.security и предоставляет
+     * более высокий уровень безопасности по сравнению с обычным Random.
+     */
+    public String generateCardCVV(){
+        SecureRandom secureRandom = new SecureRandom();
+        StringBuilder cardCVV = new StringBuilder();
+        for (int i = 0; i<3; i++){
+            cardCVV.append(secureRandom.nextInt(10));
+        }
+        return String.valueOf(cardCVV);
+    }
+
     public static LocalDate generateCardExpirationDate() {
         return LocalDate.now().plusYears(5);
     }
+
+    /**
+     * StringBuilder cardNumber = new StringBuilder(iin);
+     *         for (int i = 0; i < 15 - iin.length(); i++) {
+     *             cardNumber.append(random.nextInt(10));
+     *         }
+     *         String cardNumberWithoutCheckDigit = cardNumber.toString();
+     *         int checkDigit = calculateLuhnCheckDigit(cardNumberWithoutCheckDigit);
+     *         cardNumber.append(checkDigit);
+     *         return cardNumber.toString();
+     */
+
+
 }
 

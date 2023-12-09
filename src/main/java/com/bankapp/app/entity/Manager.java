@@ -38,6 +38,7 @@ public class Manager {
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
+    @SequenceGenerator(name = "manager_entity_generator", sequenceName = "manager_entyti_seq", allocationSize = 1)
     private UUID id;
 
     /**
