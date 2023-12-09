@@ -1,14 +1,8 @@
 package com.bankapp.app.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Data
 public class ProductDTO {
     /**
      * Product

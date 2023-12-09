@@ -5,7 +5,7 @@ import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.entity.Client;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,12 +17,14 @@ public class ClientController {
 
     private final ClientService clientService;
 
-    @GetMapping("/all")
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
     public List<ClientDTO> findAll() {
         return clientService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
     public ClientDTO getClientDTO(@PathVariable("id") String id) {
         String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
         if (!id.matches(uuidPattern)) {
@@ -31,11 +33,9 @@ public class ClientController {
         return clientService.getClientDTO(id);
     }
 
-    @PostMapping("/create_clients")
-    public ResponseEntity<String> createClient (@RequestBody Client client){
-        clientService.save(client);
-        return ResponseEntity.ok("Client was create! Success!");
+    @RequestMapping(value = "/create_clients/", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public ClientDTO createClientDTO(@RequestBody Client client) {
+        return clientService.createClientDTO(client);
     }
-
-
 }

@@ -1,16 +1,10 @@
 package com.bankapp.app.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Data
 public class TransactionDTO {
 
     /**

@@ -8,16 +8,15 @@ import java.util.UUID;
 
 public interface ManagerService {
     List<ManagerDTO> findAll();
-
-    ManagerDTO getManagerDTO(String id);
-
-    void save(Manager manager);
-
     Manager findManagerById(UUID managerId);
 
     Manager updateManager(UUID id, ManagerDTO managerDTO);
-
+    List<ManagerDTO> findManagerDTOByIdList(UUID managerId);
     boolean deleteManager(UUID id);
 
     boolean mergeManagerAndClient(UUID clientId, UUID managerId);
+
+    ManagerDTO createManager(Manager manager);
+
+    ManagerDTO findManagerDTOById(UUID managerId);
 }

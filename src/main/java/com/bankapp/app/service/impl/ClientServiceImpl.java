@@ -21,7 +21,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDTO> findAll() {
-        return clientMapper.toDTO(clientRepository.findAll());
+        return clientMapper.listToDTO(clientRepository.findAll());
     }
 
     @Override
@@ -34,13 +34,12 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client findClientById(UUID clientId) {
         return clientRepository.findById(clientId)
-                .orElseThrow(()->new EntityNotFoundException("Client not found!"));
+                .orElseThrow(() -> new EntityNotFoundException("Client not found!"));
     }
 
-
     @Override
-    public void save(Client client) {
-        clientRepository.save(client);
+    public ClientDTO createClientDTO(Client client) {
+        return clientMapper.toDTO(clientRepository.save(client));
     }
 
     @Override
@@ -51,4 +50,6 @@ public class ClientServiceImpl implements ClientService {
         }
         return Collections.emptyList();
     }
+
+
 }

@@ -13,8 +13,8 @@ public interface ClientService {
 
     Client findClientById(UUID id);
 
-    void save(Client client);
-
     List<Account> getAccountsForClient(UUID clientId);
+
+    ClientDTO createClientDTO(Client client);
 
 }
