@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 @RestController
 @RequestMapping("/managers")
 @RequiredArgsConstructor
@@ -19,47 +22,56 @@ import java.util.UUID;
 public class ManagerController {
     private final ManagerService managerService;
 
-    @GetMapping("/all")
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
     public List<ManagerDTO> findAll() {
         return managerService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ManagerDTO getManagerDTO(@PathVariable("id") String id) {
-        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-        if (!id.matches(uuidPattern)) {
-            throw new IllegalArgumentException("ID is not a valid UUID");
-        }
-        return managerService.getManagerDTO(id);
+//    @GetMapping("/{id}")
+//    public ManagerDTO getManagerDTO(@PathVariable("id") String id) {
+//        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+//        if (!id.matches(uuidPattern)) {
+//            throw new IllegalArgumentException("ID is not a valid UUID");
+//        }
+//        return managerService.getManagerDTO(id);
+//    }
+    @RequestMapping(value = "/find/{id}", method = GET)
+    @ResponseStatus(HttpStatus.OK)
+    public ManagerDTO findManagerDTOById(@PathVariable("id") UUID managerId){
+        return managerService.findManagerDTOById(managerId);
     }
 
-    @PostMapping("/create_managers")
-    public ResponseEntity<String> createManager(@RequestBody Manager manager) {
-        managerService.save(manager);
-        return ResponseEntity.ok("Manager was create! Success!");
+    @RequestMapping(value = "/create_managers/", method = POST)
+    @ResponseStatus(HttpStatus.OK)
+    public ManagerDTO createManager(@RequestBody Manager manager) {
+        return managerService.createManager(manager);
     }
 
-    @PostMapping("/update_manager/{id}")
+    @RequestMapping(value = "/update_manager/{id}", method = POST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Manager> updateManager(@PathVariable UUID id, @RequestBody ManagerDTO managerDTO) {
         Manager updateManager = managerService.updateManager(id, managerDTO);
         if (updateManager != null) {
-            return new ResponseEntity<>(updateManager, HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(updateManager, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/delete_manager/{id}")
+    @RequestMapping(value = "/delete_manager/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> deleteManager(@PathVariable UUID id) {
         boolean deleteManager = managerService.deleteManager(id);
         if (deleteManager) {
-            return new ResponseEntity<>("Manager deleted successfully!", HttpStatus.ACCEPTED);
+            return new ResponseEntity<>("Manager deleted successfully!", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Manager not found!", HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/manager_client/")
+    @RequestMapping(value = "/manager_client/", method = POST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> mergeManagerAndClient(@RequestBody Map<String, UUID> request) {
         UUID managerId = request.get("managerId");
         UUID clientId = request.get("clientId");

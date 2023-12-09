@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,19 +23,21 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<ManagerDTO> findAll() {
-        return managerMapper.toDTO(managerRepository.findAll());
+        return managerMapper.listToDTO(managerRepository.findAll());
+    }
+    @Override
+    public List<ManagerDTO> findManagerDTOByIdList(UUID managerId){
+        return managerRepository.findManagerById(managerId);
     }
 
     @Override
-    public ManagerDTO getManagerDTO(String id) {
-        Optional<Manager> managerOptional = managerRepository.findById(UUID.fromString(id));
-        Manager manager = managerOptional.orElseThrow(() -> new NoSuchElementException("Manager not found!"));
-        return managerMapper.toDTO(manager);
+    public ManagerDTO createManager(Manager manager) {
+        return managerMapper.toDTO(managerRepository.save(manager));
     }
 
     @Override
-    public void save(Manager manager) {
-        managerRepository.save(manager);
+    public ManagerDTO findManagerDTOById(UUID managerId) {
+        return managerMapper.toDTO(findManagerById(managerId));
     }
 
     @Override
@@ -69,9 +69,11 @@ public class ManagerServiceImpl implements ManagerService {
         Manager currentManager = findManagerById(managerId); // Получаем менеджера по его ID
         if (currentClient != null && currentManager != null) {
             currentClient.setManager(currentManager); // Устанавливаем менеджера для клиента
-            clientService.save(currentClient); // Сохраняем клиента в базу данных
+            clientService.createClientDTO(currentClient); // Сохраняем клиента в базу данных
             return true; // Возвращаем true, чтобы показать, что операция выполнена успешно
         }
         return false; // Возвращаем false, если клиент или менеджер не найдены
     }
+
+
 }

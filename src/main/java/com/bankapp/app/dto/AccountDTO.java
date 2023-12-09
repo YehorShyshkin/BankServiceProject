@@ -2,10 +2,7 @@ package com.bankapp.app.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
-@ToString
-@NoArgsConstructor
+@Data
 public class AccountDTO {
     /**
      * Account
@@ -15,7 +12,6 @@ public class AccountDTO {
     private String accountStatus;
     private String currencyCode;
     private String accountBalance;
-//    private String createdAt;
 
     /**
      * Client
@@ -29,6 +25,4 @@ public class AccountDTO {
     private String agreementInterestRate;
     private String agreementStatus;
     private String agreementSum;
-
-
 }

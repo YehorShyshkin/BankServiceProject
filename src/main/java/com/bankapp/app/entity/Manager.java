@@ -38,6 +38,7 @@ public class Manager {
     @Id
     @GeneratedValue(generator = "UUID")
     @Column(name = "id")
+    @SequenceGenerator(name = "manager_entity_generator", sequenceName = "manager_entyti_seq", allocationSize = 1)
     private UUID id;
 
     /**
@@ -131,12 +132,12 @@ public class Manager {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Manager manager)) return false;
-        return Objects.equals(managerFirstName, manager.managerFirstName) && Objects.equals(managerLastName, manager.managerLastName);
+        return Objects.equals(id, manager.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(managerFirstName, managerLastName);
+        return Objects.hash(id);
     }
 
     @Override

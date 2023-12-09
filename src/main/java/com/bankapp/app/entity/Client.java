@@ -1,7 +1,9 @@
 package com.bankapp.app.entity;
 
 import com.bankapp.app.enums.ClientStatus;
+import com.bankapp.app.generator.AllowedDomains;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -109,6 +111,8 @@ public class Client {
      * account activity, and other operations.
      */
     @Column(name = "email")
+    @Email
+    @AllowedDomains
     private String email;
 
     /**
@@ -204,12 +208,11 @@ public class Client {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Client client)) return false;
-        return Objects.equals(taxCode, client.taxCode) && Objects.equals(phoneNumber, client.phoneNumber);
+        return Objects.equals(id, client.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(taxCode, phoneNumber);
+        return Objects.hash(id);
     }
-
 }
