@@ -1,0 +1,210 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-cards-data
+      author: admin
+      changes:
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('b69e5762-70ea-11ee-b962-0242ac120002')"
+              - column:
+                  name: card_number
+                  value: "1234-5678-9012-3456"
+              - column:
+                  name: holder_name
+                  value: "Alice Smith"
+              - column:
+                  name: expiration_date
+                  value: "2023-12-31"
+              - column:
+                  name: balance
+                  value: "1000.00"
+              - column:
+                  name: transaction_limit
+                  value: "500.00"
+              - column:
+                  name: delivery_point
+                  value: "Main Branch"
+              - column:
+                  name: is_digital_wallet
+                  valueBoolean: true
+              - column:
+                  name: is_virtual_wallet
+                  valueBoolean: true
+              - column:
+                  name: co_brand
+                  value: "VISA"
+              - column:
+                  name: payment_system
+                  value: "MASTERCARD"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: account_id
+                  valueComputed: "UUID_TO_BIN('6ff5fa70-6b5b-11ee-b962-0242ac120002')"
+
+  - changeSet:
+      id: insert-cards-data2
+      author: admin
+      changes:
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('c3bb7588-70ea-11ee-b962-0242ac120002')"
+              - column:
+                  name: card_number
+                  value: "5678-1234-9012-3456"
+              - column:
+                  name: holder_name
+                  value: "Jane Smith"
+              - column:
+                  name: expiration_date
+                  value: "2023-11-30"
+              - column:
+                  name: balance
+                  value: "2500.00"
+              - column:
+                  name: transaction_limit
+                  value: "1000.00"
+              - column:
+                  name: delivery_point
+                  value: "Downtown Branch"
+              - column:
+                  name: is_digital_wallet
+                  valueBoolean: true
+              - column:
+                  name: is_virtual_wallet
+                  valueBoolean: true
+              - column:
+                  name: co_brand
+                  value: "MASTERCARD"
+              - column:
+                  name: payment_system
+                  value: "VISA"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 14:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 14:00:00"
+              - column:
+                  name: account_id
+                  valueComputed: "UUID_TO_BIN('032a7a08-6b5e-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-cards-data3
+      author: admin
+      changes:
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('170e7ee2-70eb-11ee-b962-0242ac120002')"
+              - column:
+                  name: card_number
+                  value: "9876-5432-2109-8765"
+              - column:
+                  name: holder_name
+                  value: "Alice Johnson"
+              - column:
+                  name: expiration_date
+                  value: "2024-02-28"
+              - column:
+                  name: balance
+                  value: "3500.00"
+              - column:
+                  name: transaction_limit
+                  value: "2000.00"
+              - column:
+                  name: delivery_point
+                  value: "Suburb Branch"
+              - column:
+                  name: is_digital_wallet
+                  valueBoolean: true
+              - column:
+                  name: is_virtual_wallet
+                  valueBoolean: true
+              - column:
+                  name: co_brand
+                  value: "AMERICAN_EXPRESS"
+              - column:
+                  name: payment_system
+                  value: "VISA"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-19 10:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-19 10:00:00"
+              - column:
+                  name: account_id
+                  valueComputed: "UUID_TO_BIN('2dadc140-6b5e-11ee-b962-0242ac120002')"
+  - changeSet:
+      id: insert-cards-data4
+      author: admin
+      changes:
+        - insert:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('208e8d54-70eb-11ee-b962-0242ac120002')"
+              - column:
+                  name: card_number
+                  value: "4321-8765-9876-2109"
+              - column:
+                  name: holder_name
+                  value: "Robert White"
+              - column:
+                  name: expiration_date
+                  value: "2023-10-15"
+              - column:
+                  name: balance
+                  value: "2000.00"
+              - column:
+                  name: transaction_limit
+                  value: "1500.00"
+              - column:
+                  name: delivery_point
+                  value: "Downtown Branch"
+              - column:
+                  name: is_digital_wallet
+                  valueBoolean: true
+              - column:
+                  name: is_virtual_wallet
+                  valueBoolean: true
+              - column:
+                  name: co_brand
+                  value: "APPLE_PAY"
+              - column:
+                  name: payment_system
+                  value: "MASTERCARD"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-20 09:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-20 09:00:00"
+              - column:
+                  name: account_id
+                  valueComputed: "UUID_TO_BIN('4c991dde-6b5e-11ee-b962-0242ac120002')"

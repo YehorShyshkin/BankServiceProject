@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-managers-data
+      author: admin
+      changes:
+        - insert:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('0f349214-6b5b-11ee-b962-0242ac120002')"
+              - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Doe"
+              - column:
+                  name: manager_status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-18 12:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-18 12:00:00"
+  - changeSet:
+      id: insert-managers-data2
+      author: admin
+      changes:
+        - insert:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('b9ef38a2-6b5c-11ee-b962-0242ac120002')"
+              - column:
+                  name: first_name
+                  value: "Michael"
+              - column:
+                  name: last_name
+                  value: "Johnson"
+              - column:
+                  name: manager_status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-20 15:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-20 15:00:00"
+  - changeSet:
+      id: insert-managers-data3
+      author: admin
+      changes:
+        - insert:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('d28d955c-6b5c-11ee-b962-0242ac120002')"
+              - column:
+                  name: first_name
+                  value: "John"
+              - column:
+                  name: last_name
+                  value: "Smith"
+              - column:
+                  name: manager_status
+                  value: "ACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-20 10:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-20 10:00:00"
+  - changeSet:
+      id: insert-managers-data4
+      author: admin
+      changes:
+        - insert:
+            tableName: managers
+            columns:
+              - column:
+                  name: id
+                  valueComputed: "UUID_TO_BIN('e8268ff4-6b5c-11ee-b962-0242ac120002')"
+              - column:
+                  name: first_name
+                  value: "Sarah"
+              - column:
+                  name: last_name
+                  value: "Wilson"
+              - column:
+                  name: manager_status
+                  value: "INACTIVE"
+              - column:
+                  name: created_at
+                  value: "2023-09-22 10:00:00"
+              - column:
+                  name: updated_at
+                  value: "2023-09-22 10:00:00"
