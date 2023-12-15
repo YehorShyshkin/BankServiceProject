@@ -53,7 +53,7 @@ public class CardServiceImpl implements CardService {
             Account account = currentCard.getAccount();
 
             if (account != null) {
-                BigDecimal balance = account.getAccountBalance();
+                BigDecimal balance = account.getBalance();
 
                 if (balance.compareTo(BigDecimal.ZERO) == 0) {
                     cardRepository.deleteById(id);

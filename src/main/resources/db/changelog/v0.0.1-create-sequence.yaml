@@ -1,8 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: create sequence for UUID generator
-      author: admin
-      createSequence:
-        sequenceName: seq_for_uuid_generator
-        schemaName: public
-        cycle: true

@@ -43,7 +43,7 @@ public class CardController {
         Account account = accountService.getAccountById(String.valueOf(id));
         if (account != null) {
             String generatedCardNumber = CardGenerator.generateCardNumber(PaymentSystem.VISA);
-            card.setCardNumber(generatedCardNumber);
+            card.setNumber(generatedCardNumber);
             card.setAccount(account);
             card.setExpirationDate(CardGenerator.generateCardExpirationDate());
             cardService.save(card);

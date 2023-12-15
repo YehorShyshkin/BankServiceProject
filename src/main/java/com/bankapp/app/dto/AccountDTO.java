@@ -4,25 +4,9 @@ import lombok.*;
 
 @Data
 public class AccountDTO {
-    /**
-     * Account
-     */
-    private String accountName;
-    private String accountType;
-    private String accountStatus;
+    private String name;
+    private String type;
+    private String status;
     private String currencyCode;
-    private String accountBalance;
-
-    /**
-     * Client
-     */
-    private String clientStatus;
-    private String clientLastName;
-
-    /**
-     * Agreement
-     */
-    private String agreementInterestRate;
-    private String agreementStatus;
-    private String agreementSum;
+    private String balance;
 }

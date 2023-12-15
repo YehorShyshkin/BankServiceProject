@@ -10,10 +10,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TransactionMapper {
     TransactionDTO toDTO(Transaction transaction);
-
     List<TransactionDTO> toDTO(List<Transaction> transactionList);
-
-    @Mapping(source = "debitAccountId", target = "transactionDebitAccount.id")
-    @Mapping(source = "creditAccountId", target = "transactionCreditAccount.id")
     Transaction toTransaction(TransactionDTO transaction);
 }
