@@ -74,7 +74,4 @@ public class ProductController {
             return new ResponseEntity<>("Product has not been successfully added to manager!", HttpStatus.BAD_REQUEST);
         }
     }
-
-
-
 }

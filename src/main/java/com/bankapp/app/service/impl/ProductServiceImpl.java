@@ -66,13 +66,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean mergeProductAndManager(UUID managerId, UUID productId) {
-        Product currentProduct = findProductById(productId);
-        Manager currentManager = managerService.findManagerById(managerId);
-        if (currentProduct != null && currentManager != null) {
-            currentProduct.setManager(currentManager);
-            productRepository.save(currentProduct);
-            return true;
-        }
+//        Product currentProduct = findProductById(productId);
+//        Manager currentManager = managerService.findManagerById(String.valueOf(managerId));
+//        if (currentProduct != null && currentManager != null) {
+//            currentProduct.setManager(currentManager);
+//            productRepository.save(currentProduct);
+//            return true;
+//        }
         return false;
     }
 

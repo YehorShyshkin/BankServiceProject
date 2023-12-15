@@ -2,20 +2,13 @@ package com.bankapp.app.dto;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductDTO {
-    /**
-     * Product
-     */
-    private String productName;
-    private String productStatus;
+    private String name;
+    private String status;
     private String currencyCode;
-    private String productInterestRate;
-    private String productLimit;
-
-    /**
-     * Manager
-     */
-    private String managerLastName;
-    private String managerStatus;
+    private BigDecimal interestRate;
+    private BigDecimal limit;
 }

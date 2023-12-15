@@ -51,15 +51,10 @@ public class CardGenerator {
         }
     }
 
-    /**
-     * SecureRandom - это класс в языке Java, предоставляющий генерацию криптографически стойких
-     * случайных чисел. Он является частью пакета java.security и предоставляет
-     * более высокий уровень безопасности по сравнению с обычным Random.
-     */
-    public String generateCardCVV(){
+    public String generateCardCVV() {
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder cardCVV = new StringBuilder();
-        for (int i = 0; i<3; i++){
+        for (int i = 0; i < 3; i++) {
             cardCVV.append(secureRandom.nextInt(10));
         }
         return String.valueOf(cardCVV);

@@ -50,6 +50,4 @@ public class ClientServiceImpl implements ClientService {
         }
         return Collections.emptyList();
     }
-
-
 }
