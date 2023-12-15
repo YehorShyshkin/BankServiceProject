@@ -1,14 +1,83 @@
 package com.bankapp.app.enums;
 
 /**
- * код валюты
+ * ----- Russian ------
+ * <p>
+ * Код валюты.
+ * <p>
+ * ----- English -------
+ * <p>
+ * Currency code.
  */
 public enum CurrencyCode {
-    USD, // (доллар США) United States - (United States Dollar)
-    EUR, // (евро); EUR (Euro)
-    CNY, // (юань Ренминби) - Китай; China - (Chinese Yuan Renminbi)
-    JPY, // Япония - (иена); Japan - (Japanese Yen)
-    GBP, // Великобритания - (фунт стерлингов); United Kingdom - (British Pound Sterling)
-    INR, // Индия - (индийская рупия); India - (Indian Rupee)
-    BRL // Бразилия - (бразильский реал);      * Brazil - BRL (Brazilian Real)
+    /**
+     * ----- Russian ------
+     * <p>
+     * Доллар США.
+     * <p>
+     * ----- English -------
+     * <p>
+     * United States Dollar.
+     */
+    USD,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Евро.
+     * <p>
+     * ----- English -------
+     * <p>
+     * Euro.
+     */
+    EUR,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Юань Ренминби.
+     * <p>
+     * ----- English -------
+     * <p>
+     * Chinese Yuan Renminbi.
+     */
+    CNY,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Иена.
+     * <p>
+     * ----- English -------
+     * <p>
+     * Japanese Yen.
+     */
+    JPY,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Фунт Стерлингов.
+     * <p>
+     * ----- English -------
+     * <p>
+     * British Pound Sterling.
+     */
+    GBP,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Индийская рупия.
+     * <p>
+     * ----- English -------
+     * <p>
+     * Indian Rupee.
+     */
+    INR,
+    /**
+     * ----- Russian ------
+     * <p>
+     * Бразильский реал.
+     * <p>
+     * ----- English -------
+     * <p>
+     * Brazilian Real.
+     */
+    BRL
 }

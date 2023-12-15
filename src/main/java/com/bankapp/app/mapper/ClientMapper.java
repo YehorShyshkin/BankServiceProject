@@ -11,10 +11,6 @@ import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 @Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR, uses = {AccountMapper.class})
 public interface ClientMapper {
 
-
-//    @Mapping(source = "manager.managerLastName", target = "managerLastName")
-//    @Mapping(source = "manager.managerStatus", target = "managerStatus")
-
     ClientDTO toDTO(Client client);
     List<ClientDTO> listToDTO(List<Client> clientList);
 }

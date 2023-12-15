@@ -11,6 +11,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = EmailDomainValidator.class)
 /**
  * ----- Russian ------
+ * <p>
  * Эта аннотация используется только на полях
  * <p>
  * ----- English -------
@@ -20,6 +21,7 @@ import java.lang.annotation.Target;
 
 /**
  * ----- Russian ------
+ * <p>
  * Аннотация говорит о том, где эта аннотация может быть использована,
  * в данном случае в режиме выполнения.
  * <p>

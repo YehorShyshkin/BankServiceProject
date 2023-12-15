@@ -21,6 +21,7 @@ import java.util.UUID;
 
 /**
  * ----- Russian ------
+ * <p>
  * Этот класс представляет собой менеджера в банковской системе.
  * <p>
  *  ----- English -------
@@ -30,9 +31,11 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Идентификации уникальной записи или объекта в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Unique identifier of the record or object in the database.
      */
     @Id
@@ -43,10 +46,12 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Имя менеджера.
      * <p>
      * ----- English -------
-     * First name of the manager
+     * <p>
+     * First name of the manager.
      */
 
     @Column(name = "first_name")
@@ -54,19 +59,23 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Фамилия менеджера.
      * <p>
      * ----- English -------
-     * Last name of the manager
+     * <p>
+     * Last name of the manager.
      */
     @Column(name = "last_name")
     private String managerLastName;
 
     /**
      * ----- Russian ------
+     * <p>
      * Статус менеджера (например, активен, неактивен и т. д.).
      * <p>
      * ----- English -------
+     * <p>
      * Status of the manager (e.g., active, inactive, etc.).
      */
     @Column(name = "manager_status")
@@ -75,9 +84,11 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Дата и время создания записи о менеджере.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time when the manager record was created.
      */
     @Column(name = "created_at", updatable = false)
@@ -86,9 +97,11 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Дата и время последнего обновления записи о менеджере.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of the last update to the manager record.
      */
     @Column(name = "updated_at")
@@ -97,9 +110,11 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Список клиентов, связанных с данным менеджером.
      * <p>
      * ----- English -------
+     * <p>
      * List of clients associated with this manager.
      */
 
@@ -108,9 +123,11 @@ public class Manager {
 
     /**
      * ----- Russian ------
+     * <p>
      * Список продуктов, связанных с данным менеджером.
      * <p>
      * ----- English -------
+     * <p>
      * List of products associated with this manager.
      */
 

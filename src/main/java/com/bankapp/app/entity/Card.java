@@ -25,11 +25,13 @@ import java.util.UUID;
 @Setter
 /**
  * ---- Russian -------
+ * <p>
  * Банковская карта - это финансовый инструмент,
  * который клиенты банка используют для осуществления платежей,
  * снятия наличных денег, онлайн-транзакций и других финансовых операций.
  * <p>
  * ----- English -------
+ * <p>
  * A bank card is a financial instrument that bank clients use
  * for making payments, withdrawing cash, online transactions,
  * and other financial operations.
@@ -38,9 +40,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Идентификации уникальной записи или объекта в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Unique identifier of the record or object in the database.
      */
     @Id
@@ -50,9 +54,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Номер карты
      * <p>
      * ----- English -------
+     * <p>
      * Card number.
      */
     @Column(name = "card_number")
@@ -60,9 +66,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Срок действия карты
      * <p>
      * ----- English -------
+     * <p>
      * Card expiration date.
      */
 
@@ -71,9 +79,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Дата и время создания карты.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of card creation.
      */
     @Column(name = "created_at", updatable = false)
@@ -82,9 +92,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Дата и временя последнего обновления записи в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of the last update to the database record.
      */
     @Column(name = "updated_at")
@@ -93,10 +105,12 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Лимит на сумму транзакций, которые могут быть совершены с данной
      * банковской карты.
      * <p>
      * ----- English -------
+     * <p>
      * Limit on the amount of transactions that can be made with this bank card.
      */
     @Column(name = "transaction_limit")
@@ -104,9 +118,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Тип банковской карты, кредитная карта, дебетовая карта и т.д.
      * <p>
      * ----- English -------
+     * <p>
      * Type of bank card, such as credit card, debit card, etc.
      */
     @Column(name = "card_type")
@@ -115,9 +131,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Указывает на платежную систему, к которой относится данная банковская карта.
      * <p>
      * ----- English -------
+     * <p>
      * Indicates the payment system to which this bank card belongs.
      */
     @Column(name = "payment_system")
@@ -126,9 +144,11 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Указывает на текущий статус банковской карты
      * <p>
      * ----- English -------
+     * <p>
      * Indicates the current status of the bank card.
      */
     @Column(name = "status")
@@ -137,6 +157,7 @@ public class Card {
 
     /**
      * ----- Russian ------
+     * <p>
      * Это ссылка на связанный счет, к которому привязана данная банковская карта.
      * Он обозначает связь между банковской картой и банковским счетом,
      * на котором хранятся деньги. Благодаря этой связи система знает,
@@ -144,6 +165,7 @@ public class Card {
      * производимые с помощью данной карты.
      * <p>
      * ----- English -------
+     * <p>
      * This is a reference to the associated account to which this bank card is linked.
      * It denotes the relationship between the bank card and the bank account
      * where the money is stored. Thanks to this link, the system knows
@@ -152,7 +174,6 @@ public class Card {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-//    @JsonIgnore
     @JsonBackReference
     private Account account;
 

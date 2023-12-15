@@ -20,18 +20,22 @@ import java.util.UUID;
 
 /**
  * ----- Russian ------
+ * <p>
  * Этот класс представляет сущность "транзакция"
  * <p>
  * ----- English -------
+ * <p>
  * This class represents the "Transaction".
  */
 public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Идентификации уникальной записи или объекта в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Unique identifier of the record or object in the database.
      */
     @Id
@@ -41,9 +45,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Тип транзакции, представленный перечислением TransactionType.
      * <p>
      * ----- English -------
+     * <p>
      * The type of the transaction, represented by the TransactionType enumeration.
      */
     @Column(name = "transaction_type")
@@ -52,9 +58,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Сумма транзакции.
      * <p>
      * ----- English -------
+     * <p>
      * The amount of the transaction.
      */
     @Column(name = "amount")
@@ -62,9 +70,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Описание транзакции.
      * <p>
      * ----- English -------
+     * <p>
      * The description of the transaction.
      */
     @Column(name = "description")
@@ -72,9 +82,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Дата и время создания транзакции
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of the transaction creation.
      */
     @Column(name = "created_at", updatable = false)
@@ -83,9 +95,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Ссылка на счет, связанный с дебетовой стороной транзакции.
      * <p>
      * ----- English -------
+     * <p>
      * Reference to the account associated with the debit side of the transaction.
      */
     @ManyToOne(fetch = FetchType.EAGER)
@@ -94,9 +108,11 @@ public class Transaction {
 
     /**
      * ----- Russian ------
+     * <p>
      * Ссылка на счет, связанный с кредитной стороной транзакции.
      * <p>
      * ----- English -------
+     * <p>
      * Reference to the account associated with the credit side of the transaction.
      */
     @ManyToOne(fetch = FetchType.EAGER)

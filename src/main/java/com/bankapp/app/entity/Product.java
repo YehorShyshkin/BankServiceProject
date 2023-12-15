@@ -25,9 +25,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Идентификации уникальной записи или объекта в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Unique identifier of the record or object in the database.
      */
     @Id
@@ -37,9 +39,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Название продукта.
      * <p>
      * ----- English -------
+     * <p>
      * Name of the product.
      */
     @Column(name = "name")
@@ -47,9 +51,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Статус продукта (используется перечисление ProductStatus).
      * <p>
      * ----- English -------
+     * <p>
      * Status of the product (using the enumeration ProductStatus).
      */
     @Column(name = "product_status")
@@ -58,9 +64,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Код валюты продукта (используется перечисление CurrencyCode).
      * <p>
      * ----- English -------
+     * <p>
      * Currency code of the product (using the enumeration CurrencyCode).
      */
     @Column(name = "currency_code")
@@ -69,9 +77,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Процентная ставка, связанная с продуктом.
      * <p>
      * ----- English -------
+     * <p>
      * Interest rate associated with the product.
      */
     @Column(name = "interest_rate")
@@ -79,9 +89,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Лимит, связанный с продуктом.
      * <p>
      * ----- English -------
+     * <p>
      * Limit associated with the product.
      */
     @Column(name = "product_limit")
@@ -89,9 +101,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Дата и время создания продукта.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of product creation.
      */
     @Column(name = "created_at", updatable = false)
@@ -100,9 +114,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Дата и время обновления продукта.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of product update.
      */
     @Column(name = "updated_at")
@@ -111,9 +127,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Ссылка на ответственного менеджера.
      * <p>
      * ----- English -------
+     * <p>
      * Reference to the responsible manager.
      */
     @ManyToOne(fetch = FetchType.EAGER)
@@ -122,9 +140,11 @@ public class Product {
 
     /**
      * ---- Russian -------
+     * <p>
      * Ссылка на лист банковских соглашений.
      * <p>
      * ----- English -------
+     * <p>
      * Reference to the list of banking agreements.
      */
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)

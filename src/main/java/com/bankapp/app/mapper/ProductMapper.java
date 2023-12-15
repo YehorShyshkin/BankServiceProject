@@ -10,12 +10,6 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
-
-    @Mapping(source = "productName", target = "productName")
-    @Mapping(source = "productStatus", target = "productStatus")
-    @Mapping(source = "currencyCode", target = "currencyCode")
-    @Mapping(source = "productInterestRate", target = "productInterestRate")
-    @Mapping(source = "productLimit", target = "productLimit")
     @Mapping(source = "manager.managerLastName", target = "managerLastName")
     @Mapping(source = "manager.managerStatus", target = "managerStatus")
     ProductDTO toDTO(Product product);

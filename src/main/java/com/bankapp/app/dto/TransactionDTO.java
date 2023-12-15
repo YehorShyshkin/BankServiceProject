@@ -19,19 +19,10 @@ public class TransactionDTO {
      * Account DebitAccount
      */
     private UUID debitAccountId;
-//    private String debitAccountType;
-//    private String debitAccountStatus;
-//    private String debitAccountCurrencyCode;
-//    private String debitAccountBalance;
 
     /**
      * Account CreditAccount
      */
 
     private UUID creditAccountId;
-//    private String creditAccountType;
-//    private String creditAccountStatus;
-//    private String creditAccountCurrencyCode;
-//    private String creditAccountBalance;
-
 }

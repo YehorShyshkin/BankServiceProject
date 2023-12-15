@@ -18,7 +18,6 @@ public class CardDTO {
     /**
      * Account
      */
-//       private UUID accountId;
     private String accountName;
     private String accountType;
     private String accountStatus;

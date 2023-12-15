@@ -20,10 +20,12 @@ import java.util.UUID;
 @Setter
 /**
  * ---- Russian -------
+ * <p>
  * Представлять собой информацию о банковских соглашениях,
  * связанных с банковскими картами или аккаунтами.
  * <p>
  * ----- English -------
+ * <p>
  * Represents information about banking agreements
  * related to bank cards or accounts.
  */
@@ -31,9 +33,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Идентификации уникальной записи или объекта в базе данных.
      * <p>
      * ----- English -------
+     * <p>
      * Unique identifier of the record or object in the database.
      */
     @Id
@@ -43,9 +47,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Процентная ставка, применимая к соглашению.
      * <p>
      * ----- English -------
+     * <p>
      * Interest rate applicable to the agreement.
      */
     @Column(name = "interest_rate")
@@ -53,9 +59,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Текущий статус соглашения (например, активное, закрытое и т. д.).
      * <p>
      * ----- English -------
+     * <p>
      * Current status of the agreement (e.g., active, closed, etc.).
      */
     @Column(name = "status")
@@ -64,9 +72,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Сумма соглашения, то есть сумма денег, оговоренная в соглашении.
      * <p>
      * ----- English -------
+     * <p>
      * Sum of the agreement, i.e., the amount of money specified in the agreement.
      */
     @Column(name = "sum")
@@ -74,9 +84,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Дата и время создания записи о соглашении.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of the agreement record creation.
      */
     @Column(name = "created_at", updatable = false)
@@ -85,9 +97,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Дата и время последнего обновления записи о соглашении.
      * <p>
      * ----- English -------
+     * <p>
      * Date and time of the last update to the agreement record.
      */
     @Column(name = "updated_at")
@@ -96,9 +110,11 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Означает продукт или услугу, предлагаемую банком
      * <p>
      * ----- English -------
+     * <p>
      * Indicates the product or service offered by the bank.
      */
     @ManyToOne(fetch = FetchType.EAGER)
@@ -107,10 +123,12 @@ public class Agreement {
 
     /**
      * ---- Russian -------
+     * <p>
      * Это поле используется для хранения информации о банковском счете,
      * связанном с объектом данного класса.
      * <p>
      * ----- English -------
+     * <p>
      * This field is used to store information about the bank account
      * associated with the object of this class.
      */

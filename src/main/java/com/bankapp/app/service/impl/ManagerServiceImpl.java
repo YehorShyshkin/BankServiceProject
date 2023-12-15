@@ -25,8 +25,9 @@ public class ManagerServiceImpl implements ManagerService {
     public List<ManagerDTO> findAll() {
         return managerMapper.listToDTO(managerRepository.findAll());
     }
+
     @Override
-    public List<ManagerDTO> findManagerDTOByIdList(UUID managerId){
+    public List<ManagerDTO> findManagerDTOByIdList(UUID managerId) {
         return managerRepository.findManagerById(managerId);
     }
 
@@ -65,15 +66,13 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public boolean mergeManagerAndClient(UUID clientId, UUID managerId) {
-        Client currentClient = clientService.findClientById(clientId); // Получаем клиента по его ID
-        Manager currentManager = findManagerById(managerId); // Получаем менеджера по его ID
+        Client currentClient = clientService.findClientById(clientId);
+        Manager currentManager = findManagerById(managerId);
         if (currentClient != null && currentManager != null) {
-            currentClient.setManager(currentManager); // Устанавливаем менеджера для клиента
-            clientService.createClientDTO(currentClient); // Сохраняем клиента в базу данных
-            return true; // Возвращаем true, чтобы показать, что операция выполнена успешно
+            currentClient.setManager(currentManager);
+            clientService.createClientDTO(currentClient);
+            return true;
         }
-        return false; // Возвращаем false, если клиент или менеджер не найдены
+        return false;
     }
-
-
 }

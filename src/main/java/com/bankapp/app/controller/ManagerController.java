@@ -28,14 +28,6 @@ public class ManagerController {
         return managerService.findAll();
     }
 
-//    @GetMapping("/{id}")
-//    public ManagerDTO getManagerDTO(@PathVariable("id") String id) {
-//        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-//        if (!id.matches(uuidPattern)) {
-//            throw new IllegalArgumentException("ID is not a valid UUID");
-//        }
-//        return managerService.getManagerDTO(id);
-//    }
     @RequestMapping(value = "/find/{id}", method = GET)
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO findManagerDTOById(@PathVariable("id") UUID managerId){
