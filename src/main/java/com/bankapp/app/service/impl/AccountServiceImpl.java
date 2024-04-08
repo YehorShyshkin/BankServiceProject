@@ -1,7 +1,7 @@
 package com.bankapp.app.service.impl;
 
 
-import com.bankapp.app.dto.AccountDTO;
+import com.bankapp.app.controller.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Transaction;
 import com.bankapp.app.mapper.AccountMapper;
@@ -83,17 +83,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void updateBalance(Transaction transaction) {
-        Account firstAccount = findAccountById(transaction.getTransactionDebitAccount().getId());
-        Account secondAccount = findAccountById(transaction.getTransactionCreditAccount().getId());
+        Account firstAccount = findAccountById(transaction.getDebitAccount().getId());
+        Account secondAccount = findAccountById(transaction.getCreditAccount().getId());
 
-        BigDecimal firstAccountBalance = firstAccount.getAccountBalance();
-        BigDecimal secondAccountBalance = secondAccount.getAccountBalance();
-        BigDecimal transactionAmount = transaction.getTransactionAmount();
+        BigDecimal firstAccountBalance = firstAccount.getBalance();
+        BigDecimal secondAccountBalance = secondAccount.getBalance();
+        BigDecimal transactionAmount = transaction.getAmount();
 
         BigDecimal newFirstAccountBalance = firstAccountBalance.subtract(transactionAmount);
         BigDecimal newSecondAccountBalance = secondAccountBalance.add(transactionAmount);
-        firstAccount.setAccountBalance(newFirstAccountBalance);
-        secondAccount.setAccountBalance(newSecondAccountBalance);
+        firstAccount.setBalance(newFirstAccountBalance);
+        secondAccount.setBalance(newSecondAccountBalance);
 
         accountRepository.save(firstAccount);
         accountRepository.save(secondAccount);

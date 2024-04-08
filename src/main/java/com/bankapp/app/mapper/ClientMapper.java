@@ -1,6 +1,6 @@
 package com.bankapp.app.mapper;
 
-import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.controller.dto.ClientDTO;
 import com.bankapp.app.entity.Client;
 import org.mapstruct.Mapper;
 

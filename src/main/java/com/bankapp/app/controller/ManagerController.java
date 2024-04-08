@@ -1,6 +1,6 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.controller.dto.ManagerDTO;
 import com.bankapp.app.entity.Manager;
 import com.bankapp.app.service.ManagerService;
 import lombok.RequiredArgsConstructor;

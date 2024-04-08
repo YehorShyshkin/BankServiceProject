@@ -3,7 +3,6 @@ package com.bankapp.app.entity;
 import com.bankapp.app.enums.CardStatus;
 import com.bankapp.app.enums.CardType;
 import com.bankapp.app.enums.PaymentSystem;
-import com.bankapp.app.generator.CardGenerator;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -62,7 +61,7 @@ public class Card {
      * Card number.
      */
     @Column(name = "card_number")
-    private String cardNumber;
+    private String number;
 
     /**
      * ----- Russian ------
@@ -177,41 +176,23 @@ public class Card {
     @JsonBackReference
     private Account account;
 
-
-    public Card(UUID id, String cardNumber, LocalDate expirationDate,
-                Timestamp createdAt, Timestamp updatedAt,
-                BigDecimal cardTransactionLimit, CardType cardType,
-                PaymentSystem cardPaymentSystem, CardStatus cardStatus,
-                Account account) {
-        this.id = id;
-        this.cardNumber = cardNumber;
-        this.expirationDate = CardGenerator.generateCardExpirationDate();
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.cardTransactionLimit = cardTransactionLimit;
-        this.cardType = cardType;
-        this.cardPaymentSystem = cardPaymentSystem;
-        this.cardStatus = cardStatus;
-        this.account = account;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Card card)) return false;
-        return Objects.equals(cardNumber, card.cardNumber) && Objects.equals(account, card.account);
+        return Objects.equals(number, card.number) && Objects.equals(account, card.account);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cardNumber, account);
+        return Objects.hash(number, account);
     }
 
     @Override
     public String toString() {
         return "Card{" +
                 "id=" + id +
-                ", cardNumber='" + cardNumber + '\'' +
+                ", cardNumber='" + number + '\'' +
                 ", expirationDate=" + expirationDate +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +

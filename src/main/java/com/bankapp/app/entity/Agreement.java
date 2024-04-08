@@ -55,7 +55,7 @@ public class Agreement {
      * Interest rate applicable to the agreement.
      */
     @Column(name = "interest_rate")
-    private BigDecimal agreementInterestRate;
+    private BigDecimal interestRate;
 
     /**
      * ---- Russian -------
@@ -68,7 +68,7 @@ public class Agreement {
      */
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private AccountStatus agreementStatus;
+    private AccountStatus status;
 
     /**
      * ---- Russian -------
@@ -80,7 +80,7 @@ public class Agreement {
      * Sum of the agreement, i.e., the amount of money specified in the agreement.
      */
     @Column(name = "sum")
-    private BigDecimal agreementSum;
+    private BigDecimal sum;
 
     /**
      * ---- Russian -------
@@ -136,40 +136,25 @@ public class Agreement {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account;
 
-    public Agreement(UUID id, BigDecimal agreementInterestRate, AccountStatus agreementStatus,
-                     BigDecimal agreementSum, Timestamp createdAt,
-                     Timestamp updatedAt,
-                     Product product,
-                     Account account) {
-        this.id = id;
-        this.agreementInterestRate = agreementInterestRate;
-        this.agreementStatus = agreementStatus;
-        this.agreementSum = agreementSum;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.product = product;
-        this.account = account;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Agreement agreement)) return false;
-        return agreementStatus == agreement.agreementStatus;
+        return status == agreement.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(agreementStatus);
+        return Objects.hash(status);
     }
 
     @Override
     public String toString() {
         return "Agreement{" +
                 "id=" + id +
-                ", interestRate=" + agreementInterestRate +
-                ", status=" + agreementStatus +
-                ", sum=" + agreementSum +
+                ", interestRate=" + interestRate +
+                ", status=" + status +
+                ", sum=" + sum +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", products=" + product +

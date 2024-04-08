@@ -54,7 +54,7 @@ public class Transaction {
      */
     @Column(name = "transaction_type")
     @Enumerated(EnumType.STRING)
-    private TransactionType transactionType;
+    private TransactionType type;
 
     /**
      * ----- Russian ------
@@ -66,7 +66,7 @@ public class Transaction {
      * The amount of the transaction.
      */
     @Column(name = "amount")
-    private BigDecimal transactionAmount;
+    private BigDecimal amount;
 
     /**
      * ----- Russian ------
@@ -78,7 +78,7 @@ public class Transaction {
      * The description of the transaction.
      */
     @Column(name = "description")
-    private String transactionDescription;
+    private String description;
 
     /**
      * ----- Russian ------
@@ -91,7 +91,7 @@ public class Transaction {
      */
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    private Timestamp transactionCreatedAt;
+    private Timestamp createdAt;
 
     /**
      * ----- Russian ------
@@ -104,7 +104,7 @@ public class Transaction {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "debit_account_id", referencedColumnName = "id")
-    private Account transactionDebitAccount;
+    private Account debitAccount;
 
     /**
      * ----- Russian ------
@@ -117,43 +117,30 @@ public class Transaction {
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "credit_account_id", referencedColumnName = "id")
-    private Account transactionCreditAccount;
-
-    public Transaction(UUID id, TransactionType transactionType,
-                       BigDecimal transactionAmount, String transactionDescription,
-                       Timestamp transactionCreatedAt, Account transactionDebitAccount,
-                       Account transactionCreditAccount) {
-        this.id = id;
-        this.transactionType = transactionType;
-        this.transactionAmount = transactionAmount;
-        this.transactionDescription = transactionDescription;
-        this.transactionCreatedAt = transactionCreatedAt;
-        this.transactionDebitAccount = transactionDebitAccount;
-        this.transactionCreditAccount = transactionCreditAccount;
-    }
+    private Account creditAccount;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Transaction that)) return false;
-        return transactionType == that.transactionType;
+        return type == that.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(transactionType);
+        return Objects.hash(type);
     }
 
     @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
-                ", type=" + transactionType +
-                ", amount=" + transactionAmount +
-                ", description='" + transactionDescription + '\'' +
-                ", createdAt=" + transactionCreatedAt +
-                ", debitAccount=" + transactionDebitAccount +
-                ", creditAccount=" + transactionCreditAccount +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", description='" + description + '\'' +
+                ", createdAt=" + createdAt +
+                ", debitAccount=" + debitAccount.getName() +
+                ", creditAccount=" + creditAccount.getName() +
                 '}';
     }
 }

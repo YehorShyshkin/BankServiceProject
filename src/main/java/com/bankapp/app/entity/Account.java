@@ -60,7 +60,7 @@ public class Account {
      * The name of the account, helping to identify it and understand its purpose.
      */
     @Column(name = "name")
-    private String accountName;
+    private String name;
 
 
     /**
@@ -76,7 +76,7 @@ public class Account {
      */
     @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
-    private AccountType accountType;
+    private AccountType type;
 
     /**
      * ---- Russian -------
@@ -89,7 +89,7 @@ public class Account {
      */
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private AccountStatus accountStatus;
+    private AccountStatus status;
 
     /**
      * ---- Russian -------
@@ -102,7 +102,7 @@ public class Account {
      */
     @Column(name = "currency_code")
     @Enumerated(EnumType.STRING)
-    private CurrencyCode currencyCode;
+    private CurrencyCode code;
 
     /**
      * ---- Russian -------
@@ -114,7 +114,7 @@ public class Account {
      * The balance (remaining funds) in the account.
      */
     @Column(name = "balance")
-    private BigDecimal accountBalance;
+    private BigDecimal balance;
 
     /**
      * ---- Russian -------
@@ -140,6 +140,7 @@ public class Account {
      */
     @Column(name = "updated_at")
     @UpdateTimestamp
+    //@LocalDate
     private Timestamp updatedAt;
 
     /**
@@ -176,7 +177,7 @@ public class Account {
      * <p>
      * Operations representing withdrawal of funds from the bank account or card.
      */
-    @OneToMany(mappedBy = "transactionDebitAccount")
+    @OneToMany(mappedBy = "debitAccount")
     private Set<Transaction> debitTransaction;
 
     /**
@@ -188,7 +189,7 @@ public class Account {
      * <p>
      * Financial operation where funds are transferred to the client's bank account or credit/debit card.
      */
-    @OneToMany(mappedBy = "transactionCreditAccount")
+    @OneToMany(mappedBy = "creditAccount")
     private Set<Transaction> creditTransaction;
 
     /**
@@ -204,49 +205,31 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Card> cards;
 
-    public Account(UUID id, String accountName, AccountType accountType, AccountStatus accountStatus,
-                   CurrencyCode currencyCode, BigDecimal accountBalance, Timestamp createdAt, Timestamp updatedAt,
-                   Client client, List<Agreement> agreementList, Set<Transaction> debitTransaction,
-                   Set<Transaction> creditTransaction, List<Card> cards) {
-        this.id = id;
-        this.accountName = accountName;
-        this.accountType = accountType;
-        this.accountStatus = accountStatus;
-        this.currencyCode = currencyCode;
-        this.accountBalance = accountBalance;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.client = client;
-        this.agreementList = agreementList;
-        this.debitTransaction = debitTransaction;
-        this.creditTransaction = creditTransaction;
-        this.cards = cards;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Account account)) return false;
-        return Objects.equals(accountName, account.accountName) && accountStatus == account.accountStatus;
+        return Objects.equals(name, account.name) && status == account.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountName, accountStatus);
+        return Objects.hash(name, status);
     }
 
     @Override
     public String toString() {
         return "Account{" +
                 "id=" + id +
-                ", accountName='" + accountName + '\'' +
-                ", accountType=" + accountType +
-                ", accountStatus=" + accountStatus +
-                ", currencyCode=" + currencyCode +
-                ", accountBalance=" + accountBalance +
+                ", accountName='" + name + '\'' +
+                ", accountType=" + type +
+                ", accountStatus=" + status +
+                ", currencyCode=" + code +
+                ", accountBalance=" + balance +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", client=" + client +
+                ", client=" + client.getLastName() +
                 '}';
     }
 }

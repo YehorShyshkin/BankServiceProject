@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
@@ -47,7 +46,7 @@ public class Product {
      * Name of the product.
      */
     @Column(name = "name")
-    private String productName;
+    private String name;
 
     /**
      * ---- Russian -------
@@ -60,7 +59,7 @@ public class Product {
      */
     @Column(name = "product_status")
     @Enumerated(EnumType.STRING)
-    private ProductStatus productStatus;
+    private ProductStatus status;
 
     /**
      * ---- Russian -------
@@ -85,7 +84,7 @@ public class Product {
      * Interest rate associated with the product.
      */
     @Column(name = "interest_rate")
-    private BigDecimal productInterestRate;
+    private BigDecimal interestRate;
 
     /**
      * ---- Russian -------
@@ -97,7 +96,7 @@ public class Product {
      * Limit associated with the product.
      */
     @Column(name = "product_limit")
-    private BigDecimal productLimit;
+    private BigDecimal limit;
 
     /**
      * ---- Russian -------
@@ -150,48 +149,30 @@ public class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
     private List<Agreement> agreements;
 
-    public Product(UUID id, String productName, ProductStatus productStatus,
-                   CurrencyCode currencyCode, BigDecimal productInterestRate,
-                   BigDecimal productLimit, Timestamp createdAt,
-                   Timestamp updatedAt, Manager manager,
-                   List<Agreement> agreements) {
-        this.id = id;
-        this.productName = productName;
-        this.productStatus = productStatus;
-        this.currencyCode = currencyCode;
-        this.productInterestRate = productInterestRate;
-        this.productLimit = productLimit;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.manager = manager;
-        this.agreements = agreements;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Product product)) return false;
-        return Objects.equals(productName, product.productName);
+        return Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productName);
+        return Objects.hash(name);
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", name='" + productName + '\'' +
-                ", status=" + productStatus +
+                ", name='" + name + '\'' +
+                ", status=" + status +
                 ", currencyCode=" + currencyCode +
-                ", interestRate=" + productInterestRate +
-                ", productLimit=" + productLimit +
+                ", interestRate=" + interestRate +
+                ", productLimit=" + limit +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
-                ", manager=" + manager +
-                ", agreements=" + agreements +
+                ", manager=" + manager.getLastName() +
                 '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.bankapp.app.service.impl;
 
-import com.bankapp.app.dto.CardDTO;
-import com.bankapp.app.dto.CardStatusUpdateDTO;
+import com.bankapp.app.controller.dto.CardDTO;
+import com.bankapp.app.controller.dto.CardStatusUpdateDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Card;
 import com.bankapp.app.mapper.CardMapper;
@@ -53,7 +53,7 @@ public class CardServiceImpl implements CardService {
             Account account = currentCard.getAccount();
 
             if (account != null) {
-                BigDecimal balance = account.getAccountBalance();
+                BigDecimal balance = account.getBalance();
 
                 if (balance.compareTo(BigDecimal.ZERO) == 0) {
                     cardRepository.deleteById(id);

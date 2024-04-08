@@ -1,4 +1,4 @@
-package com.bankapp.app.dto;
+package com.bankapp.app.controller.dto;
 
 import lombok.*;
 

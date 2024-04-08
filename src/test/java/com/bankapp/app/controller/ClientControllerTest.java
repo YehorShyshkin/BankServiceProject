@@ -1,6 +1,6 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.controller.dto.ClientDTO;
 import com.bankapp.app.service.ClientService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
 package com.bankapp.app.mapper;
 
-import com.bankapp.app.dto.AccountDTO;
+import com.bankapp.app.controller.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Agreement;
 import org.mapstruct.AfterMapping;
@@ -31,9 +31,9 @@ public interface AccountMapper {
             List<BigDecimal> sums = new ArrayList<>();
 
             for (Agreement agreement : account.getAgreementList()) {
-                interestRates.add(agreement.getAgreementInterestRate());
-                statuses.add(String.valueOf(agreement.getAgreementStatus()));
-                sums.add(agreement.getAgreementSum());
+                interestRates.add(agreement.getInterestRate());
+                statuses.add(String.valueOf(agreement.getStatus()));
+                sums.add(agreement.getSum());
             }
 
             accountDTO.setAgreementInterestRate(interestRates.toString());

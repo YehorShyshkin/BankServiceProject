@@ -1,7 +1,7 @@
 package com.bankapp.app.mapper;
 
-import com.bankapp.app.dto.CardDTO;
-import com.bankapp.app.dto.CardStatusUpdateDTO;
+import com.bankapp.app.controller.dto.CardDTO;
+import com.bankapp.app.controller.dto.CardStatusUpdateDTO;
 import com.bankapp.app.entity.Card;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,6 +1,6 @@
 package com.bankapp.app.service;
 
-import com.bankapp.app.dto.ProductDTO;
+import com.bankapp.app.controller.dto.ProductDTO;
 import com.bankapp.app.entity.Product;
 
 import java.util.List;

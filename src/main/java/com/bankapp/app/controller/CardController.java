@@ -1,7 +1,7 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.dto.CardDTO;
-import com.bankapp.app.dto.CardStatusUpdateDTO;
+import com.bankapp.app.controller.dto.CardDTO;
+import com.bankapp.app.controller.dto.CardStatusUpdateDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Card;
 import com.bankapp.app.enums.PaymentSystem;
@@ -43,7 +43,7 @@ public class CardController {
         Account account = accountService.getAccountById(String.valueOf(id));
         if (account != null) {
             String generatedCardNumber = CardGenerator.generateCardNumber(PaymentSystem.VISA);
-            card.setCardNumber(generatedCardNumber);
+            card.setNumber(generatedCardNumber);
             card.setAccount(account);
             card.setExpirationDate(CardGenerator.generateCardExpirationDate());
             cardService.save(card);

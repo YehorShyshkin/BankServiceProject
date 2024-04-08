@@ -65,7 +65,7 @@ public class Client {
      */
     @Column(name = "client_status")
     @Enumerated(EnumType.STRING)
-    private ClientStatus clientStatus;
+    private ClientStatus status;
 
     /**
      * ----- Russian ------
@@ -93,8 +93,7 @@ public class Client {
      * or the bank's information system.
      */
     @Column(name = "first_name")
-    private String clientFirstName;
-
+    private String firstName;
 
     /**
      * ----- Russian ------
@@ -108,8 +107,7 @@ public class Client {
      * or the bank's information system.
      */
     @Column(name = "last_name")
-    private String clientLastName;
-
+    private String lastName;
 
     /**
      * ----- Russian ------
@@ -183,7 +181,6 @@ public class Client {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-
     /**
      * ----- Russian ------
      * <p>
@@ -209,26 +206,6 @@ public class Client {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
-
-    public Client(UUID id, ClientStatus clientStatus,
-                  String taxCode, String clientFirstName,
-                  String clientLastName, String email,
-                  String address, String phoneNumber,
-                  Timestamp createdAt, Timestamp updatedAt,
-                  List<Account> accounts, Manager manager) {
-        this.id = id;
-        this.clientStatus = clientStatus;
-        this.taxCode = taxCode;
-        this.clientFirstName = clientFirstName;
-        this.clientLastName = clientLastName;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.accounts = accounts;
-        this.manager = manager;
-    }
 
     @Override
     public boolean equals(Object o) {

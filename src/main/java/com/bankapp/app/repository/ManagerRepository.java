@@ -1,6 +1,6 @@
 package com.bankapp.app.repository;
 
-import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.controller.dto.ManagerDTO;
 import com.bankapp.app.entity.Manager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -55,7 +55,7 @@ public class Manager {
      */
 
     @Column(name = "first_name")
-    private String managerFirstName;
+    private String firstName;
 
     /**
      * ----- Russian ------
@@ -67,7 +67,7 @@ public class Manager {
      * Last name of the manager.
      */
     @Column(name = "last_name")
-    private String managerLastName;
+    private String lastName;
 
     /**
      * ----- Russian ------
@@ -80,7 +80,7 @@ public class Manager {
      */
     @Column(name = "manager_status")
     @Enumerated(EnumType.STRING)
-    private ManagerStatus managerStatus;
+    private ManagerStatus status;
 
     /**
      * ----- Russian ------
@@ -134,17 +134,6 @@ public class Manager {
     @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
     private List<Product> listProducts;
 
-    public Manager(UUID id, String managerFirstName, String last_name, ManagerStatus managerStatus, Timestamp createdAt, Timestamp updatedAt, List<Client> listClients, List<Product> listProducts) {
-        this.id = id;
-        this.managerFirstName = managerFirstName;
-        this.managerLastName = last_name;
-        this.managerStatus = managerStatus;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.listClients = listClients;
-        this.listProducts = listProducts;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -161,9 +150,9 @@ public class Manager {
     public String toString() {
         return "Manager{" +
                 "id=" + id +
-                ", firstName='" + managerFirstName + '\'' +
-                ", last_name='" + managerLastName + '\'' +
-                ", status=" + managerStatus +
+                ", firstName='" + firstName + '\'' +
+                ", last_name='" + lastName + '\'' +
+                ", status=" + status +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", clients=" + listClients +

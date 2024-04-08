@@ -1,6 +1,6 @@
 package com.bankapp.app.service.impl;
 
-import com.bankapp.app.dto.TransactionDTO;
+import com.bankapp.app.controller.dto.TransactionDTO;
 import com.bankapp.app.entity.Transaction;
 import com.bankapp.app.enums.TransactionType;
 import com.bankapp.app.mapper.TransactionMapper;
@@ -69,11 +69,11 @@ public class TransactionServiceImpl implements TransactionService {
     public void refundBalance(UUID transaction) {
         Transaction originalTransaction = getTransactionById(transaction);
         Transaction refundTransaction = new Transaction();
-        refundTransaction.setTransactionAmount(originalTransaction.getTransactionAmount().negate());
-        refundTransaction.setTransactionDebitAccount(originalTransaction.getTransactionDebitAccount());
-        refundTransaction.setTransactionCreditAccount(originalTransaction.getTransactionCreditAccount());
-        refundTransaction.setTransactionDescription("REFUND!");
-        refundTransaction.setTransactionType(TransactionType.REFUND);
+        refundTransaction.setAmount(originalTransaction.getAmount().negate());
+        refundTransaction.setDebitAccount(originalTransaction.getDebitAccount());
+        refundTransaction.setCreditAccount(originalTransaction.getCreditAccount());
+        refundTransaction.setDescription("REFUND!");
+        refundTransaction.setType(TransactionType.REFUND);
         accountService.updateBalance(refundTransaction);
         transactionRepository.save(refundTransaction);
     }
