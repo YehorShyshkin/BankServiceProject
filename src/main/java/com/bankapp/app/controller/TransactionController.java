@@ -1,6 +1,6 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.controller.dto.TransactionDTO;
+import com.bankapp.app.dto.TransactionDTO;
 import com.bankapp.app.service.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

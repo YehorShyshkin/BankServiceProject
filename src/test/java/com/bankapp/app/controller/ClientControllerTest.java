@@ -1,7 +1,6 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.controller.dto.ClientDTO;
-import com.bankapp.app.service.ClientService;
+import com.bankapp.app.dto.ClientDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,17 +32,14 @@ class ClientControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    ClientService clientService;
-
 
     @Test
     public void findAll() throws Exception {
 
         ClientDTO clientDTOFirst = new ClientDTO();
-        clientDTOFirst.setClientFirstName("Alice");
-        clientDTOFirst.setClientLastName("Johnson");
-        clientDTOFirst.setClientStatus("ACTIVE");
+        clientDTOFirst.setFirstName("Alice");
+        clientDTOFirst.setLastName("Johnson");
+        clientDTOFirst.setStatus("ACTIVE");
         clientDTOFirst.setEmail("alice@gmail.com");
         clientDTOFirst.setAddress("123 Main St");
         clientDTOFirst.setPhoneNumber("123-456-7890");
@@ -50,9 +47,9 @@ class ClientControllerTest {
 
 
         ClientDTO clientDTOSecond = new ClientDTO();
-        clientDTOSecond.setClientFirstName("Bob");
-        clientDTOSecond.setClientLastName("Smith");
-        clientDTOSecond.setClientStatus("ACTIVE");
+        clientDTOSecond.setFirstName("Bob");
+        clientDTOSecond.setLastName("Smith");
+        clientDTOSecond.setStatus("ACTIVE");
         clientDTOSecond.setEmail("bob@gmail.com");
         clientDTOSecond.setAddress("456 Oak St");
         clientDTOSecond.setPhoneNumber("456-789-0123");
@@ -76,9 +73,9 @@ class ClientControllerTest {
     @Test
     public void getClientDTO() throws Exception {
         ClientDTO clientDTOFind = new ClientDTO();
-        clientDTOFind.setClientFirstName("Alice");
-        clientDTOFind.setClientLastName("Johnson");
-        clientDTOFind.setClientStatus("ACTIVE");
+        clientDTOFind.setFirstName("Alice");
+        clientDTOFind.setLastName("Johnson");
+        clientDTOFind.setStatus("ACTIVE");
         clientDTOFind.setEmail("alice@gmail.com");
         clientDTOFind.setAddress("123 Main St");
         clientDTOFind.setPhoneNumber("123-456-7890");
@@ -98,9 +95,9 @@ class ClientControllerTest {
     public void createClient() throws Exception {
 
         ClientDTO clientDTOCreate = new ClientDTO();
-        clientDTOCreate.setClientFirstName("Alice");
-        clientDTOCreate.setClientLastName("Johnson");
-        clientDTOCreate.setClientStatus("ACTIVE");
+        clientDTOCreate.setFirstName("Alice");
+        clientDTOCreate.setLastName("Johnson");
+        clientDTOCreate.setStatus("ACTIVE");
         clientDTOCreate.setEmail("alice@gmail.com");
         clientDTOCreate.setAddress("123 Main St");
         clientDTOCreate.setPhoneNumber("123-456-7890");

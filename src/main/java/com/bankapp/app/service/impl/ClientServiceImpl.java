@@ -1,6 +1,6 @@
 package com.bankapp.app.service.impl;
 
-import com.bankapp.app.controller.dto.ClientDTO;
+import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Client;
 import com.bankapp.app.mapper.ClientMapper;

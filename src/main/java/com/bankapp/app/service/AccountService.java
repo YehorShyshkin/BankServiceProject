@@ -1,6 +1,6 @@
 package com.bankapp.app.service;
 
-import com.bankapp.app.controller.dto.AccountDTO;
+import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Transaction;
 

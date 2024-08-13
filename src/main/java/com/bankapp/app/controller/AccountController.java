@@ -1,6 +1,6 @@
 package com.bankapp.app.controller;
 
-import com.bankapp.app.controller.dto.AccountDTO;
+import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.entity.Account;
 import com.bankapp.app.entity.Client;
 import com.bankapp.app.service.AccountService;
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/accounts")
 @RequiredArgsConstructor
+@RequestMapping("/accounts")
 public class AccountController {
 
     private final AccountService accountService;
@@ -28,10 +28,6 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public AccountDTO getAccountDTO(@PathVariable("id") String id) {
-        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-        if (!id.matches(uuidPattern)) {
-            throw new IllegalArgumentException("ID is not a valid UUID");
-        }
         return accountService.getAccountDTO(id);
     }
 

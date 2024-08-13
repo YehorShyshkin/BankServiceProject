@@ -1,6 +1,6 @@
 package com.bankapp.app.service.impl;
 
-import com.bankapp.app.controller.dto.TransactionDTO;
+import com.bankapp.app.dto.TransactionDTO;
 import com.bankapp.app.entity.Transaction;
 import com.bankapp.app.enums.TransactionType;
 import com.bankapp.app.mapper.TransactionMapper;
