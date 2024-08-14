@@ -4,6 +4,7 @@ import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.model.Manager;
 import com.bankapp.app.exception.ManagerNotFoundException;
 import com.bankapp.app.mapper.ManagerMapper;
+import com.bankapp.app.model.enums.ManagerStatus;
 import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.service.ManagerService;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +46,20 @@ public class ManagerServiceImpl implements ManagerService {
         return managerRepository.findById(managerId)
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found!"));
     }
+    @Override
+    public ManagerDTO updateManager(UUID managerId, ManagerDTO managerDTO) {
+        Manager manager = getById(managerId);
+        managerMapper.updateManagerDto(managerDTO, manager);
+        return managerMapper.toDto(managerRepository.save(manager));
+    }
+
+    @Override
+    public ManagerDTO deleteManager(UUID managerId) {
+        Manager manager = getById(managerId);
+        manager.setStatus(ManagerStatus.DELETED);
+        managerRepository.save(manager);
+        return managerMapper.toDto(manager);
+    }
+
 }
+

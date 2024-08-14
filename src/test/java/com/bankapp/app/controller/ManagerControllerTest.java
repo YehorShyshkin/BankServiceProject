@@ -118,7 +118,8 @@ class ManagerControllerTest {
 
         MvcResult mvcResult = mockMvc.
                 perform(MockMvcRequestBuilders.
-                        get("/managers/find/8d25ab36-969c-11ee-b9d1-0242ac120002"))
+                        get("/managers/find/" +
+                                "8d25ab36-969c-11ee-b9d1-0242ac120002"))
                 .andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus());
@@ -132,7 +133,54 @@ class ManagerControllerTest {
     }
 
     @Test
-    void testValidRegistrationRequest() throws Exception {
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void updateManager() throws Exception {
+        ManagerDTO updateDto = new ManagerDTO();
+        updateDto.setFirstName("Ali");
+        updateDto.setLastName("John");
+        updateDto.setStatus("INACTIVE");
+
+        String managerDTOStr = objectMapper.writeValueAsString(updateDto);
+
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders.
+                        get("/managers/update/" +
+                                "8d25ab36-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(managerDTOStr))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
+                .getContentAsString(), new TypeReference<>() {});
+        assertEquals(returnedDto, updateDto);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void deleteManager() throws Exception {
+        ManagerDTO deleteDto = new ManagerDTO();
+        deleteDto.setFirstName("Alice");
+        deleteDto.setLastName("Johnson");
+        deleteDto.setStatus("DELETED");
+        String managerDTOStr = objectMapper.writeValueAsString(deleteDto);
+
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders.get("/managers/delete/8d25ab36-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(managerDTOStr))
+                .andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
+                .getContentAsString(), new TypeReference<>() {});
+
+        assertEquals(returnedDto, deleteDto);
+    }
+
+    @Test
+    void testValidRegistrationRequest() {
         ManagerDTO expectancy = new ManagerDTO();
         expectancy.setFirstName("Alice");
         expectancy.setLastName("Johnson");
