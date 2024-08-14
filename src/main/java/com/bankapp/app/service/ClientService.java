@@ -1,8 +1,8 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.ClientDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Client;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Client;
 
 import java.util.List;
 import java.util.UUID;

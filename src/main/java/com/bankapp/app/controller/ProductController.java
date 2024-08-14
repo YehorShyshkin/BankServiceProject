@@ -1,7 +1,7 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ProductDTO;
-import com.bankapp.app.entity.Product;
+import com.bankapp.app.model.Product;
 import com.bankapp.app.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

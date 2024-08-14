@@ -1,6 +1,6 @@
-package com.bankapp.app.entity;
+package com.bankapp.app.model;
 
-import com.bankapp.app.enums.ManagerStatus;
+import com.bankapp.app.model.enums.ManagerStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,21 +26,20 @@ public class Manager {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "first_name")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "manager_status")
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ManagerStatus status;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
@@ -60,5 +59,18 @@ public class Manager {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Manager{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

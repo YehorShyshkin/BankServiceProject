@@ -1,7 +1,7 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.ManagerDTO;
-import com.bankapp.app.entity.Manager;
+import com.bankapp.app.model.Manager;
 
 import java.util.UUID;
 

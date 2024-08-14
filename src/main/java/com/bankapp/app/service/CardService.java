@@ -2,7 +2,7 @@ package com.bankapp.app.service;
 
 import com.bankapp.app.dto.CardDTO;
 import com.bankapp.app.dto.CardStatusUpdateDTO;
-import com.bankapp.app.entity.Card;
+import com.bankapp.app.model.Card;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

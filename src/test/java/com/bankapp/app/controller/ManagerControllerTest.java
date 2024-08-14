@@ -1,6 +1,9 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ManagerDTO;
+import com.bankapp.app.mapper.ManagerMapper;
+import com.bankapp.app.model.Manager;
+import com.bankapp.app.model.enums.ManagerStatus;
 import com.bankapp.app.service.ManagerService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +49,40 @@ class ManagerControllerTest {
     private ManagerService managerService;
 
     @Autowired
+    private ManagerMapper managerMapper;
+
+    @Autowired
     private Validator validator;
+
+    @Test
+    void testSerializationAndDeserialization() throws Exception {
+        ManagerDTO originalManager = new ManagerDTO();
+        originalManager.setFirstName("Alice");
+        originalManager.setLastName("Johnson");
+        originalManager.setStatus("ACTIVE");
+
+        String json = objectMapper.writeValueAsString(originalManager);
+
+        ManagerDTO deserializedManager = objectMapper.readValue(json, ManagerDTO.class);
+
+        assertEquals(originalManager.getFirstName(), deserializedManager.getFirstName());
+        assertEquals(originalManager.getLastName(), deserializedManager.getLastName());
+        assertEquals(originalManager.getStatus(), deserializedManager.getStatus());
+    }
+
+    @Test
+    void testManagerToDtoMapping() {
+        Manager manager = new Manager();
+        manager.setFirstName("Alice");
+        manager.setLastName("Johnson");
+        manager.setStatus(ManagerStatus.valueOf("ACTIVE"));
+
+        ManagerDTO dto = managerMapper.toDto(manager);
+
+        assertEquals("Alice", dto.getFirstName());
+        assertEquals("Johnson", dto.getLastName());
+        assertEquals("ACTIVE", dto.getStatus());
+    }
 
     @Test
     void shouldCreateManagers() throws Exception {

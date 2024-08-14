@@ -1,9 +1,9 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.AgreementDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Agreement;
-import com.bankapp.app.entity.Product;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Agreement;
+import com.bankapp.app.model.Product;
 import com.bankapp.app.mapper.AgreementMapper;
 import com.bankapp.app.repository.AgreementRepository;
 import com.bankapp.app.service.AccountService;

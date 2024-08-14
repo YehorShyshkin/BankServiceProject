@@ -1,8 +1,8 @@
-package com.bankapp.app.entity;
+package com.bankapp.app.model;
 
-import com.bankapp.app.enums.CardStatus;
-import com.bankapp.app.enums.CardType;
-import com.bankapp.app.enums.PaymentSystem;
+import com.bankapp.app.model.enums.CardStatus;
+import com.bankapp.app.model.enums.CardType;
+import com.bankapp.app.model.enums.PaymentSystem;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;

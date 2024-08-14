@@ -1,7 +1,7 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ManagerDTO;
-import com.bankapp.app.entity.Manager;
+import com.bankapp.app.model.Manager;
 import com.bankapp.app.exception.ManagerNotFoundException;
 import com.bankapp.app.mapper.ManagerMapper;
 import com.bankapp.app.repository.ManagerRepository;
@@ -19,21 +19,30 @@ public class ManagerServiceImpl implements ManagerService {
     private final ManagerMapper managerMapper;
 
     @Override
-    @Transactional
     public ManagerDTO createManager(ManagerDTO managerDTO) {
-        Manager newManager = managerMapper.toEntity(managerDTO);
-        return managerMapper.toDto(managerRepository.save(newManager));
-    }
+        if (managerDTO == null) {
+            throw new IllegalArgumentException("ManagerDTO cannot be null");
+        }
 
-    @Override
-    public Manager getById(UUID managerId) {
-        return managerRepository.findById(managerId)
-                .orElseThrow(() -> new ManagerNotFoundException("Manager not found!"));
+        Manager newManager = managerMapper.toEntity(managerDTO);
+
+        try {
+            Manager savedManager = managerRepository.save(newManager);
+            return managerMapper.toDto(savedManager);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save manager", e);
+        }
+
     }
 
     @Override
     @Transactional
     public ManagerDTO findManagerById(UUID managerId) {
         return managerMapper.toDto(getById(managerId));
+    }
+    @Override
+    public Manager getById(UUID managerId) {
+        return managerRepository.findById(managerId)
+                .orElseThrow(() -> new ManagerNotFoundException("Manager not found!"));
     }
 }

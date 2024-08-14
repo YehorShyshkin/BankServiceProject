@@ -1,6 +1,6 @@
 package com.bankapp.app.generator;
 
-import com.bankapp.app.enums.PaymentSystem;
+import com.bankapp.app.model.enums.PaymentSystem;
 import lombok.experimental.UtilityClass;
 
 import java.security.SecureRandom;

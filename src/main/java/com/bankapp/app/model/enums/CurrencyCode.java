@@ -1,4 +1,4 @@
-package com.bankapp.app.enums;
+package com.bankapp.app.model.enums;
 
 public enum CurrencyCode {
     USD,
