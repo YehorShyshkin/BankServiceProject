@@ -1,7 +1,7 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.TransactionDTO;
-import com.bankapp.app.entity.Transaction;
+import com.bankapp.app.model.Transaction;
 import jakarta.transaction.Transactional;
 
 import java.util.List;

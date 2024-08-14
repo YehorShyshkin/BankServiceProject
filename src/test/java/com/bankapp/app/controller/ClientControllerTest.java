@@ -34,7 +34,7 @@ class ClientControllerTest {
 
 
     @Test
-    public void findAll() throws Exception {
+    void findAll() throws Exception {
 
         ClientDTO clientDTOFirst = new ClientDTO();
         clientDTOFirst.setFirstName("Alice");
@@ -71,7 +71,7 @@ class ClientControllerTest {
 
 
     @Test
-    public void getClientDTO() throws Exception {
+    void getClientDTO() throws Exception {
         ClientDTO clientDTOFind = new ClientDTO();
         clientDTOFind.setFirstName("Alice");
         clientDTOFind.setLastName("Johnson");
@@ -92,7 +92,7 @@ class ClientControllerTest {
     }
 
     @Test
-    public void createClient() throws Exception {
+    void createClient() throws Exception {
 
         ClientDTO clientDTOCreate = new ClientDTO();
         clientDTOCreate.setFirstName("Alice");

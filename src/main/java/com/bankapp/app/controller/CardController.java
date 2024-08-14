@@ -2,9 +2,9 @@ package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.CardDTO;
 import com.bankapp.app.dto.CardStatusUpdateDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Card;
-import com.bankapp.app.enums.PaymentSystem;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Card;
+import com.bankapp.app.model.enums.PaymentSystem;
 import com.bankapp.app.generator.CardGenerator;
 import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.CardService;

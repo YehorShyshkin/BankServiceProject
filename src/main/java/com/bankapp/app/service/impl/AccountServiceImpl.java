@@ -2,8 +2,8 @@ package com.bankapp.app.service.impl;
 
 
 import com.bankapp.app.dto.AccountDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Transaction;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Transaction;
 import com.bankapp.app.mapper.AccountMapper;
 import com.bankapp.app.repository.AccountRepository;
 import com.bankapp.app.service.AccountService;

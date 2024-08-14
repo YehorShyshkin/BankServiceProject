@@ -2,7 +2,7 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.AgreementDTO;
-import com.bankapp.app.entity.Agreement;
+import com.bankapp.app.model.Agreement;
 import com.bankapp.app.service.AgreementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

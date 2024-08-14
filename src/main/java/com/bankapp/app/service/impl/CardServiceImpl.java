@@ -2,8 +2,8 @@ package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.CardDTO;
 import com.bankapp.app.dto.CardStatusUpdateDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Card;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Card;
 import com.bankapp.app.mapper.CardMapper;
 import com.bankapp.app.repository.CardRepository;
 import com.bankapp.app.service.CardService;

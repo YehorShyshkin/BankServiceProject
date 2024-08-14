@@ -1,8 +1,8 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.AccountDTO;
-import com.bankapp.app.entity.Account;
-import com.bankapp.app.entity.Client;
+import com.bankapp.app.model.Account;
+import com.bankapp.app.model.Client;
 import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;

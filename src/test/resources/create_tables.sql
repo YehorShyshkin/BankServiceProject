@@ -3,7 +3,7 @@ create table if not exists managers
     id             UUID primary key,
     first_name     varchar(100) ,
     last_name      varchar(100) ,
-    manager_status varchar(100) ,
+    status         varchar(100) ,
     created_at     timestamp,
     updated_at     timestamp
 );

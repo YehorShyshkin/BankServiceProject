@@ -1,9 +1,8 @@
 package com.bankapp.app.mapper;
 
 import com.bankapp.app.dto.AccountDTO;
-import com.bankapp.app.entity.Account;
+import com.bankapp.app.model.Account;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.util.List;
