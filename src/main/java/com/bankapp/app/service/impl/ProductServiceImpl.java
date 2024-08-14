@@ -1,8 +1,7 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ProductDTO;
-import com.bankapp.app.entity.Manager;
-import com.bankapp.app.entity.Product;
+import com.bankapp.app.model.Product;
 import com.bankapp.app.mapper.ProductMapper;
 import com.bankapp.app.repository.ProductRepository;
 import com.bankapp.app.service.ManagerService;

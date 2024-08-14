@@ -2,7 +2,7 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.ClientDTO;
-import com.bankapp.app.entity.Client;
+import com.bankapp.app.model.Client;
 import com.bankapp.app.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

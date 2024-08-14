@@ -1,12 +1,13 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ManagerDTO;
-import com.bankapp.app.service.ManagerService;
+import com.bankapp.app.mapper.ManagerMapper;
+import com.bankapp.app.model.Manager;
+import com.bankapp.app.model.enums.ManagerStatus;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/delete_tables.sql")
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
-@RequiredArgsConstructor
 @ActiveProfiles("test")
 class ManagerControllerTest {
 
@@ -43,10 +43,40 @@ class ManagerControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private ManagerService managerService;
+    private ManagerMapper managerMapper;
 
     @Autowired
     private Validator validator;
+
+    @Test
+    void testSerializationAndDeserialization() throws Exception {
+        ManagerDTO originalManager = new ManagerDTO();
+        originalManager.setFirstName("Alice");
+        originalManager.setLastName("Johnson");
+        originalManager.setStatus("ACTIVE");
+
+        String json = objectMapper.writeValueAsString(originalManager);
+
+        ManagerDTO deserializedManager = objectMapper.readValue(json, ManagerDTO.class);
+
+        assertEquals(originalManager.getFirstName(), deserializedManager.getFirstName());
+        assertEquals(originalManager.getLastName(), deserializedManager.getLastName());
+        assertEquals(originalManager.getStatus(), deserializedManager.getStatus());
+    }
+
+    @Test
+    void testManagerToDtoMapping() {
+        Manager manager = new Manager();
+        manager.setFirstName("Alice");
+        manager.setLastName("Johnson");
+        manager.setStatus(ManagerStatus.valueOf("ACTIVE"));
+
+        ManagerDTO dto = managerMapper.toDto(manager);
+
+        assertEquals("Alice", dto.getFirstName());
+        assertEquals("Johnson", dto.getLastName());
+        assertEquals("ACTIVE", dto.getStatus());
+    }
 
     @Test
     void shouldCreateManagers() throws Exception {
@@ -76,13 +106,14 @@ class ManagerControllerTest {
     void getById() throws Exception {
 
         ManagerDTO expectancy = new ManagerDTO();
-        expectancy.setFirstName("Alice");
-        expectancy.setLastName("Johnson");
-        expectancy.setStatus("ACTIVE");
+        expectancy.setFirstName("Henry");
+        expectancy.setLastName("Rodriguez");
+        expectancy.setStatus("INACTIVE");
 
         MvcResult mvcResult = mockMvc.
                 perform(MockMvcRequestBuilders.
-                        get("/managers/find/8d25ab36-969c-11ee-b9d1-0242ac120002"))
+                        get("/managers/find/" +
+                                "f0920ab0-969c-11ee-b9d1-0242ac120002"))
                 .andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus());
@@ -96,14 +127,62 @@ class ManagerControllerTest {
     }
 
     @Test
-    void testValidRegistrationRequest() throws Exception {
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void updateManager() throws Exception {
+        ManagerDTO updateDto = new ManagerDTO();
+        updateDto.setFirstName("Ali");
+        updateDto.setLastName("John");
+        updateDto.setStatus("INACTIVE");
+
+        String managerDTOStr = objectMapper.writeValueAsString(updateDto);
+
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders.
+                        get("/managers/update/" +
+                                "f647f8b6-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(managerDTOStr))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
+                .getContentAsString(), new TypeReference<>() {});
+        assertEquals(returnedDto, updateDto);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void softDeleteManager() throws Exception {
+        ManagerDTO deleteDto = new ManagerDTO();
+        deleteDto.setFirstName("Olivia");
+        deleteDto.setLastName("White");
+        deleteDto.setStatus("DELETED");
+        String managerDTOStr = objectMapper.writeValueAsString(deleteDto);
+
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders.
+                        get("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(managerDTOStr))
+                .andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
+                .getContentAsString(), new TypeReference<>() {});
+
+        assertEquals(returnedDto, deleteDto);
+    }
+
+    @Test
+    void testValidRegistrationRequest() {
         ManagerDTO expectancy = new ManagerDTO();
         expectancy.setFirstName("Alice");
         expectancy.setLastName("Johnson");
         expectancy.setStatus("ACTIVE");
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getMessage());
             }
@@ -120,7 +199,7 @@ class ManagerControllerTest {
 
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getMessageTemplate() + ": "
                         + constraintViolation.getMessage());
@@ -147,7 +226,7 @@ class ManagerControllerTest {
 
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getPropertyPath() + ": " +
                         constraintViolation.getMessage());

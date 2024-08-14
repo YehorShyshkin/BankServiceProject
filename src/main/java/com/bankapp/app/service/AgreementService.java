@@ -1,7 +1,7 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.AgreementDTO;
-import com.bankapp.app.entity.Agreement;
+import com.bankapp.app.model.Agreement;
 
 import java.util.List;
 import java.util.UUID;

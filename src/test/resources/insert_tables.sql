@@ -1,5 +1,5 @@
 -- Insert data into the managers table
-INSERT INTO managers (id, first_name, last_name, manager_status)
+INSERT INTO managers (id, first_name, last_name, status)
 VALUES ('8d25ab36-969c-11ee-b9d1-0242ac120002', 'Alice', 'Johnson', 'ACTIVE'),
        ('9f50d828-969c-11ee-b9d1-0242ac120002', 'Bob', 'Williams', 'INACTIVE'),
        ('ab75f61c-969c-11ee-b9d1-0242ac120002', 'Charlie', 'Brown', 'ACTIVE'),

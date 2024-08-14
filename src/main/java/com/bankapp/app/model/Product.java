@@ -1,15 +1,15 @@
-package com.bankapp.app.entity;
+package com.bankapp.app.model;
 
-import com.bankapp.app.enums.ClientStatus;
-import com.bankapp.app.generator.AllowedDomains;
+import com.bankapp.app.model.enums.CurrencyCode;
+import com.bankapp.app.model.enums.ProductStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -19,37 +19,31 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "clients")
-public class Client {
+@Table(name = "products")
+public class Product {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "client_status")
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "product_status")
     @Enumerated(EnumType.STRING)
-    private ClientStatus clientStatus;
+    private ProductStatus status;
 
-    @Column(name = "tax_code")
-    private String taxCode;
+    @Column(name = "currency_code")
+    @Enumerated(EnumType.STRING)
+    private CurrencyCode currencyCode;
 
-    @Column(name = "first_name")
-    private String firstName;
 
-    @Column(name = "last_name")
-    private String lastName;
+    @Column(name = "interest_rate")
+    private BigDecimal interestRate;
 
-    @Column(name = "email")
-    @Email
-    @AllowedDomains
-    private String email;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    @Column(name = "product_limit")
+    private BigDecimal limit;
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
@@ -59,22 +53,23 @@ public class Client {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
-    private List<Account> accounts;
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private List<Agreement> agreements;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Client client)) return false;
-        return Objects.equals(id, client.id);
+        if (!(o instanceof Product product)) return false;
+        return Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(name);
     }
+
 }

@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -21,16 +20,31 @@ public class ManagerController {
 
     @PostMapping(value = "/creates")
     @ResponseStatus(HttpStatus.CREATED)
-    public ManagerDTO createManager(@RequestBody @Valid ManagerDTO managerDTO) {
+    public ManagerDTO createManager
+            (@RequestBody @Valid ManagerDTO managerDTO) {
         log.info("Create manager: {}", managerDTO);
         return managerService.createManager(managerDTO);
     }
 
     @GetMapping(value = "/find/{managerId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ManagerDTO> findManagerById(@PathVariable UUID managerId){
-        ManagerDTO managerDTO = managerService.findManagerById(managerId);
+    public ManagerDTO findManagerById
+            (@PathVariable UUID managerId) {
         log.info("Find manager by id: {}", managerId);
-        return ResponseEntity.ok(managerDTO);
+        return managerService.findManagerById(managerId);
     }
+    @GetMapping(value = "update/{managerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ManagerDTO updateManager(@PathVariable UUID managerId,
+                                    @RequestBody @Valid ManagerDTO managerDTO) {
+        log.info("Update manager: {}", managerDTO);
+        return managerService.updateManager(managerId,managerDTO);
+    }
+    @GetMapping("/delete/{managerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ManagerDTO deleteManager(@PathVariable UUID managerId) {
+        log.info("Delete manager: {}", managerId);
+        return managerService.softDeleteManager(managerId);
+    }
+
 }

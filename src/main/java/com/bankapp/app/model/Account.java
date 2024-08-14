@@ -1,8 +1,8 @@
-package com.bankapp.app.entity;
+package com.bankapp.app.model;
 
-import com.bankapp.app.enums.AccountStatus;
-import com.bankapp.app.enums.AccountType;
-import com.bankapp.app.enums.CurrencyCode;
+import com.bankapp.app.model.enums.AccountStatus;
+import com.bankapp.app.model.enums.AccountType;
+import com.bankapp.app.model.enums.CurrencyCode;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

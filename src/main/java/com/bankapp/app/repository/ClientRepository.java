@@ -1,6 +1,6 @@
 package com.bankapp.app.repository;
 
-import com.bankapp.app.entity.Client;
+import com.bankapp.app.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.bankapp.app.mapper;
 
 import com.bankapp.app.dto.ClientDTO;
-import com.bankapp.app.entity.Client;
+import com.bankapp.app.model.Client;
 import org.mapstruct.Mapper;
 
 import java.util.List;
