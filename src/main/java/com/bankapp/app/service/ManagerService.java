@@ -13,6 +13,6 @@ public interface ManagerService {
 
     ManagerDTO updateManager(UUID managerId, @Valid ManagerDTO managerDTO);
 
-    ManagerDTO deleteManager(UUID managerId);
+    ManagerDTO softDeleteManager(UUID managerId);
 
 }

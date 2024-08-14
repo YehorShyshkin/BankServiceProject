@@ -4,12 +4,10 @@ import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.mapper.ManagerMapper;
 import com.bankapp.app.model.Manager;
 import com.bankapp.app.model.enums.ManagerStatus;
-import com.bankapp.app.service.ManagerService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -35,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/delete_tables.sql")
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
-@RequiredArgsConstructor
 @ActiveProfiles("test")
 class ManagerControllerTest {
 
@@ -44,9 +41,6 @@ class ManagerControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private ManagerService managerService;
 
     @Autowired
     private ManagerMapper managerMapper;
@@ -112,14 +106,14 @@ class ManagerControllerTest {
     void getById() throws Exception {
 
         ManagerDTO expectancy = new ManagerDTO();
-        expectancy.setFirstName("Alice");
-        expectancy.setLastName("Johnson");
-        expectancy.setStatus("ACTIVE");
+        expectancy.setFirstName("Henry");
+        expectancy.setLastName("Rodriguez");
+        expectancy.setStatus("INACTIVE");
 
         MvcResult mvcResult = mockMvc.
                 perform(MockMvcRequestBuilders.
                         get("/managers/find/" +
-                                "8d25ab36-969c-11ee-b9d1-0242ac120002"))
+                                "f0920ab0-969c-11ee-b9d1-0242ac120002"))
                 .andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus());
@@ -145,7 +139,7 @@ class ManagerControllerTest {
         MvcResult mvcResult = mockMvc.
                 perform(MockMvcRequestBuilders.
                         get("/managers/update/" +
-                                "8d25ab36-969c-11ee-b9d1-0242ac120002")
+                                "f647f8b6-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(managerDTOStr))
                 .andReturn();
@@ -159,15 +153,16 @@ class ManagerControllerTest {
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void deleteManager() throws Exception {
+    void softDeleteManager() throws Exception {
         ManagerDTO deleteDto = new ManagerDTO();
-        deleteDto.setFirstName("Alice");
-        deleteDto.setLastName("Johnson");
+        deleteDto.setFirstName("Olivia");
+        deleteDto.setLastName("White");
         deleteDto.setStatus("DELETED");
         String managerDTOStr = objectMapper.writeValueAsString(deleteDto);
 
         MvcResult mvcResult = mockMvc.
-                perform(MockMvcRequestBuilders.get("/managers/delete/8d25ab36-969c-11ee-b9d1-0242ac120002")
+                perform(MockMvcRequestBuilders.
+                        get("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(managerDTOStr))
                 .andReturn();
@@ -187,7 +182,7 @@ class ManagerControllerTest {
         expectancy.setStatus("ACTIVE");
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getMessage());
             }
@@ -204,7 +199,7 @@ class ManagerControllerTest {
 
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getMessageTemplate() + ": "
                         + constraintViolation.getMessage());
@@ -231,7 +226,7 @@ class ManagerControllerTest {
 
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
                 System.out.println(constraintViolation.getPropertyPath() + ": " +
                         constraintViolation.getMessage());

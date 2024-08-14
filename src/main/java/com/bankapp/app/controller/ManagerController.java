@@ -44,7 +44,7 @@ public class ManagerController {
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO deleteManager(@PathVariable UUID managerId) {
         log.info("Delete manager: {}", managerId);
-        return managerService.deleteManager(managerId);
+        return managerService.softDeleteManager(managerId);
     }
 
 }
