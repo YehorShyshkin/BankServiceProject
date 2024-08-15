@@ -9,7 +9,8 @@ import java.util.List;
 
 import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 
-@Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR, uses = {AgreementMapper.class})
+@Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR,
+        uses = {AgreementMapper.class})
 public interface AccountMapper {
     AccountDTO toDTO(Account account);
     List<AccountDTO> toDTO(List<Account> accountList);

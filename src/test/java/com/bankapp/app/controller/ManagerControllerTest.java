@@ -1,5 +1,6 @@
 package com.bankapp.app.controller;
 
+import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.mapper.ManagerMapper;
 import com.bankapp.app.model.Manager;
@@ -79,7 +80,7 @@ class ManagerControllerTest {
     }
 
     @Test
-    void shouldCreateManagers() throws Exception {
+    void testShouldCreateManagers() throws Exception {
         ManagerDTO create = new ManagerDTO();
         create.setFirstName("Alice");
         create.setLastName("Johnson");
@@ -103,7 +104,7 @@ class ManagerControllerTest {
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void getById() throws Exception {
+    void testGetById() throws Exception {
 
         ManagerDTO expectancy = new ManagerDTO();
         expectancy.setFirstName("Henry");
@@ -128,48 +129,50 @@ class ManagerControllerTest {
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void updateManager() throws Exception {
+    void testUpdateManager() throws Exception {
         ManagerDTO updateDto = new ManagerDTO();
         updateDto.setFirstName("Ali");
         updateDto.setLastName("John");
         updateDto.setStatus("INACTIVE");
 
-        String managerDTOStr = objectMapper.writeValueAsString(updateDto);
+        String json = objectMapper.writeValueAsString(updateDto);
 
         MvcResult mvcResult = mockMvc.
-                perform(MockMvcRequestBuilders.
-                        get("/managers/update/" +
+                perform(MockMvcRequestBuilders
+                        .get("/managers/update/" +
                                 "f647f8b6-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(managerDTOStr))
+                        .content(json))
                 .andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus());
 
         ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
-                .getContentAsString(), new TypeReference<>() {});
+                .getContentAsString(), new TypeReference<>() {
+        });
         assertEquals(returnedDto, updateDto);
     }
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void softDeleteManager() throws Exception {
+    void testSoftDeleteManager() throws Exception {
         ManagerDTO deleteDto = new ManagerDTO();
         deleteDto.setFirstName("Olivia");
         deleteDto.setLastName("White");
         deleteDto.setStatus("DELETED");
-        String managerDTOStr = objectMapper.writeValueAsString(deleteDto);
+        String json = objectMapper.writeValueAsString(deleteDto);
 
         MvcResult mvcResult = mockMvc.
-                perform(MockMvcRequestBuilders.
-                        get("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
+                perform(MockMvcRequestBuilders
+                        .get("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(managerDTOStr))
+                        .content(json))
                 .andReturn();
         assertEquals(200, mvcResult.getResponse().getStatus());
 
         ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
-                .getContentAsString(), new TypeReference<>() {});
+                .getContentAsString(), new TypeReference<>() {
+        });
 
         assertEquals(returnedDto, deleteDto);
     }
@@ -183,15 +186,15 @@ class ManagerControllerTest {
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
         if (!constraintViolations.isEmpty()) {
-            for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
-                System.out.println(constraintViolation.getMessage());
-            }
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
         }
         assertTrue(constraintViolations.isEmpty());
     }
 
     @Test
-    void testEmptyManagerFirstName() {
+    void testInvalidManagerFirstName() {
         ManagerDTO expectancy = new ManagerDTO();
         expectancy.setFirstName("");
         expectancy.setLastName("Johnson");
@@ -200,10 +203,10 @@ class ManagerControllerTest {
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
         if (!constraintViolations.isEmpty()) {
-            for (ConstraintViolation<ManagerDTO> constraintViolation : constraintViolations) {
-                System.out.println(constraintViolation.getMessageTemplate() + ": "
-                        + constraintViolation.getMessage());
-            }
+            constraintViolations.stream()
+                    .map(constraintViolation -> constraintViolation.getMessageTemplate() + ": "
+                            + constraintViolation.getMessage())
+                    .forEach(System.out::println);
         }
         assertEquals(2, constraintViolations.size());
 
@@ -215,6 +218,29 @@ class ManagerControllerTest {
                 "Expected 'Can not be empty', message");
         assertTrue(message.contains("First name must contain only letters"),
                 "Expected 'First name must contain only letters', message");
+    }
+
+    @Test
+    void testInvalidMangerFirstNameNumbers() {
+        ManagerDTO expectancy = new ManagerDTO();
+        expectancy.setFirstName("1234");
+        expectancy.setLastName("Johnson");
+        expectancy.setStatus("ACTIVE");
+
+        Set<ConstraintViolation<ManagerDTO>> constraintViolations =
+                validator.validate(expectancy);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(1, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+        assertTrue(message.contains("First name must contain only letters"),
+                "Expected 'First name must contain only letters' message");
     }
 
     @Test
@@ -242,6 +268,31 @@ class ManagerControllerTest {
                 "Expected 'Can not be empty', message");
         assertTrue(message.contains("Last name must contain only letters"),
                 "Expected 'Last name must contain only letters', message");
+    }
+
+    @Test
+    void testInvalidManagerLastNameNumbers() {
+        ManagerDTO expectancy = new ManagerDTO();
+        expectancy.setFirstName("Alice");
+        expectancy.setLastName("1234");
+        expectancy.setStatus("ACTIVE");
+        Set<ConstraintViolation<ManagerDTO>> constraintViolations =
+                validator.validate(expectancy);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(1, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        assertTrue(message.contains("Last name must contain only letters"),
+                "Expected 'Last name must contain only letters', message");
+
+
     }
 }
 

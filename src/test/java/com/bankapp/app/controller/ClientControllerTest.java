@@ -1,22 +1,30 @@
 package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ClientDTO;
+import com.bankapp.app.generator.EmailDomainValidator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,91 +40,355 @@ class ClientControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private Validator validator;
 
-    @Test
-    void findAll() throws Exception {
+    private EmailDomainValidator emailDomainValidator;
 
-        ClientDTO clientDTOFirst = new ClientDTO();
-        clientDTOFirst.setFirstName("Alice");
-        clientDTOFirst.setLastName("Johnson");
-        clientDTOFirst.setStatus("ACTIVE");
-        clientDTOFirst.setEmail("alice@gmail.com");
-        clientDTOFirst.setAddress("123 Main St");
-        clientDTOFirst.setPhoneNumber("123-456-7890");
-        clientDTOFirst.setTaxCode("123456789");
+    private ConstraintValidatorContext constraintValidatorContext;
 
-
-        ClientDTO clientDTOSecond = new ClientDTO();
-        clientDTOSecond.setFirstName("Bob");
-        clientDTOSecond.setLastName("Smith");
-        clientDTOSecond.setStatus("ACTIVE");
-        clientDTOSecond.setEmail("bob@gmail.com");
-        clientDTOSecond.setAddress("456 Oak St");
-        clientDTOSecond.setPhoneNumber("456-789-0123");
-        clientDTOSecond.setTaxCode("987654321");
-
-        List<ClientDTO> clientDTOList = new ArrayList<>();
-        clientDTOList.add(clientDTOFirst);
-        clientDTOList.add(clientDTOSecond);
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/clients/all"))
-                .andReturn();
-        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
-
-        List<ClientDTO> clientDTOReturned = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {
-        });
-        Assertions.assertEquals(clientDTOList, clientDTOReturned);
-
-    }
-
-
-    @Test
-    void getClientDTO() throws Exception {
-        ClientDTO clientDTOFind = new ClientDTO();
-        clientDTOFind.setFirstName("Alice");
-        clientDTOFind.setLastName("Johnson");
-        clientDTOFind.setStatus("ACTIVE");
-        clientDTOFind.setEmail("alice@gmail.com");
-        clientDTOFind.setAddress("123 Main St");
-        clientDTOFind.setPhoneNumber("123-456-7890");
-        clientDTOFind.setTaxCode("123456789");
-
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/clients/find/b3a3a896-969c-11ee-b9d1-0242ac120002"))
-                .andReturn();
-
-        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
-        ClientDTO clientDTOReturned = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ClientDTO.class);
-        Assertions.assertEquals(clientDTOFind, clientDTOReturned);
-
-
-    }
 
     @Test
     void createClient() throws Exception {
 
-        ClientDTO clientDTOCreate = new ClientDTO();
-        clientDTOCreate.setFirstName("Alice");
-        clientDTOCreate.setLastName("Johnson");
-        clientDTOCreate.setStatus("ACTIVE");
-        clientDTOCreate.setEmail("alice@gmail.com");
-        clientDTOCreate.setAddress("123 Main St");
-        clientDTOCreate.setPhoneNumber("123-456-7890");
-        clientDTOCreate.setTaxCode("123456789");
+        ClientDTO newClientDto = new ClientDTO();
+        newClientDto.setFirstName("Alice");
+        newClientDto.setLastName("Johnson");
+        newClientDto.setStatus("ACTIVE");
+        newClientDto.setEmail("alice@gmail.com");
+        newClientDto.setAddress("123 Main St.");
+        newClientDto.setPhoneNumber("123-456-7890");
+        newClientDto.setTaxCode("1234567890");
+        newClientDto.setManagerId(UUID.fromString("8d25ab36-969c-11ee-b9d1-0242ac120002"));
 
 
-        String clientDTOStr = objectMapper.writeValueAsString(clientDTOCreate);
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/clients/create_clients/")
+        String json = objectMapper.writeValueAsString(newClientDto);
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders.post("/clients/creates")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(clientDTOStr))
+                        .content(json))
                 .andReturn();
 
-        Assertions.assertEquals(200, mvcResult.getResponse().getStatus());
+        assertEquals(201, mvcResult.getResponse().getStatus());
 
 
-        ClientDTO clientDTOReturned = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<>() {
-        });
+        ClientDTO returnedClientDto = objectMapper.
+                readValue(mvcResult.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
 
-        Assertions.assertEquals(clientDTOReturned, clientDTOCreate);
+        assertEquals(returnedClientDto, newClientDto);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void getById() throws Exception {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+        clientDto.setManagerId(UUID.fromString("8d25ab36-969c-11ee-b9d1-0242ac120002"));
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/clients/find/b3a3a896-969c-11ee-b9d1-0242ac120002"))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ClientDTO returned = objectMapper.readValue
+                (mvcResult.getResponse().getContentAsString(),
+                        new TypeReference<>() {
+                        });
+
+        assertEquals(returned, clientDto);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void updateClient() throws Exception {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alic");
+        clientDto.setLastName("Johns");
+        clientDto.setStatus("PREMIUM");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St .");
+        clientDto.setPhoneNumber("123-456-7891");
+        clientDto.setTaxCode("1234567891");
+        clientDto.setManagerId(UUID.fromString("8d25ab36-969c-11ee-b9d1-0242ac120002"));
+
+        String json = objectMapper.writeValueAsString(clientDto);
+
+        MvcResult mvcResult = mockMvc.
+                perform(MockMvcRequestBuilders
+                        .get("/clients/update/" +
+                                "b3a3a896-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ClientDTO returnedDto = objectMapper.readValue(mvcResult
+                        .getResponse().getContentAsString(),
+                new TypeReference<>() {
+                });
+
+        assertEquals(returnedDto, clientDto);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testSoftDeleteClient() throws Exception {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("DELETED");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+        clientDto.setManagerId(UUID.fromString("8d25ab36-969c-11ee-b9d1-0242ac120002"));
+
+        String json = objectMapper.writeValueAsString(clientDto);
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/clients/delete/b3a3a896-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        ClientDTO returnedDto = objectMapper.readValue(mvcResult
+                        .getResponse().getContentAsString(),
+                new TypeReference<>() {
+                });
+
+        assertEquals(returnedDto, clientDto);
+
+    }
+
+    @Test
+    void testValidRegistrationRequest() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+
+        assertTrue(constraintViolations.isEmpty());
+    }
+
+    @Test
+    void testEmptyClientFirstName() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(2, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        assertTrue(message.contains("Can not be empty"),
+                "Expected 'Can not be empty' message");
+        assertTrue(message.contains("First name must contain only letters"),
+                "Expected 'First name must contain only letters' message");
+    }
+
+    @Test
+    void testInvalidClientFirstNameNumbers() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("1234");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(1, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        assertTrue(message.contains("First name must contain only letters"),
+                "Expected 'First name must contain only letters' message");
+    }
+
+    @Test
+    void testInvalidClientLastName() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName(" ");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(2, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+        assertTrue(message.contains("Can not be empty"),
+                "Expected 'Can not be empty', message");
+        assertTrue(message.contains("Last name must contain only letters"),
+                "Expected 'Last name must contain only letters', message");
+    }
+
+    @Test
+    void testInvalidClientLastNameNumbers() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName("12344");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("alice@gmail.com");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(1, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        assertTrue(message.contains("Last name must contain only letters"),
+                "Expected 'Last name must contain only letters', message");
+    }
+
+    @Test
+    void testInvalidClientEmail() {
+        ClientDTO clientDto = new ClientDTO();
+        clientDto.setFirstName("Alice");
+        clientDto.setLastName("Johnson");
+        clientDto.setStatus("ACTIVE");
+        clientDto.setEmail("");
+        clientDto.setAddress("123 Main St");
+        clientDto.setPhoneNumber("123-456-7890");
+        clientDto.setTaxCode("1234567890");
+
+        Set<ConstraintViolation<ClientDTO>> constraintViolations =
+                validator.validate(clientDto);
+        if (!constraintViolations.isEmpty()) {
+            constraintViolations.stream()
+                    .map(ConstraintViolation::getMessage)
+                    .forEach(System.out::println);
+        }
+        assertEquals(2, constraintViolations.size());
+
+        Set<String> message = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        assertTrue(message.contains("Email cannot be blank"),
+                "Expected 'Email cannot be blank' message");
+        assertTrue(message.contains("Invalid email domain"),
+                "Expected 'Invalid email domain' message");
+
+    }
+
+    @BeforeEach
+    void setUp() {
+        emailDomainValidator = new EmailDomainValidator();
+    }
+
+    @Test
+    void testValidEmail() {
+        assertTrue(emailDomainValidator.isValid("user@gmail.com", constraintValidatorContext),
+                "Expected valid email with allowed domain");
+        assertTrue(emailDomainValidator.isValid("example@proton.me", constraintValidatorContext),
+                "Expected valid email with allowed domain");
+    }
+
+    @Test
+    void testEmailWithoutAtSymbol() {
+        assertFalse(emailDomainValidator.isValid("usergmail.com", null),
+                "Expected invalid email without '@'");
+        assertFalse(emailDomainValidator.isValid("example.proton.me", null),
+                "Expected invalid email without '@'");
+    }
+
+    @Test
+    void testInvalidDomain() {
+        assertFalse(emailDomainValidator.isValid("user@invalid.com", null),
+                "Expected invalid email with not allowed domain");
+        assertFalse(emailDomainValidator.isValid("example@unknown.net", null),
+                "Expected invalid email with not allowed domain");
+    }
+
+    @Test
+    void testEmptyEmail() {
+        assertFalse(emailDomainValidator.isValid("", null),
+                "Expected invalid for empty email");
+        assertFalse(emailDomainValidator.isValid(null, null),
+                "Expected invalid for null email");
+    }
+
+    @Test
+    void testEmailWithOnlyLocalPart() {
+        assertFalse(emailDomainValidator.isValid("user@", null),
+                "Expected invalid email with only local part");
+    }
+
+    @Test
+    void testEmailWithOnlyDomain() {
+        assertFalse(emailDomainValidator.isValid("@gmail.com", null),
+                "Expected invalid email with only domain");
     }
 }
 
