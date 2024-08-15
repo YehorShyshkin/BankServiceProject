@@ -1,20 +1,19 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.ClientDTO;
-import com.bankapp.app.model.Account;
 import com.bankapp.app.model.Client;
+import jakarta.validation.Valid;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface ClientService {
-    List<ClientDTO> findAll();
-    ClientDTO getClientDTO(String id);
+    ClientDTO findClientById(UUID clientId);
 
-    Client findClientById(UUID id);
+    Client findById(UUID clientId);
 
-    List<Account> getAccountsForClient(UUID clientId);
+    ClientDTO createClient(ClientDTO clientDTO);
 
-    ClientDTO createClientDTO(Client client);
+    ClientDTO updateClient(UUID clientId, @Valid ClientDTO clientDTO);
 
+    ClientDTO softDeleteClient(UUID clientId);
 }

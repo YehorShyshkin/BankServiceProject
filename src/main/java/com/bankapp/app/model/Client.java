@@ -1,9 +1,7 @@
 package com.bankapp.app.model;
 
 import com.bankapp.app.model.enums.ClientStatus;
-import com.bankapp.app.generator.AllowedDomains;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,35 +25,30 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "client_status")
     @Enumerated(EnumType.STRING)
-    private ClientStatus clientStatus;
+    private ClientStatus status;
 
-    @Column(name = "tax_code")
     private String taxCode;
 
-    @Column(name = "first_name")
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(nullable = false)
     private String lastName;
 
-    @Column(name = "email")
-    @Email
-    @AllowedDomains
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "address")
+    @Column(nullable = false)
     private String address;
 
-    @Column(name = "phone_number")
+    @Column(nullable = false)
     private String phoneNumber;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
@@ -77,4 +70,5 @@ public class Client {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

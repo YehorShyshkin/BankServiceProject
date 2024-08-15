@@ -16,6 +16,16 @@ public class EmailDomainValidator implements ConstraintValidator<AllowedDomains,
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        return allowedDomains.contains(email.split("@")[1]);
+        if (email == null || !email.contains("@")) {
+            return false;
+        }
+
+        String[] parts = email.split("@");
+        if (parts.length != 2 || parts[0].isEmpty()) {
+            return false;
+        }
+
+        String domain = parts[1];
+        return allowedDomains.contains(domain);
     }
 }

@@ -4,5 +4,6 @@ public enum ClientStatus {
     ACTIVE,
     PREMIUM,
     BLOCKED,
-    CLOSED
+    CLOSED,
+    DELETED
 }

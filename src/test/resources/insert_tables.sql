@@ -25,11 +25,13 @@ VALUES ('8df40ce4-969c-11ee-b9d1-0242ac120002', 'Savings Account', 'ACTIVE', 'US
        ('c3c4d5e6-969c-11ee-b9d1-0242ac120002', 'Mortgage', 'ACTIVE', 'USD', 0.03, 100000, 'ab75f61c-969c-11ee-b9d1-0242ac120002');
 
 -- Insert data into the clients table
-INSERT INTO clients (id, client_status, tax_code, first_name, last_name, email, address, phone_number, manager_id)
-VALUES ('b3a3a896-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '123456789', 'Alice', 'Johnson', 'alice@gmail.com', '123 Main St', '123-456-7890', '8d25ab36-969c-11ee-b9d1-0242ac120002'),
-       ('b9814aa2-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '987654321', 'Bob', 'Smith', 'bob@gmail.com', '456 Oak St', '456-789-0123', '8d25ab36-969c-11ee-b9d1-0242ac120002'),
-       ('c0a1b2c3-969c-11ee-b9d1-0242ac120002', 'INACTIVE', '112233445', 'Charlie', 'Brown', 'charlie@gmail.com', '789 Pine St', '789-012-3456', '9f50d828-969c-11ee-b9d1-0242ac120002'),
-       ('d0b2c3d4-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '556677889', 'Dana', 'Lee', 'dana@gmail.com', '321 Maple St', '321-654-9870', 'ab75f61c-969c-11ee-b9d1-0242ac120002');
+INSERT INTO clients (id, status, tax_code, first_name, last_name, email, address, phone_number, manager_id)
+VALUES
+    ('b3a3a896-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '1234567890', 'Alice', 'Johnson', 'alice@gmail.com', '123 Main St', '123-456-7890', '8d25ab36-969c-11ee-b9d1-0242ac120002'),
+    ('b9814aa2-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '9876543210', 'Bob', 'Smith', 'bob@gmail.com', '456 Oak St', '456-789-0123', '8d25ab36-969c-11ee-b9d1-0242ac120002'),
+    ('c0a1b2c3-969c-11ee-b9d1-0242ac120002', 'INACTIVE', '1122334455', 'Charlie', 'Brown', 'charlie@gmail.com', '789 Pine St', '789-012-3456', '9f50d828-969c-11ee-b9d1-0242ac120002'),
+    ('d0b2c3d4-969c-11ee-b9d1-0242ac120002', 'ACTIVE', '5566778890', 'Dana', 'Lee', 'dana@gmail.com', '321 Maple St', '321-654-9870', 'ab75f61c-969c-11ee-b9d1-0242ac120002');
+
 
 -- Insert data into the accounts table
 INSERT INTO accounts (id, name, account_type, status, currency_code, balance, created_at, updated_at, client_id)
