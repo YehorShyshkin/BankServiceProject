@@ -1,10 +1,9 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ManagerDTO;
-import com.bankapp.app.exception.FailedToSaveManagerException;
-import com.bankapp.app.model.Manager;
 import com.bankapp.app.exception.ManagerNotFoundException;
 import com.bankapp.app.mapper.ManagerMapper;
+import com.bankapp.app.model.Manager;
 import com.bankapp.app.model.enums.ManagerStatus;
 import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.service.ManagerService;
@@ -23,42 +22,29 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     @Transactional
     public ManagerDTO createManager(ManagerDTO managerDTO) {
-        if (managerDTO == null) {
-            throw new IllegalArgumentException("ManagerDTO cannot be null");
-        }
-
         Manager newManager = managerMapper.toEntity(managerDTO);
-
-        try {
-            Manager savedManager = managerRepository.save(newManager);
-            return managerMapper.toDto(savedManager);
-        } catch (Exception e) {
-            throw new FailedToSaveManagerException
-                    ("Failed to save manager", e);
-        }
+        Manager savedManager = managerRepository.save(newManager);
+        return managerMapper.toDto(savedManager);
     }
 
     @Override
     @Transactional(readOnly = true)
     public ManagerDTO findManagerById(UUID managerId) {
-        return managerMapper.toDto(getById(managerId));
+        return managerMapper.toDto(findById(managerId));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Manager getById(UUID managerId) {
+    public Manager findById(UUID managerId) {
         return managerRepository.findById(managerId)
-                .orElseThrow(() -> new ManagerNotFoundException("Manager not found!"));
+                .orElseThrow(() -> new ManagerNotFoundException
+                        (String.format("Manager with id %s not found", managerId)));
     }
 
     @Override
     @Transactional
     public ManagerDTO updateManager(UUID managerId, ManagerDTO managerDTO) {
-        if (managerDTO == null) {
-            throw new IllegalArgumentException("ManagerDTO cannot be null");
-        }
-
-        Manager manager = getById(managerId);
+        Manager manager = findById(managerId);
         managerMapper.updateManagerFromDto(managerDTO, manager);
         return managerMapper.toDto(managerRepository.save(manager));
     }
@@ -66,7 +52,7 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     @Transactional
     public ManagerDTO softDeleteManager(UUID managerId) {
-        Manager manager = getById(managerId);
+        Manager manager = findById(managerId);
         manager.setStatus(ManagerStatus.DELETED);
         managerRepository.save(manager);
         return managerMapper.toDto(manager);

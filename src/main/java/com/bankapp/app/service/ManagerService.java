@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import java.util.UUID;
 
 public interface ManagerService {
-    Manager getById(UUID managerId);
+    Manager findById(UUID managerId);
     ManagerDTO findManagerById(UUID managerId);
     ManagerDTO createManager(ManagerDTO managerDTO);
 
