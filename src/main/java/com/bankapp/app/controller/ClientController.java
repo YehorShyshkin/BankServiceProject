@@ -2,40 +2,43 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.ClientDTO;
-import com.bankapp.app.model.Client;
 import com.bankapp.app.service.ClientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.UUID;
 
+@Slf4j
 @RestController
-@RequestMapping("/clients")
 @RequiredArgsConstructor
+@RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public List<ClientDTO> findAll() {
-        return clientService.findAll();
+    @PostMapping(value = "/creates")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ClientDTO createClient
+            (@RequestBody @Valid ClientDTO clientDTO) {
+        log.info("Create client {}", clientDTO);
+        return clientService.createClient(clientDTO);
     }
 
-    @RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/find/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ClientDTO getClientDTO(@PathVariable("id") String id) {
-        String uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-        if (!id.matches(uuidPattern)) {
-            throw new IllegalArgumentException("ID is not a valid UUID");
-        }
-        return clientService.getClientDTO(id);
+    public ClientDTO findClientById(@PathVariable UUID clientId) {
+        log.info("Find client by id: {}", clientId);
+        return clientService.findClientById(clientId);
     }
 
-    @RequestMapping(value = "/create_clients/", method = RequestMethod.POST)
+    @GetMapping("/update/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ClientDTO createClientDTO(@RequestBody Client client) {
-        return clientService.createClientDTO(client);
+    public ClientDTO updateClient(@PathVariable UUID clientId, @RequestBody @Valid ClientDTO clientDTO) {
+        log.info("Update client {}", clientDTO);
+        return clientService.updateClient(clientId, clientDTO);
     }
+
 }

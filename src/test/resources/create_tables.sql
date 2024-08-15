@@ -24,8 +24,8 @@ create table if not exists products
 create table if not exists clients
 (
     id            UUID primary key,
-    client_status varchar(100) not null,
-    tax_code       varchar(100) not null,
+    status        varchar(100) not null,
+    tax_code      varchar(100) not null,
     first_name    varchar(100) not null,
     last_name     varchar(100) not null,
     email         varchar(100) not null,

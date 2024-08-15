@@ -134,14 +134,14 @@ class ManagerControllerTest {
         updateDto.setLastName("John");
         updateDto.setStatus("INACTIVE");
 
-        String managerDTOStr = objectMapper.writeValueAsString(updateDto);
+        String json = objectMapper.writeValueAsString(updateDto);
 
         MvcResult mvcResult = mockMvc.
-                perform(MockMvcRequestBuilders.
-                        get("/managers/update/" +
+                perform(MockMvcRequestBuilders
+                        .get("/managers/update/" +
                                 "f647f8b6-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(managerDTOStr))
+                        .content(json))
                 .andReturn();
 
         assertEquals(200, mvcResult.getResponse().getStatus());

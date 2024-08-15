@@ -33,7 +33,7 @@ public class ManagerController {
         log.info("Find manager by id: {}", managerId);
         return managerService.findManagerById(managerId);
     }
-    @GetMapping(value = "update/{managerId}")
+    @GetMapping(value = "/update/{managerId}")
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO updateManager(@PathVariable UUID managerId,
                                     @RequestBody @Valid ManagerDTO managerDTO) {
