@@ -1,4 +1,4 @@
-package com.bankapp.app.service.impl;
+package com.bankapp.app.controller;
 
 import com.bankapp.app.request.ErrorData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
-class ClientServiceImplExceptionTest {
+class ProductControllerExceptionTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,16 +34,16 @@ class ClientServiceImplExceptionTest {
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void testClientNotFoundException() throws Exception {
-        UUID clientId =
+    void testProductNotFoundException() throws Exception {
+        UUID productId =
                 UUID.randomUUID();
 
         String json =
-                objectMapper.writeValueAsString(clientId);
+                objectMapper.writeValueAsString(productId);
 
         String errorDataJson = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/clients/find/" + clientId)
+                        .get("/products/find/"+productId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isNotFound())
@@ -55,7 +55,9 @@ class ClientServiceImplExceptionTest {
                 objectMapper.readValue(errorDataJson, ErrorData.class);
 
         String expectedMessage =
-                String.format("Client with id %s not found", clientId);
+                String.format("Product with id %s not found", productId);
+
         assertEquals(expectedMessage, errorData.message());
     }
+
 }

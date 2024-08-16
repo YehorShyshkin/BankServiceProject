@@ -1,4 +1,4 @@
-package com.bankapp.app.service.impl;
+package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ManagerDTO;
 import com.bankapp.app.mapper.ManagerMapper;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
 @ActiveProfiles("test")
-class ManagerServiceImplTest {
+class ManagerControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

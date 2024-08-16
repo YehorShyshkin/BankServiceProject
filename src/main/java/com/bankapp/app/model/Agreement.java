@@ -26,21 +26,17 @@ public class Agreement {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "interest_rate")
     private BigDecimal interestRate;
 
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @Column(name = "sum")
     private BigDecimal sum;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

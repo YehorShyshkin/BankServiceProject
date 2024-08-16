@@ -1,5 +1,6 @@
 package com.bankapp.app.exception_handler;
 
+import com.bankapp.app.exception.AgreementNotFoundException;
 import com.bankapp.app.exception.ClientNotFoundException;
 import com.bankapp.app.exception.ManagerNotFoundException;
 import com.bankapp.app.exception.ProductNotFoundException;
@@ -24,21 +25,11 @@ public class ExceptionControllerAdvisor extends Exception {
         return new ResponseEntity<>(errorData, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(ManagerNotFoundException.class)
-    public ResponseEntity<ErrorData> handleManagerNotFoundException(ManagerNotFoundException exception) {
-        ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
-                exception.getMessage(), Arrays.toString(exception.getStackTrace()));
-        return new ResponseEntity<>(errorData, HttpStatus.NOT_FOUND);
-    }
-    @ExceptionHandler(ClientNotFoundException.class)
+    @ExceptionHandler({ManagerNotFoundException.class,
+            ClientNotFoundException.class,
+            ProductNotFoundException.class,
+            AgreementNotFoundException.class})
     public ResponseEntity<ErrorData> handleClientNotFoundException(ClientNotFoundException exception) {
-        ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
-                exception.getMessage(), Arrays.toString(exception.getStackTrace()));
-        return new ResponseEntity<>(errorData, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorData> handleProductNotFoundException(ProductNotFoundException exception) {
         ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
                 exception.getMessage(), Arrays.toString(exception.getStackTrace()));
         return new ResponseEntity<>(errorData, HttpStatus.NOT_FOUND);

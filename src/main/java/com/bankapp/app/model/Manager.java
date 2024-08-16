@@ -43,10 +43,10 @@ public class Manager {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private List<Client> listClients;
 
-    @OneToMany(mappedBy = "manager", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
     private List<Product> listProducts;
 
     @Override
