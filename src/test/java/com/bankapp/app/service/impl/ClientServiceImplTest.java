@@ -1,4 +1,4 @@
-package com.bankapp.app.controller;
+package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.generator.EmailDomainValidator;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
-class ClientControllerTest {
+class ClientServiceImplTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ class ClientControllerTest {
 
 
     @Test
-    void createClient() throws Exception {
+    void testCreateClient() throws Exception {
 
         ClientDTO newClientDto = new ClientDTO();
         newClientDto.setFirstName("Alice");
@@ -63,8 +63,8 @@ class ClientControllerTest {
 
 
         String json = objectMapper.writeValueAsString(newClientDto);
-        MvcResult mvcResult = mockMvc.
-                perform(MockMvcRequestBuilders.post("/clients/creates")
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders.post("/clients/creates")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -82,7 +82,7 @@ class ClientControllerTest {
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
-    void getById() throws Exception {
+    void testGetById() throws Exception {
         ClientDTO clientDto = new ClientDTO();
         clientDto.setFirstName("Alice");
         clientDto.setLastName("Johnson");
