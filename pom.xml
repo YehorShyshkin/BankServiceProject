@@ -117,7 +117,16 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>com/**/entity/**</exclude>
+                        <exclude>**/aspect/**</exclude>
+                        <exclude>**/mapper/**</exclude>
+                        <exclude>**/controller/handler/**</exclude>
+                        <exclude>**/service/exception/**</exclude>
+                        <exclude>**/model/**</exclude>
+                        <exclude>**/service/impl/**</exclude>
+                        <exclude>**/security/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/repository/**</exclude>
+                        <exclude>com/bankapp.app/BankServiceApplication.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

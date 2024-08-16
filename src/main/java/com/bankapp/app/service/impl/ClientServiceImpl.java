@@ -46,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO createClient(ClientDTO clientDTO) {
         Client newClient = clientMapper.toEntity(clientDTO);
         Manager manager = managerRepository.findById(clientDTO.getManagerId())
-                .orElseThrow(() -> new ManagerNotFoundException("Client with id %s not found"));
+                .orElseThrow(() -> new ManagerNotFoundException("Manager with id %s not found"));
         newClient.setManager(manager);
         log.info("ClientDTO status: {}", clientDTO.getStatus());
         Client savedClient = clientRepository.save(newClient);
