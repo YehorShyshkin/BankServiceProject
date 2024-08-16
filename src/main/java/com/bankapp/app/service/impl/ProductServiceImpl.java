@@ -1,20 +1,24 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.ProductDTO;
-import com.bankapp.app.model.Product;
+import com.bankapp.app.exception.ManagerNotFoundException;
+import com.bankapp.app.exception.ProductNotFoundException;
 import com.bankapp.app.mapper.ProductMapper;
+import com.bankapp.app.model.Manager;
+import com.bankapp.app.model.Product;
+import com.bankapp.app.model.enums.ProductStatus;
+import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.repository.ProductRepository;
 import com.bankapp.app.service.ManagerService;
 import com.bankapp.app.service.ProductService;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -22,57 +26,50 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final ManagerService managerService;
+    private final ManagerRepository managerRepository;
 
     @Override
-    public List<ProductDTO> findAll() {
-        return productMapper.toDTO(productRepository.findAll());
-    }
-
-    @Override
-    public ProductDTO getProductDTO(String id) {
-        Optional<Product> productOptional = productRepository.findById(UUID.fromString(id));
-        Product product = productOptional.orElseThrow(() -> new NoSuchElementException("Product not found!"));
-        return productMapper.toDTO(product);
-    }
-
-    @Override
-    public Product findProductById(UUID productId) {
+    @Transactional
+    public Product findById(UUID productId){
         return productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ProductNotFoundException
+                        (String.format("Product with id %s not found", productId)));
     }
 
     @Override
-    public void save(Product product) {
+    @Transactional
+    public ProductDTO createProduct(ProductDTO productDTO) {
+        Product newProduct = productMapper.toEntity(productDTO);
+        Manager manager = managerRepository.findById(UUID.fromString(productDTO.getManagerId()))
+                .orElseThrow(() -> new ManagerNotFoundException("Manager with id %s not found"));
+        newProduct.setManager(manager);
+        log.info("New product created: {}", newProduct);
+        Product savedProduct = productRepository.save(newProduct);
+        return productMapper.toDto(savedProduct);
+    }
+
+
+    @Override
+    @Transactional
+    public ProductDTO findProductById(UUID productId) {
+        return productMapper.toDto(findById(productId));
+    }
+
+    @Override
+    @Transactional
+    public ProductDTO updateProduct(UUID productId, ProductDTO productDTO) {
+        Product product = findById(productId);
+        productMapper.updateManagerFromDTO(productDTO,product);
+        Product updatedProduct = productRepository.save(product);
+        return productMapper.toDto(updatedProduct);
+    }
+
+    @Override
+    public ProductDTO softDeleteProduct(UUID productId) {
+        Product product = findById(productId);
+        product.setStatus(ProductStatus.DELETED);
         productRepository.save(product);
-    }
-
-    @Override
-    public boolean deleteProduct(UUID id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public Product updateProduct(UUID id, ProductDTO productDTO) {
-        Product currentProduct = findProductById(id);
-        Product updateProduct = productMapper.updateManagerFromDTO(productDTO, currentProduct);
-        return productRepository.save(updateProduct);
-    }
-
-    @Override
-    public boolean mergeProductAndManager(UUID managerId, UUID productId) {
-//        Product currentProduct = findProductById(productId);
-//        Manager currentManager = managerService.findManagerById(String.valueOf(managerId));
-//        if (currentProduct != null && currentManager != null) {
-//            currentProduct.setManager(currentManager);
-//            productRepository.save(currentProduct);
-//            return true;
-//        }
-        return false;
+        return productMapper.toDto(product);
     }
 
 }

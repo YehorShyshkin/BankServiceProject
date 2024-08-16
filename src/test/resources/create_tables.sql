@@ -11,7 +11,7 @@ create table if not exists products
 (
     id             UUID primary key,
     name           varchar(100) not null,
-    product_status varchar(100) not null,
+    status         varchar(100) not null,
     currency_code  varchar(100) not null,
     interest_rate  decimal(3, 2),
     product_limit  decimal(16, 0),
@@ -41,7 +41,7 @@ create table if not exists accounts
 (
     id            UUID primary key,
     name          varchar(100) not null,
-    account_type  varchar(100) not null,
+    type  varchar(100) not null,
     status        varchar(100) not null,
     currency_code varchar(100) not null,
     balance       decimal(15, 2),

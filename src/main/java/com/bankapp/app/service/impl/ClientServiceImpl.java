@@ -58,8 +58,8 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO updateClient(UUID clientId, ClientDTO clientDTO) {
         Client client = findById(clientId);
         clientMapper.updateClientFromDto(clientDTO, client);
-        Client savedClient = clientRepository.save(client);
-        return clientMapper.toDto(savedClient);
+        Client updatedClient = clientRepository.save(client);
+        return clientMapper.toDto(updatedClient);
     }
 
     @Override

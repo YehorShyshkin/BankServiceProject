@@ -10,5 +10,6 @@ public class ProductDTO {
     private String status;
     private String currencyCode;
     private BigDecimal interestRate;
-    private BigDecimal limit;
+    private BigDecimal productLimit;
+    private String managerId;
 }

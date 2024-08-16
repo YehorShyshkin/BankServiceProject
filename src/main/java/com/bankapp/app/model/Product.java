@@ -27,29 +27,22 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name")
     private String name;
 
-    @Column(name = "product_status")
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
-    @Column(name = "currency_code")
     @Enumerated(EnumType.STRING)
     private CurrencyCode currencyCode;
 
-
-    @Column(name = "interest_rate")
     private BigDecimal interestRate;
 
-    @Column(name = "product_limit")
-    private BigDecimal limit;
+    private BigDecimal productLimit;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 

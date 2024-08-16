@@ -18,7 +18,7 @@ VALUES ('8d25ab36-969c-11ee-b9d1-0242ac120002', 'Alice', 'Johnson', 'ACTIVE'),
        ('f97a9d0a-969c-11ee-b9d1-0242ac120002', 'Paul', 'Harris', 'INACTIVE');
 
 -- Insert data into the products table
-INSERT INTO products (id, name, product_status, currency_code, interest_rate, product_limit, manager_id)
+INSERT INTO products (id, name, status, currency_code, interest_rate, product_limit, manager_id)
 VALUES ('8df40ce4-969c-11ee-b9d1-0242ac120002', 'Savings Account', 'ACTIVE', 'USD', 0.02, 10000, '8d25ab36-969c-11ee-b9d1-0242ac120002'),
        ('a96788e8-969c-11ee-b9d1-0242ac120002', 'Credit Card', 'ACTIVE', 'USD', 0.15, 5000, '8d25ab36-969c-11ee-b9d1-0242ac120002'),
        ('b1b2a3c4-969c-11ee-b9d1-0242ac120002', 'Personal Loan', 'ACTIVE', 'USD', 0.07, 20000, '9f50d828-969c-11ee-b9d1-0242ac120002'),
@@ -34,7 +34,7 @@ VALUES
 
 
 -- Insert data into the accounts table
-INSERT INTO accounts (id, name, account_type, status, currency_code, balance, created_at, updated_at, client_id)
+INSERT INTO accounts (id, name, type, status, currency_code, balance, created_at, updated_at, client_id)
 VALUES
     ('d7d5866c-969c-11ee-b9d1-0242ac120002', 'Alice', 'CHECKING_ACCOUNT', 'ACTIVE', 'USD', 5000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'b3a3a896-969c-11ee-b9d1-0242ac120002'),
     ('06c8dc62-969d-11ee-b9d1-0242ac120002', 'Bob', 'CHECKING_ACCOUNT', 'ACTIVE', 'USD', 2000, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'b9814aa2-969c-11ee-b9d1-0242ac120002'),

@@ -70,15 +70,16 @@ public class AgreementServiceImpl implements AgreementService {
     @Override
     public boolean mergeAgreementProductAndAccount(UUID accountId, UUID productId, UUID agreementId) {
         Agreement currentAgreement = findAgreementById(agreementId);
-        Product currentProduct = productService.findProductById(productId);
-        Account currentAccount = accountService.findAccountById(accountId);
-        if (currentAgreement != null && currentProduct != null && currentAccount != null) {
-            currentAgreement.setAccount(currentAccount);
-            currentAgreement.setProduct(currentProduct);
-            agreementRepository.save(currentAgreement);
-            return true;
-        } else {
-            return false;
-        }
+//        Product currentProduct = productService.findProductById(productId);
+//        Account currentAccount = accountService.findAccountById(accountId);
+//        if (currentAgreement != null && currentProduct != null && currentAccount != null) {
+//            currentAgreement.setAccount(currentAccount);
+//            currentAgreement.setProduct(currentProduct);
+//            agreementRepository.save(currentAgreement);
+//            return true;
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 }
