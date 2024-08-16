@@ -1,4 +1,4 @@
-package com.bankapp.app.service.impl;
+package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ProductDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
-class ProductServiceImplTest {
+class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

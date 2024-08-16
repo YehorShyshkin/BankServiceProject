@@ -1,4 +1,4 @@
-package com.bankapp.app.service.impl;
+package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.ClientDTO;
 import com.bankapp.app.generator.EmailDomainValidator;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql("/create_tables.sql")
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
-class ClientServiceImplTest {
+class ClientControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,12 +72,12 @@ class ClientServiceImplTest {
         assertEquals(201, mvcResult.getResponse().getStatus());
 
 
-        ClientDTO returnedClientDto = objectMapper.
+        ClientDTO returned = objectMapper.
                 readValue(mvcResult.getResponse().getContentAsString(),
                         new TypeReference<>() {
                         });
 
-        assertEquals(returnedClientDto, newClientDto);
+        assertEquals(returned, newClientDto);
     }
 
     @Test

@@ -50,7 +50,7 @@ public class Product {
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Agreement> agreements;
 
     @Override

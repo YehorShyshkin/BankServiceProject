@@ -52,10 +52,10 @@ public class Client {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     private List<Account> accounts;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
 
