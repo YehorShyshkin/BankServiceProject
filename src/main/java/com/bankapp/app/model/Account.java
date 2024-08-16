@@ -32,26 +32,21 @@ public class Account {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
     private AccountType type;
 
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private AccountStatus status;
 
-    @Column(name = "currency_code")
     @Enumerated(EnumType.STRING)
-    private CurrencyCode code;
+    private CurrencyCode currencyCode;
 
-    @Column(name = "balance")
     private BigDecimal balance;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
