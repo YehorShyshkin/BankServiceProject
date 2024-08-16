@@ -19,8 +19,9 @@ public class ClientDTO {
     @NotBlank(message = "Can not be empty")
     @Pattern(regexp = "^\\p{L}+$", message = "Last name must contain only letters")
     private String lastName;
-    @Email
-    @AllowedDomains
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid email format")
+    @AllowedDomains(message = "Invalid email domain")
     private String email;
     @Size(max = 100,
             message = "Address must be at most 100 characters long")

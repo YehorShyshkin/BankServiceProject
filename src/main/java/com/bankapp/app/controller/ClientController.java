@@ -41,4 +41,11 @@ public class ClientController {
         return clientService.updateClient(clientId, clientDTO);
     }
 
+    @GetMapping("/delete/{clientId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ClientDTO softDeleteClient(@PathVariable UUID clientId) {
+        log.info("Delete client {}", clientId);
+        return clientService.softDeleteClient(clientId);
+    }
+
 }

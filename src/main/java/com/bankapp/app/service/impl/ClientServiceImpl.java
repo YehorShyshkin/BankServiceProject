@@ -6,6 +6,7 @@ import com.bankapp.app.exception.ManagerNotFoundException;
 import com.bankapp.app.mapper.ClientMapper;
 import com.bankapp.app.model.Client;
 import com.bankapp.app.model.Manager;
+import com.bankapp.app.model.enums.ClientStatus;
 import com.bankapp.app.repository.ClientRepository;
 import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.service.ClientService;
@@ -35,7 +36,8 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public Client findById(UUID clientId) {
         return clientRepository.findById(clientId)
-                .orElseThrow(() -> new ClientNotFoundException("Client not found!"));
+                .orElseThrow(() -> new ClientNotFoundException
+                        (String.format("Client with id %s not found", clientId)));
     }
 
 
@@ -44,7 +46,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientDTO createClient(ClientDTO clientDTO) {
         Client newClient = clientMapper.toEntity(clientDTO);
         Manager manager = managerRepository.findById(clientDTO.getManagerId())
-                .orElseThrow(() -> new ManagerNotFoundException("Manager not found!"));
+                .orElseThrow(() -> new ManagerNotFoundException("Client with id %s not found"));
         newClient.setManager(manager);
         log.info("ClientDTO status: {}", clientDTO.getStatus());
         Client savedClient = clientRepository.save(newClient);
@@ -59,5 +61,15 @@ public class ClientServiceImpl implements ClientService {
         Client savedClient = clientRepository.save(client);
         return clientMapper.toDto(savedClient);
     }
+
+    @Override
+    @Transactional
+    public ClientDTO softDeleteClient(UUID clientId) {
+        Client client = findById(clientId);
+        client.setStatus(ClientStatus.DELETED);
+        clientRepository.save(client);
+        return clientMapper.toDto(client);
+    }
+
 
 }
