@@ -31,9 +31,10 @@ public class ProductController {
 
     @GetMapping("/update/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDTO updateProduct(@PathVariable UUID productId, @RequestBody ProductDTO productDTO) {
+    public ProductDTO updateProduct(@PathVariable UUID productId,
+                                    @RequestBody ProductDTO productDTO) {
         log.info("Updating product {}", productDTO);
-        return productService.updateProduct(productId,productDTO);
+        return productService.updateProduct(productId, productDTO);
     }
 
     @GetMapping("/delete/{productId}")
@@ -42,7 +43,4 @@ public class ProductController {
         log.info("Deleting product {}", productId);
         return productService.softDeleteProduct(productId);
     }
-
-
-
 }

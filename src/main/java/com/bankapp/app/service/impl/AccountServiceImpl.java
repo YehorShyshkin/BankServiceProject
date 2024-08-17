@@ -9,7 +9,6 @@ import com.bankapp.app.model.Account;
 import com.bankapp.app.model.Client;
 import com.bankapp.app.model.enums.AccountStatus;
 import com.bankapp.app.repository.AccountRepository;
-import com.bankapp.app.repository.AgreementRepository;
 import com.bankapp.app.repository.ClientRepository;
 import com.bankapp.app.service.AccountService;
 import jakarta.transaction.Transactional;
@@ -27,7 +26,6 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountMapper accountMapper;
     private final ClientRepository clientRepository;
-    private final AgreementRepository agreementRepository;
 
     @Override
     @Transactional
@@ -73,32 +71,4 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
         return accountMapper.toDto(account);
     }
-
-
-
-
-
-
-
-
-
-//
-//    @Override
-//    @Transactional
-//    public void updateBalance(Transaction transaction) {
-//        Account firstAccount = findAccountById(transaction.getDebitAccount().getId());
-//        Account secondAccount = findAccountById(transaction.getCreditAccount().getId());
-//
-//        BigDecimal firstAccountBalance = firstAccount.getBalance();
-//        BigDecimal secondAccountBalance = secondAccount.getBalance();
-//        BigDecimal transactionAmount = transaction.getAmount();
-//
-//        BigDecimal newFirstAccountBalance = firstAccountBalance.subtract(transactionAmount);
-//        BigDecimal newSecondAccountBalance = secondAccountBalance.add(transactionAmount);
-//        firstAccount.setBalance(newFirstAccountBalance);
-//        secondAccount.setBalance(newSecondAccountBalance);
-//
-//        accountRepository.save(firstAccount);
-//        accountRepository.save(secondAccount);
-//    }
 }

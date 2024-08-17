@@ -27,7 +27,8 @@ public class ExceptionControllerAdvisor extends Exception {
             ProductNotFoundException.class,
             AgreementNotFoundException.class,
             AccountNotFoundException.class,
-            TransactionNotFoundException.class,})
+            TransactionNotFoundException.class,
+            CardNotFoundException.class,})
     public ResponseEntity<ErrorData> handleEntityNotFoundException(RuntimeException exception) {
         ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
                 exception.getMessage(), Arrays.toString(exception.getStackTrace()));

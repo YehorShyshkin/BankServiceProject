@@ -41,7 +41,7 @@ create table if not exists accounts
 (
     id            UUID primary key,
     name          varchar(100) not null,
-    type  varchar(100) not null,
+    type          varchar(100) not null,
     status        varchar(100) not null,
     currency_code varchar(100) not null,
     balance       decimal(15, 2),
@@ -63,20 +63,24 @@ create table if not exists agreements
     foreign key (product_id) references products (id),
     foreign key (account_id) references accounts (id)
 );
-create table if not exists cards
+create table IF not exists cards
 (
-    id                UUID primary key,
-    card_number       varchar(100) not null,
-    expiration_date   timestamp,
+    id                UUID  primary key,
+    number            varchar(100) not null,
+    expiration_date   date,
+    cvv               integer,
+    holder            varchar(255),
     created_at        timestamp,
     updated_at        timestamp,
-    transaction_limit decimal(16, 2),
     card_type         varchar(100) not null,
     payment_system    varchar(100) not null,
     status            varchar(100) not null,
     account_id        uuid,
-    foreign key (account_id) references accounts (id)
-);
+    client_id         uuid,
+    foreign key (account_id) references accounts(id),
+    foreign key (client_id) references clients(id)
+    );
+
 create table if not exists transactions
 (
     id                UUID primary key,

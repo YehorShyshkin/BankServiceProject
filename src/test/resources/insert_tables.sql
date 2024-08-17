@@ -43,10 +43,10 @@ VALUES
     ('546651ac-969d-11ee-b9d1-0242ac120002', 0.15, 'ACTIVE', 500, 'a96788e8-969c-11ee-b9d1-0242ac120002', '06c8dc62-969d-11ee-b9d1-0242ac120002');
 
 -- Insert data into the cards table
-INSERT INTO cards (id, card_number, expiration_date, transaction_limit, card_type, payment_system, status, account_id)
+INSERT INTO cards (id, number, expiration_date, holder, card_type, payment_system, status, account_id, client_id)
 VALUES
-    ('7f580996-969d-11ee-b9d1-0242ac120002', '1234-5678-9012-3456', '2023-12-31', 1000, 'CREDIT', 'VISA', 'ACTIVE', 'd7d5866c-969c-11ee-b9d1-0242ac120002'),
-    ('92f1e468-969d-11ee-b9d1-0242ac120002', '9876-5432-1098-7654', '2023-12-31', 500, 'DEBIT', 'MASTER_CARD', 'ACTIVE', '06c8dc62-969d-11ee-b9d1-0242ac120002');
+    ('7f580996-969d-11ee-b9d1-0242ac120002', '1234-5678-9012-3456', '2023-12-31', 'Alice Johnson', 'CREDIT_CARDS', 'VISA', 'ACTIVE', 'd7d5866c-969c-11ee-b9d1-0242ac120002', 'b3a3a896-969c-11ee-b9d1-0242ac120002'),
+    ('92f1e468-969d-11ee-b9d1-0242ac120002', '9876-5432-1098-7654', '2023-12-31', 'Bob Smith', 'DEBIT_CARDS', 'MASTER_CARD', 'ACTIVE', '06c8dc62-969d-11ee-b9d1-0242ac120002', 'b9814aa2-969c-11ee-b9d1-0242ac120002');
 
 -- Insert data into the transactions table
 INSERT INTO transactions (id, type, amount, description, debit_account_id, credit_account_id, currency_code)

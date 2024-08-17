@@ -13,7 +13,6 @@ public class CardGenerator {
         String iin = switch (paymentSystem) {
             case VISA -> "4";
             case MASTERCARD -> "5";
-            case AMERICAN_EXPRESS -> "3";
             case PAYPAL -> "6";
             case APPLE_PAY -> "7";
             case GOOGLE_PAY -> "8";

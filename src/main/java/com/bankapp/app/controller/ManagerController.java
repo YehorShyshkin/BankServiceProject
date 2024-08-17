@@ -33,18 +33,19 @@ public class ManagerController {
         log.info("Find manager by id: {}", managerId);
         return managerService.findManagerById(managerId);
     }
+
     @GetMapping(value = "/update/{managerId}")
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO updateManager(@PathVariable UUID managerId,
                                     @RequestBody @Valid ManagerDTO managerDTO) {
         log.info("Update manager: {}", managerDTO);
-        return managerService.updateManager(managerId,managerDTO);
+        return managerService.updateManager(managerId, managerDTO);
     }
+
     @GetMapping("/delete/{managerId}")
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO deleteManager(@PathVariable UUID managerId) {
         log.info("Delete manager: {}", managerId);
         return managerService.softDeleteManager(managerId);
     }
-
 }

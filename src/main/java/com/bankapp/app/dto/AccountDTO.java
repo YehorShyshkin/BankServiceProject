@@ -15,12 +15,6 @@ public class AccountDTO {
     /**
      * Client
      */
-
     private String clientId;
 
-    /**
-     * Agreement
-     */
-
-    private String agreementId;
 }

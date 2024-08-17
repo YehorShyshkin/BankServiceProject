@@ -17,8 +17,7 @@ public interface AccountMapper {
     @Mapping(source = "client.id", target = "clientId")
     AccountDTO toDto(Account account);
 
-    Account updateAccountFromDTO(AccountDTO accountDTO, @MappingTarget Account account);
-
+    void updateAccountFromDTO(AccountDTO accountDTO, @MappingTarget Account account);
 }
 
 
