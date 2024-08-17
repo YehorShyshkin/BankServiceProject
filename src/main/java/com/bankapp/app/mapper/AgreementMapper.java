@@ -6,8 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring")
 public interface AgreementMapper {
     @Mapping(source = "productId", target = "product.id")
@@ -17,6 +15,5 @@ public interface AgreementMapper {
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "account.id", target = "accountId")
     AgreementDTO toDto(Agreement agreement);
-    List<AgreementDTO> toDto(List<Agreement> agreementList);
     Agreement updateAgreementFromDTO(AgreementDTO agreementDTO, @MappingTarget Agreement agreement);
 }

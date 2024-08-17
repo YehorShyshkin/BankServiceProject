@@ -2,15 +2,12 @@ package com.bankapp.app.controller;
 
 
 import com.bankapp.app.dto.AgreementDTO;
-import com.bankapp.app.model.Agreement;
 import com.bankapp.app.service.AgreementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.UUID;
 @Slf4j
 @RestController
@@ -34,4 +31,19 @@ public class AgreementController {
         return agreementService.findAgreementById(agreementId);
     }
 
+    @GetMapping("/update/{agreementId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AgreementDTO updateAgreement
+            (@PathVariable UUID agreementId,
+             @RequestBody AgreementDTO agreementDTO) {
+        log.info("Updating agreement {}", agreementId);
+        return agreementService.updateAgreement(agreementId, agreementDTO);
+    }
+
+    @GetMapping("/delete/{agreementId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AgreementDTO softDeleteAgreement(@PathVariable UUID agreementId) {
+        log.info("Deleting agreement {}", agreementId);
+        return agreementService.softDeleteAgreement(agreementId);
+    }
 }

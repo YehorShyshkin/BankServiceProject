@@ -29,7 +29,6 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "name")
     private String name;
 
     @Enumerated(EnumType.STRING)
@@ -54,7 +53,7 @@ public class Account {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<Agreement> agreementList;
 
     @OneToMany(mappedBy = "debitAccount")
