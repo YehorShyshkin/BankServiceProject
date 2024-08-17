@@ -37,15 +37,4 @@ public class TransactionController {
         log.info("Deleting transaction by id: {}", transactionId);
         return transactionService.deleteTransactionById(transactionId);
     }
-
-//    @DeleteMapping("/delete_transfer/{id}")
-//    public ResponseEntity<String> deleteTransaction(@PathVariable UUID id) {
-//        boolean deleteTransaction = transactionService.deleteTransaction(id);
-//        if (deleteTransaction) {
-//            return new ResponseEntity<>("Transaction deleted successfully!", HttpStatus.ACCEPTED);
-//        } else {
-//            return new ResponseEntity<>("Transaction not found!", HttpStatus.NOT_FOUND);
-//        }
-//    }
-
 }

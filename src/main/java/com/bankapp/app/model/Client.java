@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -58,6 +59,9 @@ public class Client {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id", referencedColumnName = "id")
     private Manager manager;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private Set<Card> listCards;
 
     @Override
     public boolean equals(Object o) {

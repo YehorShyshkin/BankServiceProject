@@ -1,19 +1,18 @@
 package com.bankapp.app.service.impl;
 
 import com.bankapp.app.dto.CardDTO;
-import com.bankapp.app.dto.CardStatusUpdateDTO;
-import com.bankapp.app.model.Account;
-import com.bankapp.app.model.Card;
+import com.bankapp.app.exception.CardNotFoundException;
+import com.bankapp.app.generator.CardGenerator;
 import com.bankapp.app.mapper.CardMapper;
+import com.bankapp.app.model.Card;
+import com.bankapp.app.model.enums.PaymentSystem;
 import com.bankapp.app.repository.CardRepository;
 import com.bankapp.app.service.CardService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,54 +22,42 @@ public class CardServiceImpl implements CardService {
     private final CardMapper cardMapper;
 
     @Override
-    public List<CardDTO> findAll() {
-        return cardMapper.toDTO(cardRepository.findAll());
+    @Transactional
+    public CardDTO findCardById(UUID cardId) {
+        return cardMapper.toDto(getById(cardId));
     }
 
     @Override
-    public CardDTO getCardDTO(String id) {
-        Optional<Card> cardOptional = cardRepository.findById(UUID.fromString(id));
-        Card card = cardOptional.orElseThrow(() -> new NoSuchElementException("Card not found"));
-        return cardMapper.toDTO(card);
-    }
-
-    @Override
-    public Card findCardByID(UUID cardId) {
+    @Transactional
+    public Card getById(UUID cardId) {
         return cardRepository.findById(cardId)
-                .orElseThrow(() -> new EntityNotFoundException("Card not found!"));
+                .orElseThrow(() -> new CardNotFoundException(
+                        String.format("Card with id %s not found", cardId)));
     }
 
-    @Override
-    public void save(Card card) {
-        cardRepository.save(card);
-    }
 
     @Override
-    public ResponseEntity<String> deleteCard(UUID id) {
-        Card currentCard = findCardByID(id);
+    @Transactional
+    public CardDTO createCard(CardDTO cardDTO) {
+        Card newCard = cardMapper.toEntity(cardDTO);
 
-        if (currentCard != null) {
-            Account account = currentCard.getAccount();
-
-            if (account != null) {
-                BigDecimal balance = account.getBalance();
-
-                if (balance.compareTo(BigDecimal.ZERO) == 0) {
-                    cardRepository.deleteById(id);
-                    return ResponseEntity.ok("Card deleted successfully!");
-                } else {
-                    return ResponseEntity.badRequest().body("Balance on the card must be zero!");
-                }
-            }
+        if (newCard.getNumber() == null
+                || newCard.getNumber().isEmpty()) {
+            newCard.setNumber(CardGenerator
+                    .generateCardNumber(PaymentSystem.valueOf(cardDTO.getPaymentSystem())));
         }
-        return ResponseEntity.notFound().build();
-    }
 
-    @Override
-    public Card updateCard(UUID id, CardStatusUpdateDTO cardDTO) {
-        Card currentCard = findCardByID(id);
-        Card updatedCard = cardMapper.updateCardFromDTO(cardDTO, currentCard);
-        return cardRepository.save(updatedCard);
+        if (newCard.getCvv() == null) {
+            newCard.setCvv(Integer
+                    .valueOf(CardGenerator.generateCardCVV()));
+        }
+
+        if (newCard.getExpirationDate() == null) {
+            newCard.setExpirationDate(CardGenerator
+                    .generateCardExpirationDate());
+        }
+
+        return cardMapper.toDto(cardRepository.save(newCard));
     }
 }
 

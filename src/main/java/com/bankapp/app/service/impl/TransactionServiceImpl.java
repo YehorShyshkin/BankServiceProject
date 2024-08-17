@@ -9,9 +9,7 @@ import com.bankapp.app.model.Transaction;
 import com.bankapp.app.model.enums.TransactionType;
 import com.bankapp.app.repository.AccountRepository;
 import com.bankapp.app.repository.TransactionRepository;
-import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.TransactionService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,6 @@ import java.util.UUID;
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
-    private final AccountService accountService;
     private final AccountRepository accountRepository;
 
     @Override
@@ -72,19 +69,4 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionMapper.toDto(transaction);
     }
-
-//
-//    @Override
-//    @Transactional
-//    public void refundBalance(UUID transaction) {
-//        Transaction originalTransaction = getTransactionById(transaction);
-//        Transaction refundTransaction = new Transaction();
-//        refundTransaction.setAmount(originalTransaction.getAmount().negate());
-//        refundTransaction.setDebitAccount(originalTransaction.getDebitAccount());
-//        refundTransaction.setCreditAccount(originalTransaction.getCreditAccount());
-//        refundTransaction.setDescription("REFUND!");
-//        refundTransaction.setType(TransactionType.REFUND);
-////        accountService.updateBalance(refundTransaction);
-//        transactionRepository.save(refundTransaction);
-//    }
 }
