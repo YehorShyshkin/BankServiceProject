@@ -3,7 +3,6 @@ package com.bankapp.app.model;
 import com.bankapp.app.model.enums.CardStatus;
 import com.bankapp.app.model.enums.CardType;
 import com.bankapp.app.model.enums.PaymentSystem;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -22,7 +20,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "cards")
-
 public class Card {
 
     @Id
@@ -30,53 +27,50 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "card_number")
     private String number;
 
-    @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    @Column(name = "created_at", updatable = false)
+    private Integer cvv;
+
+    private String holder;
+
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @Column(name = "transaction_limit")
-    private BigDecimal cardTransactionLimit;
-
-    @Column(name = "card_type")
     @Enumerated(EnumType.STRING)
     private CardType cardType;
 
-    @Column(name = "payment_system")
     @Enumerated(EnumType.STRING)
     private PaymentSystem paymentSystem;
 
-
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private CardStatus cardStatus;
+    private CardStatus status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    @JsonBackReference
     private Account account;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    private Client client;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Card card)) return false;
-        return Objects.equals(number, card.number) && Objects.equals(account, card.account);
+        return Objects.equals(number, card.number)
+                && Objects.equals(account, card.account);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(number, account);
     }
-
 }
 
 

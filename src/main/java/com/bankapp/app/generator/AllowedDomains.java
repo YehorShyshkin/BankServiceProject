@@ -14,6 +14,8 @@ import java.lang.annotation.Target;
 
 public @interface AllowedDomains {
     String message() default "Invalided email domain";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }

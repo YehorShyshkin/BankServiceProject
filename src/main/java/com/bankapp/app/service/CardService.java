@@ -1,24 +1,19 @@
 package com.bankapp.app.service;
 
 import com.bankapp.app.dto.CardDTO;
-import com.bankapp.app.dto.CardStatusUpdateDTO;
 import com.bankapp.app.model.Card;
-import org.springframework.http.ResponseEntity;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CardService {
 
-    List<CardDTO> findAll();
+    CardDTO createCard(CardDTO cardDTO);
 
-    CardDTO getCardDTO(String id);
+    CardDTO findCardById(UUID cardId);
+    Card getById(UUID cardId);
 
-    Card findCardByID(UUID cardId);
+    CardDTO updateCard(UUID cardId, CardDTO cardDTO);
 
-    void save(Card card);
+    CardDTO deleteCard(UUID cardId);
 
-    ResponseEntity<String> deleteCard(UUID id);
-
-    Card updateCard(UUID id, CardStatusUpdateDTO cardDTO);
 }
