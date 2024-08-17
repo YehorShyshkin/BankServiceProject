@@ -48,7 +48,7 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDTO transferTransactionDTO(TransactionDTO transaction) {
         Transaction thisTransaction = transactionMapper.toTransaction(transaction);
         transactionRepository.save(thisTransaction);
-        accountService.updateBalance(thisTransaction);
+//        accountService.updateBalance(thisTransaction);
         return transaction;
     }
 
@@ -74,7 +74,7 @@ public class TransactionServiceImpl implements TransactionService {
         refundTransaction.setCreditAccount(originalTransaction.getCreditAccount());
         refundTransaction.setDescription("REFUND!");
         refundTransaction.setType(TransactionType.REFUND);
-        accountService.updateBalance(refundTransaction);
+//        accountService.updateBalance(refundTransaction);
         transactionRepository.save(refundTransaction);
     }
 }

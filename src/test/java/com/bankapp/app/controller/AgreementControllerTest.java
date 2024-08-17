@@ -84,4 +84,60 @@ class AgreementControllerTest {
         );
         assertEquals(returned, agreementDTO);
     }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testUpdateAgreement() throws Exception {
+        AgreementDTO agreementDTO = new AgreementDTO();
+        agreementDTO.setInterestRate(new BigDecimal("0.10"));
+        agreementDTO.setStatus("ACTIVE");
+        agreementDTO.setSum(new BigDecimal("2000.00"));
+        agreementDTO.setProductId("8df40ce4-969c-11ee-b9d1-0242ac120002");
+        agreementDTO.setAccountId("d7d5866c-969c-11ee-b9d1-0242ac120002");
+
+        String json = objectMapper.writeValueAsString(agreementDTO);
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/agreements/update/4e1f1090-969d-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        AgreementDTO returned = objectMapper.readValue(mvcResult
+                .getResponse().getContentAsString(),
+                new TypeReference<>() {});
+
+        assertEquals(returned, agreementDTO);
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testSoftDeleteAgreement() throws Exception {
+        AgreementDTO agreementDTO = new AgreementDTO();
+        agreementDTO.setInterestRate(new BigDecimal("0.02"));
+        agreementDTO.setStatus("DELETED");
+        agreementDTO.setSum(new BigDecimal("1000.00"));
+        agreementDTO.setProductId("8df40ce4-969c-11ee-b9d1-0242ac120002");
+        agreementDTO.setAccountId("d7d5866c-969c-11ee-b9d1-0242ac120002");
+
+        String json = objectMapper.writeValueAsString(agreementDTO);
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/agreements/delete/4e1f1090-969d-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        AgreementDTO returned = objectMapper.readValue(mvcResult
+                .getResponse().getContentAsString(),
+                new TypeReference<>() {});
+
+        assertEquals(returned, agreementDTO);
+    }
 }

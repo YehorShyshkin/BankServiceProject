@@ -40,7 +40,7 @@ public class CardController {
 
     @PostMapping("/create_card/{account_id}")
     public ResponseEntity<String> createCard(@RequestBody Card card, @PathVariable("account_id") UUID id) {
-        Account account = accountService.getAccountById(String.valueOf(id));
+        Account account = accountService.findById(id);
         if (account != null) {
             String generatedCardNumber = CardGenerator.generateCardNumber(PaymentSystem.VISA);
             card.setNumber(generatedCardNumber);

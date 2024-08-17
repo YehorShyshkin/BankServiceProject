@@ -1,6 +1,6 @@
 package com.bankapp.app.model;
 
-import com.bankapp.app.model.enums.AccountStatus;
+import com.bankapp.app.model.enums.AgreementStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class Agreement {
     private BigDecimal interestRate;
 
     @Enumerated(EnumType.STRING)
-    private AccountStatus status;
+    private AgreementStatus status;
 
     private BigDecimal sum;
 

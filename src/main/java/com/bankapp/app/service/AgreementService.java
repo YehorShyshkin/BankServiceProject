@@ -10,5 +10,6 @@ public interface AgreementService {
     AgreementDTO createAgreement(AgreementDTO agreementDTO);
     AgreementDTO findAgreementById(UUID agreementId);
     Agreement findById(UUID agreementId);
-//    Agreement updateAgreement(UUID id, AgreementDTO agreementDTO);
+    AgreementDTO updateAgreement(UUID agreementId, AgreementDTO agreementDTO);
+    AgreementDTO softDeleteAgreement(UUID agreementId);
 }

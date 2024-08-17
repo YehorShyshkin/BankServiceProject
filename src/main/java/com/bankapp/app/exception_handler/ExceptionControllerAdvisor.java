@@ -29,7 +29,7 @@ public class ExceptionControllerAdvisor extends Exception {
             ClientNotFoundException.class,
             ProductNotFoundException.class,
             AgreementNotFoundException.class})
-    public ResponseEntity<ErrorData> handleClientNotFoundException(ClientNotFoundException exception) {
+    public ResponseEntity<ErrorData> handleEntityNotFoundException(RuntimeException exception) {
         ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
                 exception.getMessage(), Arrays.toString(exception.getStackTrace()));
         return new ResponseEntity<>(errorData, HttpStatus.NOT_FOUND);
