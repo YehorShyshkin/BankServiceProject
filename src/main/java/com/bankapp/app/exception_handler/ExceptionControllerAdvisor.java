@@ -1,9 +1,6 @@
 package com.bankapp.app.exception_handler;
 
-import com.bankapp.app.exception.AgreementNotFoundException;
-import com.bankapp.app.exception.ClientNotFoundException;
-import com.bankapp.app.exception.ManagerNotFoundException;
-import com.bankapp.app.exception.ProductNotFoundException;
+import com.bankapp.app.exception.*;
 import com.bankapp.app.request.ErrorData;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
@@ -28,7 +25,9 @@ public class ExceptionControllerAdvisor extends Exception {
     @ExceptionHandler({ManagerNotFoundException.class,
             ClientNotFoundException.class,
             ProductNotFoundException.class,
-            AgreementNotFoundException.class})
+            AgreementNotFoundException.class,
+            AccountNotFoundException.class,
+            TransactionNotFoundException.class,})
     public ResponseEntity<ErrorData> handleEntityNotFoundException(RuntimeException exception) {
         ErrorData errorData = new ErrorData(HttpStatus.NOT_FOUND, OffsetDateTime.now(),
                 exception.getMessage(), Arrays.toString(exception.getStackTrace()));

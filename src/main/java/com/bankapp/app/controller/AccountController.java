@@ -41,6 +41,12 @@ public class AccountController {
         return accountService.updateAccount(accountsId, accountDTO);
     }
 
+    @GetMapping("/delete/{accountsId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountDTO softDeleteAccount(@PathVariable UUID accountsId) {
+        log.info("Deleting account by id {}", accountsId);
+        return accountService.softDeleteAccount(accountsId);
+    }
 
 
 

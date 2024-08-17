@@ -1,13 +1,15 @@
 package com.bankapp.app.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 public class TransactionDTO {
     private String type;
     private BigDecimal amount;
     private String description;
+    private String currencyCode;
+    private String debitAccount;
+    private String creditAccount;
 }

@@ -3,44 +3,49 @@ package com.bankapp.app.controller;
 import com.bankapp.app.dto.TransactionDTO;
 import com.bankapp.app.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
-@RequestMapping("/transactions")
 @RequiredArgsConstructor
+@RequestMapping("/transactions")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
-    @GetMapping("/all")
-    public List<TransactionDTO> findAll() {
-        return transactionService.findAll();
+    @PostMapping("/create")
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDTO createTransaction(@RequestBody TransactionDTO transactionDTO) {
+        log.info("Creating transaction: {}", transactionDTO);
+        return transactionService.createTransaction(transactionDTO);
     }
 
-    @GetMapping("/{id}")
-    public TransactionDTO getTransactionDTO(@PathVariable("id") UUID id) {
-        return transactionService.getTransactionDTO(id);
+    @GetMapping("/find/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDTO getTransactionById(@PathVariable UUID transactionId) {
+        log.info("Retrieving transaction by id: {}", transactionId);
+        return transactionService.getTransactionById(transactionId);
     }
 
-    @PostMapping("/transfer")
-    public ResponseEntity<TransactionDTO> transferTransactionDTO(@RequestBody TransactionDTO transaction) {
-        TransactionDTO newTransaction = transactionService.transferTransactionDTO(transaction);
-        return new ResponseEntity<>(newTransaction, HttpStatus.ACCEPTED);
+    @GetMapping("/delete/{transactionId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDTO deleteTransactionById(@PathVariable UUID transactionId) {
+        log.info("Deleting transaction by id: {}", transactionId);
+        return transactionService.deleteTransactionById(transactionId);
     }
 
-    @DeleteMapping("/delete_transfer/{id}")
-    public ResponseEntity<String> deleteTransaction(@PathVariable UUID id) {
-        boolean deleteTransaction = transactionService.deleteTransaction(id);
-        if (deleteTransaction) {
-            return new ResponseEntity<>("Transaction deleted successfully!", HttpStatus.ACCEPTED);
-        } else {
-            return new ResponseEntity<>("Transaction not found!", HttpStatus.NOT_FOUND);
-        }
-    }
+//    @DeleteMapping("/delete_transfer/{id}")
+//    public ResponseEntity<String> deleteTransaction(@PathVariable UUID id) {
+//        boolean deleteTransaction = transactionService.deleteTransaction(id);
+//        if (deleteTransaction) {
+//            return new ResponseEntity<>("Transaction deleted successfully!", HttpStatus.ACCEPTED);
+//        } else {
+//            return new ResponseEntity<>("Transaction not found!", HttpStatus.NOT_FOUND);
+//        }
+//    }
 
 }

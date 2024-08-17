@@ -7,6 +7,7 @@ import com.bankapp.app.exception.ClientNotFoundException;
 import com.bankapp.app.mapper.AccountMapper;
 import com.bankapp.app.model.Account;
 import com.bankapp.app.model.Client;
+import com.bankapp.app.model.enums.AccountStatus;
 import com.bankapp.app.repository.AccountRepository;
 import com.bankapp.app.repository.AgreementRepository;
 import com.bankapp.app.repository.ClientRepository;
@@ -64,63 +65,23 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.toDto(updatedAccount);
     }
 
+    @Override
+    @Transactional
+    public AccountDTO softDeleteAccount(UUID accountsId) {
+        Account account = findById(accountsId);
+        account.setStatus(AccountStatus.DELETED);
+        accountRepository.save(account);
+        return accountMapper.toDto(account);
+    }
 
 
 
-//    @Override
-//    @Transactional
-//    public Account getAccountById(String id) {
-//        return accountRepository.findById(UUID.fromString(id)).orElseThrow();
-//    }
-//
-//    @Override
-//    @Transactional
-//    public AccountDTO getAccountDTO(String id) {
-//        Optional<Account> accountOptional = accountRepository.findById(UUID.fromString(id));
-//        Account account = accountOptional.orElseThrow(() -> new NoSuchElementException("Account not found!"));
-//        return accountMapper.toDTO(account);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public List<AccountDTO> findAll() {
-//        return accountMapper.toDTO(accountRepository.findAll());
-//    }
-//
-//    @Override
-//    @Transactional
-//    public Account getById(String id) {
-//        return accountRepository.getReferenceById(UUID.fromString(id));
-//    }
-//
-//
-//    @Override
-//    public Account save(Account account) {
-//        return accountRepository.save(account);
-//    }
-//
-//    @Override
-//    public Account findAccountById(UUID accountId) {
-//        return accountRepository.findById(accountId)
-//                .orElseThrow(() -> new EntityNotFoundException("Account not found!"));
-//    }
-//
-//    @Override
-//    public Account updateAccount(UUID id, AccountDTO accountDTO) {
-//        Account currentAccount = findAccountById(id);
-//        Account updateAccount = accountMapper.updateAccountFromDTO(accountDTO, currentAccount);
-//        return accountRepository.save(updateAccount);
-//    }
-//
-//    @Override
-//    public boolean deleteAccount(UUID id) {
-//        if (accountRepository.existsById(id)) {
-//            accountRepository.deleteById(id);
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+
+
+
+
+
+
 //
 //    @Override
 //    @Transactional

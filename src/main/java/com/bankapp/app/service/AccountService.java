@@ -10,5 +10,6 @@ public interface AccountService {
     AccountDTO findAccountById(UUID accountsId);
     Account findById(UUID accountsId);
     AccountDTO updateAccount(UUID accountsId, AccountDTO accountDTO);
+    AccountDTO softDeleteAccount(UUID accountsId);
 }
 
