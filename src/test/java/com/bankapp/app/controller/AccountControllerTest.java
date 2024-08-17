@@ -116,4 +116,32 @@ class AccountControllerTest {
         );
         assertEquals(returned, accountDTO);
     }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testSoftDeleteAccount() throws Exception {
+        AccountDTO accountDTO = new AccountDTO();
+        accountDTO.setName("Alice");
+        accountDTO.setType("CHECKING_ACCOUNT");
+        accountDTO.setStatus("DELETED");
+        accountDTO.setCurrencyCode("USD");
+        accountDTO.setBalance(new BigDecimal ("5000.00"));
+        accountDTO.setClientId("b3a3a896-969c-11ee-b9d1-0242ac120002");
+        String json = objectMapper.writeValueAsString(accountDTO);
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/accounts/delete/d7d5866c-969c-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        AccountDTO returned = objectMapper.readValue(mvcResult
+                .getResponse().getContentAsString(),
+                new TypeReference<>() {});
+
+        assertEquals(returned, accountDTO);
+    }
 }

@@ -80,12 +80,14 @@ create table if not exists cards
 create table if not exists transactions
 (
     id                UUID primary key,
-    transaction_type  varchar(100) not null,
+    type              varchar(100) not null,
     amount            decimal(16, 2),
     description       varchar(100) not null,
     created_at        timestamp,
     debit_account_id  uuid,
     credit_account_id uuid,
+    currency_code     varchar(100) not null,
     foreign key (debit_account_id) references accounts (id),
     foreign key (credit_account_id) references accounts (id)
-);
+    );
+

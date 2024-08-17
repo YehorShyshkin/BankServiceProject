@@ -1,5 +1,6 @@
 package com.bankapp.app.model;
 
+import com.bankapp.app.model.enums.CurrencyCode;
 import com.bankapp.app.model.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -24,17 +25,17 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "transaction_type")
     @Enumerated(EnumType.STRING)
     private TransactionType type;
 
-    @Column(name = "amount")
+    @Enumerated(EnumType.STRING)
+    private CurrencyCode currencyCode;
+
     private BigDecimal amount;
 
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
