@@ -1,102 +1,359 @@
-# Bank Project [Backend]
+# Bank Service Application
 
-There is a prototype of the BackEnd Bank's Core Services data.
-Data consist of clients, accounts, products, accounts, transactions and managers
-___
+Demo final project. IT School, Germany, 2023-2024.
 
-### Class Diagram BankApplication
-![PhotoDependencyClasses](https://github.com/SvitLanaSvit/Tel_Ran_BankApplication_New_2023/blob/main/Diagramms/jpg/Diagramm_classes.jpg)
+## Description
 
-### Sequence Diagram Account
-![PhotoBase](https://github.com/SvitLanaSvit/Tel_Ran_BankApplication_New_2023/blob/main/Diagramms/jpg/Sequence%20Diagram%20Account.jpg)
+**Bank Service Application** - a backend-driven application that simulates core banking operations.
 
-### Database Diagram
-![PhotoBase](https://raw.githubusercontent.com/SvitLanaSvit/Tel_Ran_BankApplication_New_2023/main/photoBase.jpg)
+The application provides the following functionalities:
 
-___
-## Database Structure
+- Client management
+- Manager management
+- Account management
+- Card management
+- Agreement management
+- Product management
+- Transaction processing
 
-### Table manager (Bank's managers table)
+The system consists of:
+- **[Backend]** developed using the Spring Boot Framework
+- **[Database]** managed by PostgreSQL for persistent data storage
+- **[Security layer]** implemented using Spring Security for authentication and authorization
+- **[Containerization]** powered by Docker for smooth deployment and scalability
 
-| Column name | Type         | Description                                   |
-|-------------|--------------|-----------------------------------------------|
-| id          | binary(16)   | id key of row - unique, not null, primary key | 
-| first_name  | varchar(50)  | manager's name                                | 
-| last_name   | varchar(50)  | manager's surname                             | 
-| status      | varchar(50)  | manager's status from enum ManagerStatus      | 
-| created_at  | timestamp    | timestamp of row creation                     |
-| updated_at  | timestamp    | timestamp of last update                      | 
+Additionally, the application architecture follows RESTful principles and supports security protocols including SSL and OAuth2 for secure communication.
 
+## Technologies Used
 
-### Table client ( Bank's clients table )
-
-| Column name | Type        | Description                                   |
-|-------------|-------------|-----------------------------------------------|
-| id          | binary(16)  | id key of entity - unique, not null, PK       | 
-| status      | VARCHAR(20) | client's status from enum ClientStatus        |
-| tax_code    | varchar(16) | client's TAX code unique                      |
-| first_name  | varchar(50) | client's name                                 |
-| last_name   | varchar(50) | client's surname                              |
-| email       | varchar(60) | client's e-mail                               |                               
-| address     | varchar(80) | client's address                              |
-| phone       | varchar(20) | client's phone                                |                                
-| created_at  | timestamp   | timestamp of entity creation                  |
-| updated_at  | timestamp   | timestamp of last update                      |
-| manager_id  | binary(16)  | manager`s id FK references managers(id)       |
+- **Spring Boot 3.1.4**
+- **PostgreSQL**
+- **Docker**
+- **Lombok**
+- **MapStruct**
+- **Spring Security** 
+- **H2 Database**
+- **JUnit 5**
+- **Spring Boot Test**
+- **MockMvc**
+- **Mockito**
 
 
-### Table account (Bank's accounts table)
+## Setup and Installation
 
-| Column name     | Type          | Description                             |
-|-----------------|---------------|-----------------------------------------|
-| id              | binary(16)    | id key of entity - unique, not null, PK |        
-| name            | varchar(100)  | name of account                         |                              
-| type            | varchar(50)   | account from enum AccountType           |                                   
-| status          | varchar(50)   | status from enum AccountStatus          |                          
-| balance         | decimal(15,2) | balance of the account                  | 
-| currency_code   | varchar(50)   | currency code from enum CurrencyCode    |                          
-| created_at      | timestamp     | timestamp of entity creation            |
-| updated_at      | timestamp     | timestamp of last update                |
-| client_id       | binary(16)    | client`s id FK references clients(id)   | 
+### Prerequisites
+
+- JDK 21
+- Docker
+
+### Getting Started
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/YehorShyshkin/BankServiceProject.git
+   cd BankServiceProject
+   
+2. **Build the project using Maven:**
+   ```bash
+   ./mvn clean install
+   
+3. **Run the application:**
+    ```bash
+   ./mvn spring-boot:run
+4. **Run Docker Compose to start PostgreSQL and PgAdmin:**
+    ```bash
+    docker-compose up
+   
+
+Ensure that your docker-compose.yml file is correctly configured with the environment variables.
+
+### Configuration
+Update the `.env` file with your PostgreSQL and PgAdmin credentials:
+
+SPRING_DATASOURCE_USER=your_postgres_user  
+SPRING_DATASOURCE_PASSWORD=your_postgres_password  
+PGADMIN_DEFAULT_EMAIL=your_pgadmin_email  
+PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password  
+
+### Running Tests
+
+To run the tests, use Maven:   
+
+    mvn test
+
+## Testing
+
+![Jacoco Testing](screenshots/Jacoco%20Testing.png)
+![Jacoco with Java.png](screenshots/Jacoco%20with%20Java.png)
+### Overview
+
+This project uses JUnit 5 and Spring Boot's testing framework to ensure the quality and functionality of the application. Tests cover various functionalities including CRUD operations, validation, and exception handling for different controllers.
+
+### Account Controller Tests
+
+#### 1. **Create Account**
+
+**Description**: Verifies that a new account is created successfully with the correct details.
+
+- **Endpoint**: `POST /accounts/creates`
+- **Expected Result**: Returns a 201 status with the created account details.
+
+#### 2. **Get Account By ID**
+
+**Description**: Checks if an existing account can be retrieved by its ID.
+
+- **Endpoint**: `GET /accounts/find/{accountId}`
+- **Expected Result**: Returns a 200 status with the account details.
+
+#### 3. **Update Account**
+
+**Description**: Tests updating an account's details and verifies that the updated account is returned.
+
+- **Endpoint**: `GET /accounts/update/{accountId}`
+- **Expected Result**: Returns a 200 status with the updated account details.
+
+#### 4. **Soft Delete Account**
+
+**Description**: Tests the soft deletion of an account by marking it as deleted.
+
+- **Endpoint**: `GET /accounts/delete/{accountId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion with updated account details.
+
+### Agreement Controller Tests
+
+#### 1. **Create Agreement**
+
+**Description**: Verifies that a new agreement is created successfully with the correct details.
+
+- **Endpoint**: `POST /agreements/creates`
+- **Expected Result**: Returns a 201 status with the created agreement details.
+
+#### 2. **Get Agreement By ID**
+
+**Description**: Checks if an existing agreement can be retrieved by its ID.
+
+- **Endpoint**: `GET /agreements/find/{agreementId}`
+- **Expected Result**: Returns a 200 status with the agreement details.
+
+#### 3. **Update Agreement**
+
+**Description**: Tests updating an agreement's details and verifies that the updated agreement is returned.
+
+- **Endpoint**: `GET /agreements/update/{agreementId}`
+- **Expected Result**: Returns a 200 status with the updated agreement details.
+
+#### 4. **Exception Handling**
+
+**Description**: Tests how the application handles exceptions such as when creating or finding an agreement with invalid data.
+
+- **Endpoint**: Varies by specific exception scenarios.
+- **Expected Result**: Returns appropriate HTTP status codes (e.g., 404 Not Found) and error messages.
+
+### Card Controller Tests
+
+#### 1. **Create Card**
+
+**Description**: Verifies that a new card is created successfully with the correct details.
+
+- **Endpoint**: `POST /cards/create`
+- **Expected Result**: Returns a 201 status with the created card details.
+
+#### 2. **Get Card By ID**
+
+**Description**: Checks if an existing card can be retrieved by its ID.
+
+- **Endpoint**: `GET /cards/find/{cardId}`
+- **Expected Result**: Returns a 200 status with the card details.
+
+#### 3. **Generate Card Number**
+
+**Description**: Tests the generation of card numbers for different payment systems.
+
+- **Endpoint**: Not applicable (utility test)
+- **Expected Result**: Valid card numbers are generated and match expected formats.
+
+#### 4. **Generate Card Expiration Date**
+
+**Description**: Tests the generation of a valid card expiration date.
+
+- **Endpoint**: Not applicable (utility test)
+- **Expected Result**: Expiration date is valid (i.e., after today and within 10 years).
+
+#### 5. **Generate Card CVV**
+
+**Description**: Tests the generation of a valid card CVV.
+
+- **Endpoint**: Not applicable (utility test)
+- **Expected Result**: CVV is a valid 3-digit number.
+
+#### 6. **Update Card**
+
+**Description**: Tests updating a card's details and verifies that the updated card is returned.
+
+- **Endpoint**: `GET /cards/update/{cardId}`
+- **Expected Result**: Returns a 200 status with the updated card details.
+
+#### 7. **Delete Card**
+
+**Description**: Tests the deletion of a card.
+
+- **Endpoint**: `GET /cards/delete/{cardId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion.
+
+### Client Controller Tests
+
+#### 1. **Create Client**
+
+**Description**: Verifies that a new client is created successfully with the correct details.
+
+- **Endpoint**: `POST /clients/creates`
+- **Expected Result**: Returns a 201 status with the created client details.
+
+#### 2. **Get Client By ID**
+
+**Description**: Checks if an existing client can be retrieved by its ID.
+
+- **Endpoint**: `GET /clients/find/{clientId}`
+- **Expected Result**: Returns a 200 status with the client details.
+
+#### 3. **Update Client**
+
+**Description**: Tests updating a client's details and verifies that the updated client is returned.
+
+- **Endpoint**: `GET /clients/update/{clientId}`
+- **Expected Result**: Returns a 200 status with the updated client details.
+
+#### 4. **Soft Delete Client**
+
+**Description**: Tests the soft deletion of a client by marking it as deleted.
+
+- **Endpoint**: `GET /clients/delete/{clientId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion with updated client details.
+
+### Manager Controller Tests
+
+#### 1. **Serialization and Deserialization**
+
+**Description**: Verifies that a `ManagerDTO` object is correctly serialized to JSON and deserialized back to a `ManagerDTO` object.
+
+- **Endpoint**: Not applicable (utility test)
+- **Expected Result**: The original and deserialized `ManagerDTO` objects should be equivalent.
+
+#### 2. **Manager to DTO Mapping**
+
+**Description**: Tests the mapping between a `Manager` entity and `ManagerDTO`.
+
+- **Endpoint**: Not applicable (utility test)
+- **Expected Result**: The `ManagerDTO` should reflect the correct fields from the `Manager` entity.
+
+#### 3. **Create Manager**
+
+**Description**: Verifies that a new manager is created successfully with the correct details.
+
+- **Endpoint**: `POST /managers/creates`
+- **Expected Result**: Returns a 201 status with the created manager details.
+
+#### 4. **Get Manager By ID**
+
+**Description**: Checks if an existing manager can be retrieved by its ID.
+
+- **Endpoint**: `GET /managers/find/{managerId}`
+- **Expected Result**: Returns a 200 status with the manager details.
+
+#### 5. **Update Manager**
+
+**Description**: Tests updating a manager's details and verifies that the updated manager is returned.
+
+- **Endpoint**: `GET /managers/update/{managerId}`
+- **Expected Result**: Returns a 200 status with the updated manager details.
+
+#### 6. **Soft Delete Manager**
+
+**Description**: Tests the soft deletion of a manager by marking it as deleted.
+
+- **Endpoint**: `GET /managers/delete/{managerId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion with updated manager details.
+
+### Product Controller Tests
+
+#### 1. **Create Product**
+
+**Description**: Verifies that a new product is created successfully with the correct details.
+
+- **Endpoint**: `POST /products/creates`
+- **Expected Result**: Returns a 201 status with the created product details.
+
+- **Test Details**:
+    - **Test Case**: `testCreateProduct`
+    - **Description**: This test creates a new `ProductDTO` object with specified details and checks if it is successfully created by comparing the returned product with the original one.
+
+#### 2. **Get Product By ID**
+
+**Description**: Checks if an existing product can be retrieved by its ID.
+
+- **Endpoint**: `GET /products/find/{productId}`
+- **Expected Result**: Returns a 200 status with the product details.
+
+- **Test Details**:
+    - **Test Case**: `testGetById`
+    - **Description**: This test attempts to retrieve a product by its ID and compares the retrieved product with a predefined `ProductDTO` object to verify accuracy.
+
+#### 3. **Update Product**
+
+**Description**: Tests updating a product's details and verifies that the updated product is returned.
+
+- **Endpoint**: `GET /products/update/{productId}`
+- **Expected Result**: Returns a 200 status with the updated product details.
+
+- **Test Details**:
+    - **Test Case**: `testUpdateProduct`
+    - **Description**: This test updates the details of an existing product and verifies that the updated product matches the given `ProductDTO` object.
+
+#### 4. **Soft Delete Product**
+
+**Description**: Tests the soft deletion of a product by marking it as deleted.
+
+- **Endpoint**: `GET /products/delete/{productId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion with updated product details.
+
+- **Test Details**:
+    - **Test Case**: `testSoftDeleteProduct`
+    - **Description**: This test soft deletes a product and checks if the product is marked as deleted correctly, verifying the updated product details.
+
+### Transaction Controller Tests
+
+#### 1. **Create Transaction**
+
+**Description**: Verifies that a new transaction is created successfully with the correct details.
+
+- **Endpoint**: `POST /transactions/create`
+- **Expected Result**: Returns a 200 status with the created transaction details.
+
+- **Test Details**:
+    - **Test Case**: `testCreateTransaction`
+    - **Description**: This test creates a new `TransactionDTO` object with specified details and checks if it is successfully created by comparing the returned transaction with the original one.
+
+#### 2. **Get Transaction By ID**
+
+**Description**: Checks if an existing transaction can be retrieved by its ID.
+
+- **Endpoint**: `GET /transactions/find/{transactionId}`
+- **Expected Result**: Returns a 200 status with the transaction details.
+
+- **Test Details**:
+    - **Test Case**: `testGetById`
+    - **Description**: This test attempts to retrieve a transaction by its ID and compares the retrieved transaction with a predefined `TransactionDTO` object to verify accuracy.
+
+#### 3. **Delete Transaction By ID**
+
+**Description**: Tests the deletion of a transaction by marking it as deleted and verifies if the account balances are updated correctly.
+
+- **Endpoint**: `GET /transactions/delete/{transactionId}`
+- **Expected Result**: Returns a 200 status indicating successful deletion.
+
+- **Test Details**:
+    - **Test Case**: `testDeleteTransactionById`
+    - **Description**: This test soft deletes a transaction and verifies if the transaction is marked as deleted and checks if the associated account balances are updated as expected.
 
 
-### Table transaction (Bank's transactions table) 
-
-| Column name        | Type          | Description                            |
-|--------------------|---------------|----------------------------------------|
-| id                 | binary(16)    | id key of entity - unique, not null, PK| 
-| type               | byte          | transaction type  -124 bis 125         | 
-| amount             | decimal(12,4) | transaction amount                     | 
-| description        | varchar(255)  | description of transaction             | 
-| created_at         | timestamp     | timestamp of entity creation           | 
-| debit_account_id   | binary(16)    | account`s id FK references accounts(id)| 
-| credit_account_id  | binary(16)    | account`s id FK references accounts(id)| 
-
-
-### Table product (Bank's products table)
-
-| Column name   | Type          | Description                               |
-|---------------|---------------|-------------------------------------------|
-| id            | binary(16)    | id key of entity - unique, not null, PK   |
-| name          | varchar(70)   | product's name                            |
-| status        | varchar(50)   | product's status from enum ProductStatus  |
-| currency_code | varchar(50)   | currency code from enum CurrencyCode      |
-| interest_rate | decimal(6,4)  | interest rate of product                  |
-| product_limit | integer       | limit of product                          |
-| created_at    | timestamp     | timestamp of entity creation              |
-| updated_at    | timestamp     | timestamp of last update                  |
-| manager_id    | binary(16)    | manager`s id FK references managers(id)   |
-
-
-### Table agreement (Bank's agreements table)
-
-| Column name   | Type          | Description                                 |
-|---------------|---------------|---------------------------------------------|
-| id            | binary(16)    | id key of entity - unique, not null, PK     |
-| interest_rate | decimal(6,4)	| current interest rate of agreement          | 
-| status        | VARCHAR(50)   | agreement's status from enum AgreementStatus| 
-| sum           | decimal(15,2) | summe of agreement                          | 
-| created_at    | timestamp     | timestamp of entity creation                | 
-| updated_at    | timestamp     | timestamp of last update                    | 
-| product_id    | binary(16)    | product's id FK references products(id)     |
-| account_id    | binary(16)    | client's FK references accounts(id)         | 
