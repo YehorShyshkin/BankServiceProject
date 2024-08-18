@@ -4,7 +4,7 @@ public enum PaymentSystem {
     VISA,
     MASTERCARD,
     PAYPAL,
-    APPLE_PAY, //
+    APPLE_PAY,
     GOOGLE_PAY,
     SEPA
 }

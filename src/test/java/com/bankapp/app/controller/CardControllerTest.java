@@ -62,7 +62,8 @@ class CardControllerTest {
 
         CardDTO returned = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(),
-                new TypeReference<>() {});
+                new TypeReference<>() {
+                });
 
         assertEquals(returned, newCard);
     }
@@ -92,11 +93,13 @@ class CardControllerTest {
 
         CardDTO returned = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(),
-                new TypeReference<>() {}
+                new TypeReference<>() {
+                }
         );
 
         assertEquals(returned, cardDTO);
     }
+
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testGenerateCardNumber() {
@@ -144,4 +147,54 @@ class CardControllerTest {
         assertNotNull(cvv);
         assertTrue(cvv.matches("^[0-9]{3}$"));
     }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testUpdateCard() throws Exception {
+        CardDTO cardDTO = new CardDTO();
+        cardDTO.setNumber("4532 6987 2345 9876");
+        cardDTO.setExpirationDate("2028-12-31");
+        cardDTO.setCardType("CREDIT_CARDS");
+        cardDTO.setPaymentSystem("VISA");
+        cardDTO.setStatus("ACTIVE");
+        cardDTO.setCvv("413");
+        cardDTO.setHolder("Alice Johnson");
+        cardDTO.setClientId("b3a3a896-969c-11ee-b9d1-0242ac120002");
+        cardDTO.setAccountId("d7d5866c-969c-11ee-b9d1-0242ac120002");
+
+        String json = objectMapper.writeValueAsString(cardDTO);
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/cards/update/7f580996-969d-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+        CardDTO returned = objectMapper.readValue(
+                mvcResult.getResponse().getContentAsString(),
+                new TypeReference<>() {
+                }
+        );
+
+        assertEquals(returned, cardDTO);
+
+    }
+
+    @Test
+    @WithMockUser(username = "aloha.test@gmail.com")
+    void testDeleteCard() throws Exception {
+
+        MvcResult mvcResult = mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/cards/delete/7f580996-969d-11ee-b9d1-0242ac120002")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        assertEquals(200, mvcResult.getResponse().getStatus());
+
+    }
+
 }

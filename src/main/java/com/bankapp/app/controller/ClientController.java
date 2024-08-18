@@ -36,7 +36,8 @@ public class ClientController {
 
     @GetMapping("/update/{clientId}")
     @ResponseStatus(HttpStatus.OK)
-    public ClientDTO updateClient(@PathVariable UUID clientId, @RequestBody @Valid ClientDTO clientDTO) {
+    public ClientDTO updateClient(@PathVariable UUID clientId,
+                                  @RequestBody @Valid ClientDTO clientDTO) {
         log.info("Update client {}", clientDTO);
         return clientService.updateClient(clientId, clientDTO);
     }
@@ -47,5 +48,4 @@ public class ClientController {
         log.info("Delete client {}", clientId);
         return clientService.softDeleteClient(clientId);
     }
-
 }

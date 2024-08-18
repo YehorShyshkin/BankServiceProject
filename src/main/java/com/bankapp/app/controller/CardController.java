@@ -31,4 +31,18 @@ public class CardController {
         return cardService.findCardById(cardId);
     }
 
+    @GetMapping("/update/{cardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CardDTO updateCard(@PathVariable UUID cardId,
+                              @RequestBody CardDTO cardDTO) {
+        log.info("Update card: {}", cardDTO);
+        return cardService.updateCard(cardId, cardDTO);
+    }
+
+    @GetMapping("/delete/{cardId}")
+    @ResponseStatus(HttpStatus.OK)
+    public CardDTO deleteCard(@PathVariable UUID cardId) {
+        log.info("Delete card: {}", cardId);
+        return cardService.deleteCard(cardId);
+    }
 }

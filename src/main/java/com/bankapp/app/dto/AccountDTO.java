@@ -16,5 +16,5 @@ public class AccountDTO {
      * Client
      */
     private String clientId;
-    
+
 }

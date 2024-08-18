@@ -18,8 +18,7 @@ public class SecurityConfiguration {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/managers/creates","/clients/creates", "/swagger-ui/**",
-                                "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/managers/creates","/clients/creates").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }

@@ -15,5 +15,6 @@ public interface AgreementMapper {
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "account.id", target = "accountId")
     AgreementDTO toDto(Agreement agreement);
-    Agreement updateAgreementFromDTO(AgreementDTO agreementDTO, @MappingTarget Agreement agreement);
+
+    void updateAgreementFromDTO(AgreementDTO agreementDTO, @MappingTarget Agreement agreement);
 }

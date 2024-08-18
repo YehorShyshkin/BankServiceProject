@@ -7,6 +7,7 @@ import com.bankapp.app.mapper.CardMapper;
 import com.bankapp.app.model.Card;
 import com.bankapp.app.model.enums.PaymentSystem;
 import com.bankapp.app.repository.CardRepository;
+import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
+    private final AccountService accountService;
 
     @Override
     @Transactional
@@ -34,7 +36,6 @@ public class CardServiceImpl implements CardService {
                 .orElseThrow(() -> new CardNotFoundException(
                         String.format("Card with id %s not found", cardId)));
     }
-
 
     @Override
     @Transactional
@@ -59,5 +60,23 @@ public class CardServiceImpl implements CardService {
 
         return cardMapper.toDto(cardRepository.save(newCard));
     }
+
+    @Override
+    @Transactional
+    public CardDTO updateCard(UUID cardId, CardDTO cardDTO) {
+        Card card = getById(cardId);
+        cardMapper.updateCardFromDTO(cardDTO, card);
+        Card updatedCard = cardRepository.save(card);
+        return cardMapper.toDto(updatedCard);
+    }
+
+    @Override
+    @Transactional
+    public CardDTO deleteCard(UUID cardId) {
+        Card card = getById(cardId);
+        cardRepository.delete(card);
+        return cardMapper.toDto(card);
+    }
+
 }
 

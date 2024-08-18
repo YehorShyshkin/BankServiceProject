@@ -7,7 +7,8 @@ import java.util.Set;
 
 public class EmailDomainValidator implements ConstraintValidator<AllowedDomains, String> {
 
-    private static final Set<String> allowedDomains = Set.of("gmail.com", "yahoo.com", "proton.me");
+    private static final Set<String> allowedDomains =
+            Set.of("gmail.com", "yahoo.com", "proton.me");
 
     @Override
     public void initialize(AllowedDomains constraintAnnotation) {
