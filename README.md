@@ -1,32 +1,42 @@
-# Bank Service Project
+# Bank Service Application
 
-## Overview
+Demo final project. IT School, Germany, 2023-2024.
 
-The Bank Service Project is a comprehensive banking application developed using Spring Boot. It provides a set of RESTful APIs for managing various aspects of banking operations, including clients, managers, accounts, cards, agreements, products, and transactions.
+## Description
 
-## Features
+**Bank Service Application** - a backend-driven application that simulates core banking operations.
 
-- **Client Management**: Create, read, update, and delete clients.
-- **Manager Management**: Create, read, update, and delete managers.
-- **Account Management**: Create, read, update, and delete accounts.
-- **Card Management**: Create, read, update, and delete cards.
-- **Agreement Management**: Create, read, update, and delete agreements.
-- **Product Management**: Create, read, update, and delete products.
-- **Transaction Management**: Create, read, and delete transactions.
+The application provides the following functionalities:
+
+- Client management
+- Manager management
+- Account management
+- Card management
+- Agreement management
+- Product management
+- Transaction processing
+
+The system consists of:
+- **[Backend]** developed using the Spring Boot Framework
+- **[Database]** managed by PostgreSQL for persistent data storage
+- **[Security layer]** implemented using Spring Security for authentication and authorization
+- **[Containerization]** powered by Docker for smooth deployment and scalability
+
+Additionally, the application architecture follows RESTful principles and supports security protocols including SSL and OAuth2 for secure communication.
 
 ## Technologies Used
 
-- **Spring Boot 3.1.4**: The core framework for developing and managing the application.
-- **PostgreSQL**: The primary relational database for data storage.
-- **Docker**: Containerization platform used for easy deployment and management of the application.
-- **Lombok**: Library that reduces boilerplate code by automatically generating getters, setters, and other methods.
-- **MapStruct**: Library for automatic mapping between DTOs and entity objects.
-- **Spring Security**: Framework for handling security and authorization in the application.
-- **H2 Database**: Lightweight database used for testing purposes.
-- **JUnit 5**: Framework for writing and running tests in Java.
-- **Spring Boot Test**: Tools and annotations for integration testing in Spring Boot applications.
-- **MockMvc**: Utility for testing Spring MVC controllers with mock objects.
-- **Mockito**: Library for creating mocks and verifying interactions in tests.
+- **Spring Boot 3.1.4**
+- **PostgreSQL**
+- **Docker**
+- **Lombok**
+- **MapStruct**
+- **Spring Security** 
+- **H2 Database**
+- **JUnit 5**
+- **Spring Boot Test**
+- **MockMvc**
+- **Mockito**
 
 
 ## Setup and Installation
@@ -46,14 +56,15 @@ The Bank Service Project is a comprehensive banking application developed using 
    
 2. **Build the project using Maven:**
    ```bash
-   ./mvnw clean install
+   ./mvn clean install
    
 3. **Run the application:**
     ```bash
-   ./mvnw spring-boot:run
+   ./mvn spring-boot:run
 4. **Run Docker Compose to start PostgreSQL and PgAdmin:**
     ```bash
     docker-compose up
+   
 
 Ensure that your docker-compose.yml file is correctly configured with the environment variables.
 
@@ -65,100 +76,16 @@ SPRING_DATASOURCE_PASSWORD=your_postgres_password
 PGADMIN_DEFAULT_EMAIL=your_pgadmin_email  
 PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password  
 
-## API Endpoints
+### Running Tests
 
-### Clients
-1. **Create Client**
-    - **POST** /clients/creates
+To run the tests, use Maven:   
 
-2. **Find Client by ID**
-    - **GET** /clients/find/{clientId}
-
-3. **Update Client**
-    - **GET** /clients/update/{clientId}
-
-4. **Delete Client**
-    - **GET** /clients/delete/{clientId}
-
-### Managers
-1. **Create Manager**
-    - **POST** /managers/creates
-
-2. **Find Manager by ID**
-    - **GET** /managers/find/{managerId}
-
-3. **Update Manager**
-    - **GET** /managers/update/{managerId}
-
-4. **Delete Manager**
-    - **GET** /managers/delete/{managerId}
-
-### Accounts
-1. **Create Account**
-    - **POST** /accounts/creates
-
-2. **Find Account by ID**
-    - **GET** /accounts/find/{accountId}
-
-3. **Update Account**
-    - **GET** /accounts/update/{accountId}
-
-4. **Delete Account**
-    - **GET** /accounts/delete/{accountId}
-
-### Cards
-1. **Create Card**
-    - **POST** /cards/create
-
-2. **Find Card by ID**
-    - **GET** /cards/find/{cardId}
-
-3. **Update Card**
-    - **GET** /cards/update/{cardId}
-
-4. **Delete Card**
-    - **GET** /cards/delete/{cardId}
-
-### Agreements
-1. **Create Agreement**
-    - **POST** /agreements/creates
-
-2. **Find Agreement by ID**
-    - **GET** /agreements/find/{agreementId}
-
-3. **Update Agreement**
-    - **GET** /agreements/update/{agreementId}
-
-4. **Delete Agreement**
-    - **GET** /agreements/delete/{agreementId}
-
-### Products
-1. **Create Product**
-    - **POST** /products/creates
-
-2. **Find Product by ID**
-    - **GET** /products/find/{productId}
-
-3. **Update Product**
-    - **GET** /products/update/{productId}
-
-4. **Delete Product**
-    - **GET** /products/delete/{productId}
-
-### Transactions
-1. **Create Transaction**
-    - **POST** /transactions/create
-
-2. **Find Transaction by ID**
-    - **GET** /transactions/find/{transactionId}
-
-3. **Delete Transaction**
-    - **GET** /transactions/delete/{transactionId}
+    mvn test
 
 ## Testing
 
-![Jacoco Testing](Jacoco%20Testing.png)
-![Jacoco with Java.png](Jacoco%20with%20Java.png)
+![Jacoco Testing](screenshots/Jacoco%20Testing.png)
+![Jacoco with Java.png](screenshots/Jacoco%20with%20Java.png)
 ### Overview
 
 This project uses JUnit 5 and Spring Boot's testing framework to ensure the quality and functionality of the application. Tests cover various functionalities including CRUD operations, validation, and exception handling for different controllers.
@@ -428,12 +355,5 @@ This project uses JUnit 5 and Spring Boot's testing framework to ensure the qual
 - **Test Details**:
     - **Test Case**: `testDeleteTransactionById`
     - **Description**: This test soft deletes a transaction and verifies if the transaction is marked as deleted and checks if the associated account balances are updated as expected.
-
-### Running Tests
-
-To run the tests, use Maven:
-
-```bash
-mvn test
 
 
