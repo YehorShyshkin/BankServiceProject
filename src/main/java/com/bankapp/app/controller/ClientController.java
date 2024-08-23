@@ -19,6 +19,7 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    // FIXME here and in all other controllers: why creates? create is better
     @PostMapping(value = "/creates")
     @ResponseStatus(HttpStatus.CREATED)
     public ClientDTO createClient

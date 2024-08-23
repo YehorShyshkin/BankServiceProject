@@ -1,3 +1,5 @@
+#// FIXME usually in test application-test.yaml is used for test profile
+#// FIXME try to study - how application.yaml from main and test acts in thta case? which has more priority?
 spring:
 
   liquibase:

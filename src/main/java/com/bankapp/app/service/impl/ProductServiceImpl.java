@@ -31,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product findById(UUID productId){
+        // FIXME why we throw exception if product nor found? what see frontend in that case?
         return productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException
                         (String.format("Product with id %s not found", productId)));
@@ -40,6 +41,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product newProduct = productMapper.toEntity(productDTO);
+        // FIXME waht will hapenned with product creation if manager is nor found?
         Manager manager = managerRepository.findById(UUID.fromString(productDTO.getManagerId()))
                 .orElseThrow(() -> new ManagerNotFoundException("Manager with id %s not found"));
         newProduct.setManager(manager);
@@ -48,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(savedProduct);
     }
 
-
+    // FIXME 2 empty lines
     @Override
     @Transactional
     public ProductDTO findProductById(UUID productId) {

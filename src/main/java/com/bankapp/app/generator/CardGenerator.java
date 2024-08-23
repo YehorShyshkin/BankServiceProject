@@ -6,6 +6,7 @@ import lombok.experimental.UtilityClass;
 import java.security.SecureRandom;
 import java.time.LocalDate;
 
+// FIXME here and in all project, public methods and classes should have javadoc
 @UtilityClass
 public class CardGenerator {
     public static String generateCardNumber(PaymentSystem paymentSystem) {
@@ -28,6 +29,7 @@ public class CardGenerator {
         return cardNumber.toString();
     }
 
+    // FIXME did get the sense of the name Luan?
     private static int calculateLuanCheckDigit(String cardNumber) {
         int sum = 0;
         boolean doubleDigit = false;

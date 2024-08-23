@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.util.Set;
 
 public class EmailDomainValidator implements ConstraintValidator<AllowedDomains, String> {
-
+    // FIXME all checks could bde done by one regexp pattern
     private static final Set<String> allowedDomains =
             Set.of("gmail.com", "yahoo.com", "proton.me");
 

@@ -1,3 +1,5 @@
+#// FIXME you need to have here to services, postgress db and ypu backend app, whcih start from separate Dockerfile,
+#  //I am not sure you need pgadmin at all at the monent
 services:
   postgres:
     container_name: postgres

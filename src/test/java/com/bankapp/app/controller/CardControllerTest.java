@@ -28,7 +28,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
 class CardControllerTest {
-
+// FIXME, I see thta you are using h2 db for test, which is not the same as postgres, try to write test with test-container,
+//  which runs test postgres databases in docker container
     @Autowired
     private MockMvc mockMvc;
 
@@ -180,7 +181,7 @@ class CardControllerTest {
         );
 
         assertEquals(returned, cardDTO);
-
+// FIXME why do you leave empty lines before the end of method? sometimes yes, sometimes no. Be consistent. I'd delete it
     }
 
     @Test

@@ -36,8 +36,9 @@ class AccountControllerExceptionTest {
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testAccountNotFoundException() throws Exception {
+        // long test usually devided by comments, eg, // prepare // test // assert
         UUID accountId =
-                UUID.randomUUID();
+                UUID.randomUUID();// FIXME why on 2 lines?
 
         String json = objectMapper.writeValueAsString(accountId);
 
@@ -70,7 +71,7 @@ class AccountControllerExceptionTest {
 
         String json = objectMapper.writeValueAsString(accountDTO);
 
-        String errorDataJson = mockMvc
+        String errorDataJson = mockMvc // why is it called errordata? i'd call it response
                 .perform(MockMvcRequestBuilders
                         .post("/accounts/creates")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -83,7 +84,7 @@ class AccountControllerExceptionTest {
         ErrorData errorData = objectMapper.readValue(errorDataJson, ErrorData.class);
 
         String expectedMessage =
-                "Client with id " + clientId + " not found";
+                "Client with id " + clientId + " not found";// FIXME 2 lines?
 
         assertEquals(expectedMessage, errorData.message());
     }

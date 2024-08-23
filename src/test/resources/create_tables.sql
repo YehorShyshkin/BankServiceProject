@@ -1,3 +1,4 @@
+-- // FIXME it would be good to have reserved words in capital - CREATE TABLE
 create table if not exists managers
 (
     id             UUID primary key,

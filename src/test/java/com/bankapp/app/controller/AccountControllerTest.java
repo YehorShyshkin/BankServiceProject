@@ -42,9 +42,9 @@ class AccountControllerTest {
         newAccount.setStatus("ACTIVE");
         newAccount.setCurrencyCode("USD");
         newAccount.setBalance(new BigDecimal ("5000.00"));
-        newAccount.setClientId("b3a3a896-969c-11ee-b9d1-0242ac120002");
+        newAccount.setClientId("b3a3a896-969c-11ee-b9d1-0242ac120002");// FIXME consider using builder patter for classes with manu fields
 
-        String json = objectMapper.writeValueAsString(newAccount);
+        String json = objectMapper.writeValueAsString(newAccount);// FIXME not descriptive name, can be newAccountJson
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
@@ -54,8 +54,9 @@ class AccountControllerTest {
                 .andReturn();
 
         assertEquals(201, mvcResult.getResponse().getStatus());
+        // FIXME 201 can be replaced with HttpStatus.CREATED
 
-        AccountDTO returned = objectMapper.readValue(mvcResult
+        AccountDTO returned = objectMapper.readValue(mvcResult //FIXME why is it in several lines? Also not descriptive name
                 .getResponse().getContentAsString(),
                 new TypeReference<>() {});
 
@@ -87,6 +88,7 @@ class AccountControllerTest {
 
         assertEquals(returned, accountDTO);
     }
+    // FIXME write test, which tries to input illegal char as account id
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
@@ -144,4 +146,5 @@ class AccountControllerTest {
 
         assertEquals(returned, accountDTO);
     }
+    // FIXME write test for negative cases: illegal chars as input parameters, db is not respondind, unknown currency and etc
 }

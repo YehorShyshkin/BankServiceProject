@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+// consider using records, here in all other dtos
 @Data
 public class AccountDTO {
     private String name;

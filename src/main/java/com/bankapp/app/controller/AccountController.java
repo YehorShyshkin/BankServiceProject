@@ -19,6 +19,7 @@ public class AccountController {
     private final AccountService accountService;
 
     private final CardService cardService;
+    // FIXME cardService declared but is not used
 
 
     @PostMapping("/creates")
@@ -35,6 +36,8 @@ public class AccountController {
         return accountService.findAccountById(accountsId);
     }
 
+    // FIXME here in all other conrollers: it is not a good style to update model with get
+    // all types of http request are intended for special purposes, GET usually to get sim info
     @GetMapping("/update/{accountsId}")
     @ResponseStatus(HttpStatus.OK)
     public AccountDTO updateAccount(
@@ -44,6 +47,7 @@ public class AccountController {
         return accountService.updateAccount(accountsId, accountDTO);
     }
 
+    // FIXME also not correct - must be DELETE
     @GetMapping("/delete/{accountsId}")
     @ResponseStatus(HttpStatus.OK)
     public AccountDTO softDeleteAccount(@PathVariable UUID accountsId) {

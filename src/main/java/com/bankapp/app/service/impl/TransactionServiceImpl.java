@@ -25,6 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
+    // FIXME like an idea, to be discussed and testes. if some record not found in db, return empty optional
     public Transaction getById(UUID transactionId) {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException(

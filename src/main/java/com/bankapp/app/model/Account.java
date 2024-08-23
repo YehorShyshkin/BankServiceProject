@@ -65,7 +65,7 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Card> cards;
 
-
+    // FIXME equals and hashCode can be replaced with lombok?
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

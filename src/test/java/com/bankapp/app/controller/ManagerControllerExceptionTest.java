@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// FIXME if all test are similar you can create one parent with similar elements
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/delete_tables.sql")

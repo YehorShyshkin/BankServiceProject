@@ -224,6 +224,7 @@ class ClientControllerTest {
                 "Expected 'Can not be empty' message");
         assertTrue(message.contains("First name must contain only letters"),
                 "Expected 'First name must contain only letters' message");
+        // FIXME it would be good to assert log messages for all tests
     }
 
     @Test

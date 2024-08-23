@@ -73,7 +73,7 @@ class ProductControllerTest {
         newProduct.setInterestRate(new BigDecimal("0.02"));
         newProduct.setProductLimit(new BigDecimal("10000"));
         newProduct.setManagerId("8d25ab36-969c-11ee-b9d1-0242ac120002");
-
+// FIXME 2 empty lines
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders

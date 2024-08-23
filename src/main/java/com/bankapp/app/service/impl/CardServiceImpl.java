@@ -21,7 +21,7 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
-    private final AccountService accountService;
+    private final AccountService accountService;// FIXME is not used
 
     @Override
     @Transactional
@@ -39,7 +39,8 @@ public class CardServiceImpl implements CardService {
 
     @Override
     @Transactional
-    public CardDTO createCard(CardDTO cardDTO) {
+    public CardDTO createCard(CardDTO cardDTO) {// FIXME is is not clear we take cardDTO as input, create card and return cardDTo,
+        // for what?
         Card newCard = cardMapper.toEntity(cardDTO);
 
         if (newCard.getNumber() == null
@@ -62,7 +63,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @Transactional
+    @Transactional// FIXME the same - why d0 you return dto? will it be different from input one?
     public CardDTO updateCard(UUID cardId, CardDTO cardDTO) {
         Card card = getById(cardId);
         cardMapper.updateCardFromDTO(cardDTO, card);
@@ -71,7 +72,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    @Transactional
+    @Transactional// FIXME the same
     public CardDTO deleteCard(UUID cardId) {
         Card card = getById(cardId);
         cardRepository.delete(card);

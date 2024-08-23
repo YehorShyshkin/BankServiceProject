@@ -1,28 +1,31 @@
 # Bank Service Application
 
 Demo final project. IT School, Germany, 2023-2024.
-
+// FIXME add Telran, Telran It School
 ## Description
 
 **Bank Service Application** - a backend-driven application that simulates core banking operations.
+// FIXME replace hyphen with long dash, every symbol is important 
 
 The application provides the following functionalities:
 
 - Client management
-- Manager management
+- Manager management 
 - Account management
 - Card management
 - Agreement management
 - Product management
 - Transaction processing
 
-The system consists of:
+// FIXME I would rather write technology stackT
+he system consists of:
 - **[Backend]** developed using the Spring Boot Framework
 - **[Database]** managed by PostgreSQL for persistent data storage
 - **[Security layer]** implemented using Spring Security for authentication and authorization
 - **[Containerization]** powered by Docker for smooth deployment and scalability
 
-Additionally, the application architecture follows RESTful principles and supports security protocols including SSL and OAuth2 for secure communication.
+Additionally, the application architecture follows RESTful principles and supports security protocols including SSL and OAuth2 for secure communication.// FIXME also could be described in stack oin few words
+
 
 ## Technologies Used
 
@@ -64,12 +67,12 @@ Additionally, the application architecture follows RESTful principles and suppor
 4. **Run Docker Compose to start PostgreSQL and PgAdmin:**
     ```bash
     docker-compose up
-   
+   // FIXNE why user should at first install and run? It must be all done in docker
 
-Ensure that your docker-compose.yml file is correctly configured with the environment variables.
+Ensure that your docker-compose.yml file is correctly configured with the environment variables. // FXIME water
 
 ### Configuration
-Update the `.env` file with your PostgreSQL and PgAdmin credentials:
+Update the `.env` file with your PostgreSQL and PgAdmin credentials: // FXIME also must be done in docker by yourself. Finally user must run only docker-compose up
 
 SPRING_DATASOURCE_USER=your_postgres_user  
 SPRING_DATASOURCE_PASSWORD=your_postgres_password  
@@ -78,7 +81,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 
 ### Running Tests
 
-To run the tests, use Maven:   
+To run the tests, use Maven:  // FXIME water, we consider that project will be explored by experts, they know for sure how to do it 
 
     mvn test
 
@@ -89,10 +92,11 @@ To run the tests, use Maven:
 ### Overview
 
 This project uses JUnit 5 and Spring Boot's testing framework to ensure the quality and functionality of the application. Tests cover various functionalities including CRUD operations, validation, and exception handling for different controllers.
+// FXIME water, I'd say wich test I have, coverage, maybe libs, that all
 
 ### Account Controller Tests
 
-#### 1. **Create Account**
+#### 1. **Create Account**// FXIME this and below looks not related to tests bu more like rest api guide, also redundant, water
 
 **Description**: Verifies that a new account is created successfully with the correct details.
 
@@ -355,5 +359,5 @@ This project uses JUnit 5 and Spring Boot's testing framework to ensure the qual
 - **Test Details**:
     - **Test Case**: `testDeleteTransactionById`
     - **Description**: This test soft deletes a transaction and verifies if the transaction is marked as deleted and checks if the associated account balances are updated as expected.
-
+// FXIME If you want have REST api description, better to do it in separate file, this is not for readme.md
 

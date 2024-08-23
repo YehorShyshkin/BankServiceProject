@@ -78,6 +78,8 @@ class ManagerControllerTest {
         assertEquals("ACTIVE", dto.getStatus());
     }
 
+    // FIXME choose one style for naming tests, you have shouldcreate and getById
+    // I like following test_testcase_outcome, eg test_createManager_ok, test_createAccountWithEmptyId_exception
     @Test
     void testShouldCreateManagers() throws Exception {
         ManagerDTO create = new ManagerDTO();

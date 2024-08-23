@@ -12,6 +12,7 @@
     <artifactId>app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>FromBankService</name>
+<!--   // FIXME  what does it mean - FromBankService?-->
     <description>FromBankService</description>
     <properties>
         <java.version>21</java.version>
@@ -68,6 +69,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <version>${spring-security.version}</version>
+<!--            FIXME spring-security.version variable is not declared, not obvious-->
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -81,6 +83,16 @@
             <artifactId>spring-boot-test</artifactId>
         </dependency>
     </dependencies>
+
+
+
+
+
+
+
+
+
+
 
     <build>
         <plugins>
@@ -132,5 +144,7 @@
             </plugin>
         </plugins>
     </build>
+
+    
 
 </project>

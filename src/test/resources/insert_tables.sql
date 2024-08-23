@@ -1,3 +1,4 @@
+-- // FIXME can be renamed to insert_values
 -- Insert data into the managers table
 INSERT INTO managers (id, first_name, last_name, status)
 VALUES
