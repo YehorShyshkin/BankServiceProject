@@ -4,23 +4,20 @@ import com.bankapp.app.model.enums.AccountStatus;
 import com.bankapp.app.model.enums.AccountType;
 import com.bankapp.app.model.enums.CurrencyCode;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+@Data
 @Entity
 @NoArgsConstructor
-@Getter
-@Setter
 @Table(name = "accounts")
 public class Account {
 
@@ -64,18 +61,5 @@ public class Account {
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Card> cards;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Account account)) return false;
-        return Objects.equals(name, account.name) && status == account.status;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, status);
-    }
 
 }
