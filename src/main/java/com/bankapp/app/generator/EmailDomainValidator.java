@@ -3,12 +3,13 @@ package com.bankapp.app.generator;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.util.Set;
+import java.util.regex.Pattern;
 
 public class EmailDomainValidator implements ConstraintValidator<AllowedDomains, String> {
 
-    private static final Set<String> allowedDomains =
-            Set.of("gmail.com", "yahoo.com", "proton.me");
+    private static final Pattern EMAIL_PATTERN = Pattern.compile(
+            "^[a-zA-Z0-9._%+-]+@(gmail\\.com|yahoo\\.com|proton\\.me)$"
+    );
 
     @Override
     public void initialize(AllowedDomains constraintAnnotation) {
@@ -17,16 +18,9 @@ public class EmailDomainValidator implements ConstraintValidator<AllowedDomains,
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext constraintValidatorContext) {
-        if (email == null || !email.contains("@")) {
+        if (email == null) {
             return false;
         }
-
-        String[] parts = email.split("@");
-        if (parts.length != 2 || parts[0].isEmpty()) {
-            return false;
-        }
-
-        String domain = parts[1];
-        return allowedDomains.contains(domain);
+        return EMAIL_PATTERN.matcher(email).matches();
     }
 }

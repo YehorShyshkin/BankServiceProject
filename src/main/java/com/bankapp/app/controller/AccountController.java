@@ -2,7 +2,6 @@ package com.bankapp.app.controller;
 
 import com.bankapp.app.dto.AccountDTO;
 import com.bankapp.app.service.AccountService;
-import com.bankapp.app.service.CardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,9 +16,6 @@ import java.util.UUID;
 public class AccountController {
 
     private final AccountService accountService;
-
-    private final CardService cardService;
-
 
     @PostMapping("/creates")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,7 +40,7 @@ public class AccountController {
         return accountService.updateAccount(accountsId, accountDTO);
     }
 
-    @GetMapping("/delete/{accountsId}")
+    @DeleteMapping("/delete/{accountsId}")
     @ResponseStatus(HttpStatus.OK)
     public AccountDTO softDeleteAccount(@PathVariable UUID accountsId) {
         log.info("Deleting account by id {}", accountsId);

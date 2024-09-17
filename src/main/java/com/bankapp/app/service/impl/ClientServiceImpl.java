@@ -48,7 +48,6 @@ public class ClientServiceImpl implements ClientService {
         Manager manager = managerRepository.findById(clientDTO.getManagerId())
                 .orElseThrow(() -> new ManagerNotFoundException("Manager with id %s not found"));
         newClient.setManager(manager);
-        log.info("ClientDTO status: {}", clientDTO.getStatus());
         Client savedClient = clientRepository.save(newClient);
         return clientMapper.toDto(savedClient);
     }
@@ -70,6 +69,4 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.save(client);
         return clientMapper.toDto(client);
     }
-
-
 }
