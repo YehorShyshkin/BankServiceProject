@@ -39,7 +39,7 @@ public class CardController {
         return cardService.updateCard(cardId, cardDTO);
     }
 
-    @GetMapping("/delete/{cardId}")
+    @DeleteMapping("/delete/{cardId}")
     @ResponseStatus(HttpStatus.OK)
     public CardDTO deleteCard(@PathVariable UUID cardId) {
         log.info("Delete card: {}", cardId);

@@ -1,5 +1,11 @@
 server:
-  port: 8083
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.jks
+    key-store-password: ${KET_STORE_PASSWORD}
+    key-store-type: JKS
+    key-alias: mykey
   error:
     include-message: always
     include-binding-errors: always

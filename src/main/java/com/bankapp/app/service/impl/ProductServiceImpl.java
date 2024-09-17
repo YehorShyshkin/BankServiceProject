@@ -9,7 +9,6 @@ import com.bankapp.app.model.Product;
 import com.bankapp.app.model.enums.ProductStatus;
 import com.bankapp.app.repository.ManagerRepository;
 import com.bankapp.app.repository.ProductRepository;
-import com.bankapp.app.service.ManagerService;
 import com.bankapp.app.service.ProductService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final ManagerService managerService;
     private final ManagerRepository managerRepository;
 
     @Override
@@ -47,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(newProduct);
         return productMapper.toDto(savedProduct);
     }
-
 
     @Override
     @Transactional
@@ -71,5 +68,4 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
         return productMapper.toDto(product);
     }
-
 }

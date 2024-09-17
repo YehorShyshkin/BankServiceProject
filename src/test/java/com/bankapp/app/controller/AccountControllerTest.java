@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
@@ -78,7 +79,7 @@ class AccountControllerTest {
                         .get("/accounts/find/d7d5866c-969c-11ee-b9d1-0242ac120002"))
                 .andReturn();
 
-        assertEquals(200, mvcResult.getResponse().getStatus());
+        assertEquals(HttpStatus.CREATED, mvcResult.getResponse().getStatus());
 
         AccountDTO returned = objectMapper.readValue(
                 mvcResult.getResponse().getContentAsString(),
