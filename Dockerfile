@@ -1,11 +1,6 @@
 # Stage 1: Build the application
 FROM openjdk:21-jdk-slim AS build
 
-# Install Maven
-RUN apt-get update && \
-    apt-get install -y maven && \
-    rm -rf /var/lib/apt/lists/*
-
 # Set the working directory inside the container
 WORKDIR /app
 
