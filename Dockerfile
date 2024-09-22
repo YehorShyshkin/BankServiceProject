@@ -1,10 +1,14 @@
 # Stage 1: Build the application
-FROM maven:3.8.4-openjdk-17-slim AS build
+FROM openjdk:21-jdk-slim AS build
+
+RUN apt-get update && \
+    apt-get install -y maven && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the pom.xml file and download the dependencies
+# Copy the pom.xml file and download dependencies
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
@@ -12,13 +16,13 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stap 2: Run the application
-FROM openjdk:17-jdk-slim
+# Stage 2: Run the application
+FROM openjdk:21-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Set the JAR file from the build stage
+# Copy the JAR file from the build stage
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the application port
