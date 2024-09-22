@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM openjdk:21-jdk-slim AS build
+FROM openjdk:17-jdk-slim AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stage 2: Run the application
-FROM openjdk:21-jdk-slim
+FROM openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
