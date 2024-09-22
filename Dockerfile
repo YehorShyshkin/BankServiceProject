@@ -1,8 +1,5 @@
 # Stage 1: Build the application
-FROM eclipse-temurin:21-jdk-slim AS build
-
-# Build the Maven
-RUN apt-get update && apt-get install -y maven
+FROM maven:3.9.4-eclipse-temurin-21 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -16,7 +13,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Stap 2: Run the application
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:21-jdk-jammy
 
 # Set the working directory inside the container
 WORKDIR /app
