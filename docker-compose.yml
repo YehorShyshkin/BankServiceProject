@@ -31,9 +31,7 @@ services:
 
   app:
     container_name: bank-app
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: "${TAG_COMMIT}"
     ports:
       - "443:443"
     networks:
@@ -44,8 +42,6 @@ services:
 
 networks:
   bank-service:
-    driver: bridge
-  spring:
     driver: bridge
 
 volumes:
