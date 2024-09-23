@@ -1,7 +1,7 @@
 server:
   port: 8443
   ssl:
-    enabled: true
+    enabled: false
     key-store: classpath:keystore.jks
     key-store-password: ${KET_STORE_PASSWORD}
     key-store-type: JKS
