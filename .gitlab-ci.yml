@@ -25,22 +25,10 @@ deploy:
   script:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
-
-    # Use sudo to create the directory with root permissions
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo mkdir -p /path/to/deployment"
-
-    # Transfer the updated docker-compose.yml to the server, but with sudo to ensure root ownership
-    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/tmp/docker-compose.yml
-
-    # Move the docker-compose.yml to the root-protected directory and set appropriate permissions
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo mv /tmp/docker-compose.yml /path/to/deployment/docker-compose.yml"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo chown root:root /path/to/deployment/docker-compose.yml"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo chmod 644 /path/to/deployment/docker-compose.yml"
-
-    # Pull the latest image and restart the service using Docker Compose with root privileges
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose pull"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose down"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose up -d"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $TAG_COMMIT"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f my-app || true"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 80:80 --name my-app $TAG_COMMIT"
 
   environment:
     name: production
