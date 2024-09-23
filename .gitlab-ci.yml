@@ -26,16 +26,21 @@ deploy:
     - chmod og= $ID_RSA
     - apk update && apk add openssh-client
 
-    # Ensure the deployment directory exists on the server
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "mkdir -p /path/to/deployment"
+    # Use sudo to create the directory with root permissions
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo mkdir -p /path/to/deployment"
 
-    # Transfer the updated docker-compose.yml to the server
-    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/path/to/deployment/
+    # Transfer the updated docker-compose.yml to the server, but with sudo to ensure root ownership
+    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/tmp/docker-compose.yml
 
-    # Pull the latest image and restart the service using Docker Compose
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose pull"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose down"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose up -d"
+    # Move the docker-compose.yml to the root-protected directory and set appropriate permissions
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo mv /tmp/docker-compose.yml /path/to/deployment/docker-compose.yml"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo chown root:root /path/to/deployment/docker-compose.yml"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo chmod 644 /path/to/deployment/docker-compose.yml"
+
+    # Pull the latest image and restart the service using Docker Compose with root privileges
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose pull"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose down"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && sudo docker-compose up -d"
 
   environment:
     name: production
