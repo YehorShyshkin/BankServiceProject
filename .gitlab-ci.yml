@@ -24,10 +24,15 @@ deploy:
     - deployment
   script:
     - chmod og= $ID_RSA
-    - apk update && apk add openssh-client git
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "git clone $CI_REPOSITORY_URL /home/$SERVER_USER/project/bankservice || (cd /home/$SERVER_USER/project/bankservice && git pull)"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/$SERVER_USER/project/bankservice && export TAG_COMMIT=$TAG_COMMIT && docker-compose down"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/$SERVER_USER/project/bankservice && export TAG_COMMIT=$TAG_COMMIT && docker-compose up -d"
+    - apk update && apk add openssh-client
+
+    # Transfer the updated docker-compose.yml to the server
+    - scp -i $ID_RSA -o StrictHostKeyChecking=no docker-compose.yml $SERVER_USER@$SERVER_IP:/path/to/deployment/
+
+    # Pull the latest image and restart the service using Docker Compose
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose pull"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose down"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /path/to/deployment && docker-compose up -d"
 
   environment:
     name: production
