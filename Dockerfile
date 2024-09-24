@@ -1,6 +1,7 @@
-# Stage 1: Build the application
+# Build the application
 FROM openjdk:21-jdk-slim AS build
 
+# Install Maven
 RUN apt-get update && \
     apt-get install -y maven && \
     rm -rf /var/lib/apt/lists/*
@@ -16,7 +17,7 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Stage 2: Run the application
+# Run the application
 FROM openjdk:21-jdk-slim
 
 # Set the working directory inside the container
