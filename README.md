@@ -32,18 +32,18 @@ Additionally, the application architecture follows RESTful principles and suppor
 
 ## Technologies Used
 
+- **CI/CD**
 - **Spring Boot 3.1.4**
-- **PostgreSQL**
-- **Docker**
 - **Lombok**
 - **MapStruct**
 - **Spring Security** 
+- **PostgreSQL**
+- **Docker**
 - **H2 Database**
 - **JUnit 5**
 - **Spring Boot Test**
 - **MockMvc**
 - **Mockito**
-
 
 ## Setup and Installation
 
@@ -51,6 +51,7 @@ Additionally, the application architecture follows RESTful principles and suppor
 
 - JDK 21
 - Docker
+- Docker Compose
 
 ### Getting Started
 
@@ -67,26 +68,22 @@ Additionally, the application architecture follows RESTful principles and suppor
 3. **Run the application:**
     ```bash
    ./mvn spring-boot:run
+   
 4. **Run Docker Compose to start PostgreSQL and PgAdmin:**
     ```bash
     docker-compose up
-   
 
 Ensure that your docker-compose.yml file is correctly configured with the environment variables.
-
-### Configuration
-Update the `.env` file with your PostgreSQL and PgAdmin credentials:
-
-SPRING_DATASOURCE_USER=your_postgres_user  
-SPRING_DATASOURCE_PASSWORD=your_postgres_password  
-PGADMIN_DEFAULT_EMAIL=your_pgadmin_email  
-PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password  
 
 ### Running Tests
 
 To run the tests, use Maven:   
 
     mvn test
+
+## CI/CD
+
+![CI.CD.jpg](screenshots/CI.CD.jpg)
 
 ## Testing
 
@@ -95,6 +92,14 @@ To run the tests, use Maven:
 ### Overview
 
 This project uses JUnit 5 and Spring Boot's testing framework to ensure the quality and functionality of the application. Tests cover various functionalities including CRUD operations, validation, and exception handling for different controllers.
+
+### Configuration
+Update the `.env` file with your PostgreSQL and PgAdmin credentials:
+
+SPRING_DATASOURCE_USER=your_postgres_user  
+SPRING_DATASOURCE_PASSWORD=your_postgres_password  
+PGADMIN_DEFAULT_EMAIL=your_pgadmin_email  
+PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 
 ### Account Controller Tests
 
