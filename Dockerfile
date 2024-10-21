@@ -1,4 +1,4 @@
-# Build the application
+# Use the official OpenJDK image as the base image
 FROM openjdk:21-jdk-slim AS build
 
 # Install Maven
@@ -9,22 +9,23 @@ RUN apt-get update && \
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the pom.xml file and download dependencies
-COPY pom.xml .
-RUN mvn dependency:go-offline
+# Copy the entire project (including parent POM and modules)
+COPY . .
 
-# Copy the source code and build the application
-COPY src ./src
-RUN mvn clean package -DskipTests
+# Go offline to download dependencies for all modules
+RUN mvn -pl manager-service dependency:go-offline
 
-# Run the application
+# Build the project and skip tests for the Docker image
+RUN mvn -pl manager-service clean package -DskipTests
+
+# Second stage: Use a smaller image for running the application
 FROM openjdk:21-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the JAR file from the build stage
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/manager-service/target/*.jar app.jar
 
 # Expose the application port
 EXPOSE 443
