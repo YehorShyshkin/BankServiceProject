@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/delete_tables.sql")
@@ -27,10 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
 class ProductControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -59,7 +56,6 @@ class ProductControllerTest {
         ProductDTO returnedProductDto = objectMapper
                 .readValue(mvcResult.getResponse().getContentAsString(),
                         new TypeReference<>() {});
-
         assertEquals(returnedProductDto, newProduct);
     }
 
@@ -74,7 +70,6 @@ class ProductControllerTest {
         newProduct.setProductLimit(new BigDecimal("10000"));
         newProduct.setManagerId("8d25ab36-969c-11ee-b9d1-0242ac120002");
 
-
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
                         .get("/products/find/8df40ce4-969c-11ee-b9d1-0242ac120002"))
@@ -85,9 +80,7 @@ class ProductControllerTest {
         ProductDTO returned = objectMapper.readValue(mvcResult
                 .getResponse().getContentAsString(),
                 new TypeReference<>() {});
-
         assertEquals(returned, newProduct);
-
     }
 
     @Test
@@ -115,7 +108,6 @@ class ProductControllerTest {
         ProductDTO returnedDto = objectMapper.readValue(mvcResult
                 .getResponse().getContentAsString(),
                 new TypeReference<>() {});
-
         assertEquals(returnedDto, newProduct);
     }
 
@@ -134,7 +126,7 @@ class ProductControllerTest {
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/products/delete/8df40ce4-969c-11ee-b9d1-0242ac120002")
+                        .delete("/products/delete/8df40ce4-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -144,9 +136,6 @@ class ProductControllerTest {
         ProductDTO returnedDto = objectMapper.readValue(mvcResult
                 .getResponse().getContentAsString(),
                 new TypeReference<>() {});
-
         assertEquals(returnedDto, newProduct);
-
     }
-
 }

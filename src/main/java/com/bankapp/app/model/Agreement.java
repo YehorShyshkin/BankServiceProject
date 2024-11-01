@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-
 @Entity
 @NoArgsConstructor
 @Getter
@@ -54,10 +53,8 @@ public class Agreement {
         if (!(o instanceof Agreement agreement)) return false;
         return status == agreement.status;
     }
-
     @Override
     public int hashCode() {
         return Objects.hash(status);
     }
-
 }

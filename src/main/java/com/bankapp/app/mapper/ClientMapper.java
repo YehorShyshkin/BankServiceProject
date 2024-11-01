@@ -7,7 +7,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy =
+                NullValuePropertyMappingStrategy.IGNORE)
 public interface ClientMapper {
     @Mapping(source = "managerId", target = "manager.id")
     Client toEntity(ClientDTO clientDTO);

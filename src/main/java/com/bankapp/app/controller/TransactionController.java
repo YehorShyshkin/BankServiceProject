@@ -31,7 +31,7 @@ public class TransactionController {
         return transactionService.getTransactionById(transactionId);
     }
 
-    @GetMapping("/delete/{transactionId}")
+    @DeleteMapping("/delete/{transactionId}")
     @ResponseStatus(HttpStatus.OK)
     public TransactionDTO deleteTransactionById(@PathVariable UUID transactionId) {
         log.info("Deleting transaction by id: {}", transactionId);

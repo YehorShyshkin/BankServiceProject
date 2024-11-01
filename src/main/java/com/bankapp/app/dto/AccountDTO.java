@@ -1,6 +1,6 @@
 package com.bankapp.app.dto;
 
-import lombok.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -12,9 +12,6 @@ public class AccountDTO {
     private String currencyCode;
     private BigDecimal balance;
 
-    /**
-     * Client
-     */
+    // Client
     private String clientId;
-
 }

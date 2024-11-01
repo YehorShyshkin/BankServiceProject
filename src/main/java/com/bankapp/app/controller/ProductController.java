@@ -14,6 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/products")
 public class ProductController {
+
     private final ProductService productService;
 
     @PostMapping("/creates")
@@ -37,7 +38,7 @@ public class ProductController {
         return productService.updateProduct(productId, productDTO);
     }
 
-    @GetMapping("/delete/{productId}")
+    @DeleteMapping("/delete/{productId}")
     @ResponseStatus(HttpStatus.OK)
     public ProductDTO softDeleteProduct(@PathVariable UUID productId) {
         log.info("Deleting product {}", productId);
