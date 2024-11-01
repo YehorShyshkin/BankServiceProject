@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-
 @Entity
 @NoArgsConstructor
 @Getter
@@ -60,7 +59,6 @@ public class Manager {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 
     @Override
     public String toString() {

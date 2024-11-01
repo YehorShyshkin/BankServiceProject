@@ -35,16 +35,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/insert_tables.sql")
 @ActiveProfiles("test")
 class ManagerControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private ManagerMapper managerMapper;
-
     @Autowired
     private Validator validator;
 
@@ -97,14 +93,12 @@ class ManagerControllerTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-
         assertNotNull(managerDTOPost);
     }
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testGetById() throws Exception {
-
         ManagerDTO expectancy = new ManagerDTO();
         expectancy.setFirstName("Henry");
         expectancy.setLastName("Rodriguez");
@@ -163,7 +157,7 @@ class ManagerControllerTest {
 
         MvcResult mvcResult = mockMvc.
                 perform(MockMvcRequestBuilders
-                        .get("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
+                        .delete("/managers/delete/f869b0e2-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -172,7 +166,6 @@ class ManagerControllerTest {
         ManagerDTO returnedDto = objectMapper.readValue(mvcResult.getResponse()
                 .getContentAsString(), new TypeReference<>() {
         });
-
         assertEquals(returnedDto, deleteDto);
     }
 
@@ -182,6 +175,7 @@ class ManagerControllerTest {
         expectancy.setFirstName("Alice");
         expectancy.setLastName("Johnson");
         expectancy.setStatus("ACTIVE");
+
         Set<ConstraintViolation<ManagerDTO>> constraintViolations =
                 validator.validate(expectancy);
         if (!constraintViolations.isEmpty()) {
@@ -208,11 +202,9 @@ class ManagerControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(2, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("Can not be empty"),
                 "Expected 'Can not be empty', message");
         assertTrue(message.contains("First name must contain only letters"),
@@ -234,7 +226,6 @@ class ManagerControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(1, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
@@ -259,7 +250,6 @@ class ManagerControllerTest {
         }
 
         assertEquals(2, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
@@ -283,15 +273,11 @@ class ManagerControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(1, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("Last name must contain only letters"),
                 "Expected 'Last name must contain only letters', message");
-
-
     }
 }
 

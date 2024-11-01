@@ -42,7 +42,7 @@ public class ManagerController {
         return managerService.updateManager(managerId, managerDTO);
     }
 
-    @GetMapping("/delete/{managerId}")
+    @DeleteMapping("/delete/{managerId}")
     @ResponseStatus(HttpStatus.OK)
     public ManagerDTO deleteManager(@PathVariable UUID managerId) {
         log.info("Delete manager: {}", managerId);

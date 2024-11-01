@@ -1,8 +1,8 @@
-# Bank Service Application
+#### Bank Service Application
 
 Demo final project. IT School, Germany, 2023-2024.
 
-## Description
+#### Description
 
 **Bank Service Application** - a backend-driven application that simulates core banking operations.
 
@@ -24,7 +24,7 @@ The system consists of:
 
 Additionally, the application architecture follows RESTful principles and supports security protocols including SSL and OAuth2 for secure communication.
 
-## Technologies Used
+#### Technologies Used
 
 - **CI/CD**
 - **Spring Boot 3.1.4**
@@ -39,15 +39,15 @@ Additionally, the application architecture follows RESTful principles and suppor
 - **MockMvc**
 - **Mockito**
 
-## Setup and Installation
+#### Setup and Installation
 
-### Prerequisites
+#### Prerequisites
 
 - JDK 21
 - Docker
 - Docker Compose
 
-### Getting Started
+#### Getting Started
 
 1. **Clone the repository:**
 
@@ -69,25 +69,26 @@ Additionally, the application architecture follows RESTful principles and suppor
 
 Ensure that your docker-compose.yml file is correctly configured with the environment variables.
 
-### Running Tests
+#### Running Tests
 
 To run the tests, use Maven:   
 
     mvn test
 
-## CI/CD
+#### CI/CD
 
 ![CI.CD.jpg](screenshots/CI.CD.jpg)
 
-## Testing
+#### Testing
 
 ![Jacoco Testing](screenshots/Jacoco%20Testing.png)
 ![Jacoco with Java.png](screenshots/Jacoco%20with%20Java.png)
-### Overview
+
+#### Overview
 
 This project uses JUnit 5 and Spring Boot's testing framework to ensure the quality and functionality of the application. Tests cover various functionalities including CRUD operations, validation, and exception handling for different controllers.
 
-### Configuration
+#### Configuration
 Update the `.env` file with your PostgreSQL and PgAdmin credentials:
 
 SPRING_DATASOURCE_USER=your_postgres_user  
@@ -95,7 +96,7 @@ SPRING_DATASOURCE_PASSWORD=your_postgres_password
 PGADMIN_DEFAULT_EMAIL=your_pgadmin_email  
 PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 
-### Account Controller Tests
+#### Account Controller Tests
 
 #### 1. **Create Account**
 
@@ -125,7 +126,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 - **Endpoint**: `GET /accounts/delete/{accountId}`
 - **Expected Result**: Returns a 200 status indicating successful deletion with updated account details.
 
-### Agreement Controller Tests
+#### Agreement Controller Tests
 
 #### 1. **Create Agreement**
 
@@ -155,7 +156,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 - **Endpoint**: Varies by specific exception scenarios.
 - **Expected Result**: Returns appropriate HTTP status codes (e.g., 404 Not Found) and error messages.
 
-### Card Controller Tests
+#### Card Controller Tests
 
 #### 1. **Create Card**
 
@@ -206,7 +207,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 - **Endpoint**: `GET /cards/delete/{cardId}`
 - **Expected Result**: Returns a 200 status indicating successful deletion.
 
-### Client Controller Tests
+#### Client Controller Tests
 
 #### 1. **Create Client**
 
@@ -236,7 +237,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 - **Endpoint**: `GET /clients/delete/{clientId}`
 - **Expected Result**: Returns a 200 status indicating successful deletion with updated client details.
 
-### Manager Controller Tests
+#### Manager Controller Tests
 
 #### 1. **Serialization and Deserialization**
 
@@ -280,7 +281,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
 - **Endpoint**: `GET /managers/delete/{managerId}`
 - **Expected Result**: Returns a 200 status indicating successful deletion with updated manager details.
 
-### Product Controller Tests
+#### Product Controller Tests
 
 #### 1. **Create Product**
 
@@ -326,7 +327,7 @@ PGADMIN_DEFAULT_PASSWORD=your_pgadmin_password
     - **Test Case**: `testSoftDeleteProduct`
     - **Description**: This test soft deletes a product and checks if the product is marked as deleted correctly, verifying the updated product details.
 
-### Transaction Controller Tests
+#### Transaction Controller Tests
 
 #### 1. **Create Transaction**
 

@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql("/delete_tables.sql")
@@ -127,7 +127,7 @@ class AgreementControllerTest {
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/agreements/delete/4e1f1090-969d-11ee-b9d1-0242ac120002")
+                        .delete("/agreements/delete/4e1f1090-969d-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -137,7 +137,6 @@ class AgreementControllerTest {
         AgreementDTO returned = objectMapper.readValue(mvcResult
                 .getResponse().getContentAsString(),
                 new TypeReference<>() {});
-
         assertEquals(returned, agreementDTO);
     }
 }

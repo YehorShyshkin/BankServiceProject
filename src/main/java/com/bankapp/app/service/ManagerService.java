@@ -10,9 +10,6 @@ public interface ManagerService {
     Manager findById(UUID managerId);
     ManagerDTO findManagerById(UUID managerId);
     ManagerDTO createManager(ManagerDTO managerDTO);
-
     ManagerDTO updateManager(UUID managerId, @Valid ManagerDTO managerDTO);
-
     ManagerDTO softDeleteManager(UUID managerId);
-
 }

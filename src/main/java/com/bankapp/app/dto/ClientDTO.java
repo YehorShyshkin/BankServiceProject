@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Data;
 
 import java.util.UUID;
 
@@ -40,9 +40,7 @@ public class ClientDTO {
             message = "Tax code must be exactly 10 digits")
     private String taxCode;
 
-    /**
-     * Manager
-     */
+    // Manager
     private UUID managerId;
 }
 

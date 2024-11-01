@@ -8,7 +8,8 @@ import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.InjectionStrategy.CONSTRUCTOR;
 
-@Mapper(componentModel = "spring", injectionStrategy = CONSTRUCTOR,
+@Mapper(componentModel = "spring",
+        injectionStrategy = CONSTRUCTOR,
         uses = {AgreementMapper.class})
 public interface AccountMapper {
     @Mapping(source = "clientId", target = "client.id")

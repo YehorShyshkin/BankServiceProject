@@ -64,14 +64,12 @@ class CardControllerTest {
                 mvcResult.getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-
         assertEquals(returned, newCard);
     }
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testGetById() throws Exception {
-
         CardDTO cardDTO = new CardDTO();
         cardDTO.setNumber("1234-5678-9012-3456");
         cardDTO.setExpirationDate("2023-12-31");
@@ -96,7 +94,6 @@ class CardControllerTest {
                 new TypeReference<>() {
                 }
         );
-
         assertEquals(returned, cardDTO);
     }
 
@@ -178,23 +175,17 @@ class CardControllerTest {
                 new TypeReference<>() {
                 }
         );
-
         assertEquals(returned, cardDTO);
-
     }
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testDeleteCard() throws Exception {
-
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/cards/delete/7f580996-969d-11ee-b9d1-0242ac120002")
+                        .delete("/cards/delete/7f580996-969d-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
         assertEquals(200, mvcResult.getResponse().getStatus());
-
     }
-
 }

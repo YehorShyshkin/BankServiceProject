@@ -6,7 +6,6 @@ import com.bankapp.app.model.Agreement;
 import java.util.UUID;
 
 public interface AgreementService {
-
     AgreementDTO createAgreement(AgreementDTO agreementDTO);
     AgreementDTO findAgreementById(UUID agreementId);
     Agreement findById(UUID agreementId);

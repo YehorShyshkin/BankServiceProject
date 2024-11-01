@@ -30,16 +30,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
 class TransactionControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private AccountRepository accountRepository;
-
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
@@ -68,9 +64,7 @@ class TransactionControllerTest {
                 new TypeReference<>() {
                 }
         );
-
         assertEquals(returned, newTransaction);
-
     }
 
     @Test
@@ -83,7 +77,6 @@ class TransactionControllerTest {
         transactionDTO.setDescription("Initial deposit");
         transactionDTO.setDebitAccount("06c8dc62-969d-11ee-b9d1-0242ac120002");
         transactionDTO.setCreditAccount("d7d5866c-969c-11ee-b9d1-0242ac120002");
-
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
@@ -98,9 +91,7 @@ class TransactionControllerTest {
                 new TypeReference<>() {
                 }
         );
-
         assertEquals(returned, transactionDTO);
-
     }
 
     @Test
@@ -124,7 +115,7 @@ class TransactionControllerTest {
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/transactions/delete/a80e7834-969d-11ee-b9d1-0242ac120002")
+                        .delete("/transactions/delete/a80e7834-969d-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
 
@@ -151,5 +142,4 @@ class TransactionControllerTest {
         assertEquals(new BigDecimal("3000.00"), debitAccount.getBalance());
         assertEquals(new BigDecimal("4000.00"), creditAccount.getBalance());
     }
-
 }

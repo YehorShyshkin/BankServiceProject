@@ -8,12 +8,8 @@ import java.util.UUID;
 
 public interface ClientService {
     ClientDTO findClientById(UUID clientId);
-
     Client findById(UUID clientId);
-
     ClientDTO createClient(ClientDTO clientDTO);
-
     ClientDTO updateClient(UUID clientId, @Valid ClientDTO clientDTO);
-
     ClientDTO softDeleteClient(UUID clientId);
 }

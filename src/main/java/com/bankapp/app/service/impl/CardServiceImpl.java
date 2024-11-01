@@ -7,7 +7,6 @@ import com.bankapp.app.mapper.CardMapper;
 import com.bankapp.app.model.Card;
 import com.bankapp.app.model.enums.PaymentSystem;
 import com.bankapp.app.repository.CardRepository;
-import com.bankapp.app.service.AccountService;
 import com.bankapp.app.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,6 @@ public class CardServiceImpl implements CardService {
 
     private final CardRepository cardRepository;
     private final CardMapper cardMapper;
-    private final AccountService accountService;
 
     @Override
     @Transactional
@@ -57,7 +55,6 @@ public class CardServiceImpl implements CardService {
             newCard.setExpirationDate(CardGenerator
                     .generateCardExpirationDate());
         }
-
         return cardMapper.toDto(cardRepository.save(newCard));
     }
 
@@ -77,6 +74,5 @@ public class CardServiceImpl implements CardService {
         cardRepository.delete(card);
         return cardMapper.toDto(card);
     }
-
 }
 

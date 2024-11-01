@@ -41,7 +41,7 @@ public class AgreementController {
         return agreementService.updateAgreement(agreementId, agreementDTO);
     }
 
-    @GetMapping("/delete/{agreementId}")
+    @DeleteMapping("/delete/{agreementId}")
     @ResponseStatus(HttpStatus.OK)
     public AgreementDTO softDeleteAgreement(@PathVariable UUID agreementId) {
         log.info("Deleting agreement {}", agreementId);

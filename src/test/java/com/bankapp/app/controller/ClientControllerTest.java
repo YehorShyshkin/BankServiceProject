@@ -47,10 +47,8 @@ class ClientControllerTest {
 
     private ConstraintValidatorContext constraintValidatorContext;
 
-
     @Test
     void testCreateClient() throws Exception {
-
         ClientDTO newClientDto = new ClientDTO();
         newClientDto.setFirstName("Alice");
         newClientDto.setLastName("Johnson");
@@ -61,7 +59,6 @@ class ClientControllerTest {
         newClientDto.setTaxCode("1234567890");
         newClientDto.setManagerId(UUID.fromString("8d25ab36-969c-11ee-b9d1-0242ac120002"));
 
-
         String json = objectMapper.writeValueAsString(newClientDto);
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders.post("/clients/creates")
@@ -71,12 +68,10 @@ class ClientControllerTest {
 
         assertEquals(201, mvcResult.getResponse().getStatus());
 
-
         ClientDTO returned = objectMapper.
                 readValue(mvcResult.getResponse().getContentAsString(),
                         new TypeReference<>() {
                         });
-
         assertEquals(returned, newClientDto);
     }
 
@@ -104,7 +99,6 @@ class ClientControllerTest {
                 (mvcResult.getResponse().getContentAsString(),
                         new TypeReference<>() {
                         });
-
         assertEquals(returned, clientDto);
     }
 
@@ -137,7 +131,6 @@ class ClientControllerTest {
                         .getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-
         assertEquals(returnedDto, clientDto);
     }
 
@@ -158,7 +151,7 @@ class ClientControllerTest {
 
         MvcResult mvcResult = mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/clients/delete/b3a3a896-969c-11ee-b9d1-0242ac120002")
+                        .delete("/clients/delete/b3a3a896-969c-11ee-b9d1-0242ac120002")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andReturn();
@@ -169,9 +162,7 @@ class ClientControllerTest {
                         .getResponse().getContentAsString(),
                 new TypeReference<>() {
                 });
-
         assertEquals(returnedDto, clientDto);
-
     }
 
     @Test
@@ -192,7 +183,6 @@ class ClientControllerTest {
                     .map(ConstraintViolation::getMessage)
                     .forEach(System.out::println);
         }
-
         assertTrue(constraintViolations.isEmpty());
     }
 
@@ -219,7 +209,6 @@ class ClientControllerTest {
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("Can not be empty"),
                 "Expected 'Can not be empty' message");
         assertTrue(message.contains("First name must contain only letters"),
@@ -249,7 +238,6 @@ class ClientControllerTest {
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("First name must contain only letters"),
                 "Expected 'First name must contain only letters' message");
     }
@@ -273,7 +261,6 @@ class ClientControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(2, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
@@ -302,11 +289,9 @@ class ClientControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(1, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("Last name must contain only letters"),
                 "Expected 'Last name must contain only letters', message");
     }
@@ -330,16 +315,13 @@ class ClientControllerTest {
                     .forEach(System.out::println);
         }
         assertEquals(2, constraintViolations.size());
-
         Set<String> message = constraintViolations.stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
-
         assertTrue(message.contains("Email cannot be blank"),
                 "Expected 'Email cannot be blank' message");
         assertTrue(message.contains("Invalid email domain"),
                 "Expected 'Invalid email domain' message");
-
     }
 
     @BeforeEach

@@ -25,21 +25,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql("/insert_tables.sql")
 @RequiredArgsConstructor
 class ProductControllerExceptionTest {
-
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
     @WithMockUser(username = "aloha.test@gmail.com")
     void testProductNotFoundException() throws Exception {
-        UUID productId =
-                UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
 
-        String json =
-                objectMapper.writeValueAsString(productId);
+        String json = objectMapper.writeValueAsString(productId);
 
         String errorDataJson = mockMvc
                 .perform(MockMvcRequestBuilders
@@ -56,8 +52,6 @@ class ProductControllerExceptionTest {
 
         String expectedMessage =
                 String.format("Product with id %s not found", productId);
-
         assertEquals(expectedMessage, errorData.message());
     }
-
 }

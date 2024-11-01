@@ -40,7 +40,6 @@ public class ClientServiceImpl implements ClientService {
                         (String.format("Client with id %s not found", clientId)));
     }
 
-
     @Override
     @Transactional
     public ClientDTO createClient(ClientDTO clientDTO) {
