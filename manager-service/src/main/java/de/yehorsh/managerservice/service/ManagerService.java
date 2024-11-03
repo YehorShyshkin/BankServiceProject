@@ -1,5 +1,6 @@
 package de.yehorsh.managerservice.service;
 
+import de.yehorsh.managerservice.config.LogInfo;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
 import de.yehorsh.managerservice.exception.ManagerNotFoundException;
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class ManagerService {
     private final ManagerRepository managerRepository;
 
+    @LogInfo(name = "create_manager_service")
     public Manager createNewManager(ManagerCreateDto managerCreateDto) {
         if (managerRepository.existsManagerByEmailOrLastNameOrPhoneNumber(
                 managerCreateDto.email(),
@@ -39,15 +41,14 @@ public class ManagerService {
                 .build();
 
         Manager savedManager = managerRepository.save(createNewManager);
-
         log.info("Successfully created new manager: {}", savedManager);
 
-        return createNewManager;
+        return savedManager;
     }
 
+    @LogInfo(name = "find_manager_by_id_service")
     public Manager findManagerById(UUID managerId) {
         log.info("Attempting to find manager with Id: {}", managerId);
-
         return managerRepository.findById(managerId)
                 .map(manager -> {
                     log.info("Successfully found manager with Id: {}", managerId);
@@ -59,6 +60,7 @@ public class ManagerService {
                 });
     }
 
+    @LogInfo(name = "update_manager_service")
     public void updateManager(UUID managerId, ManagerUpdateDto managerUpdateDto) {
         Manager manager = findManagerById(managerId);
         log.debug("Found manager for update with Id: {}", managerId);
@@ -72,6 +74,7 @@ public class ManagerService {
         log.info("Successfully updated manager with Id: {}", managerId);
     }
 
+    @LogInfo(name = "delete_manager_service")
     public void deleteManager(UUID managerId) {
         if (managerId == null) {
             throw new IllegalArgumentException("Manager Id cannot be null.");

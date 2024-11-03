@@ -1,5 +1,6 @@
 package de.yehorsh.managerservice.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.yehorsh.managerservice.ManagerServiceApplication;
 import de.yehorsh.managerservice.config.ContainersEnvironment;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
@@ -8,6 +9,7 @@ import de.yehorsh.managerservice.model.Manager;
 import de.yehorsh.managerservice.model.enums.ManagerStatus;
 import de.yehorsh.managerservice.repository.ManagerRepository;
 import de.yehorsh.managerservice.service.ManagerService;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,17 +21,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import javax.sql.DataSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.sql.DataSource;
-
 @ActiveProfiles("test")
-@SpringBootTest(classes = ManagerServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = ManagerServiceApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 class ManagerControllerTest {
@@ -45,11 +49,14 @@ class ManagerControllerTest {
     private DataSource dataSource;
     @Autowired
     private DBUtil dbUtil;
+    @Autowired
+    private MeterRegistry meterRegistry;
 
     @BeforeEach
     void cleanUpDatabase() {
         managerRepository.deleteAll();
         dbUtil = new DBUtil(dataSource);
+        meterRegistry.clear();
     }
 
     @ParameterizedTest
@@ -77,6 +84,12 @@ class ManagerControllerTest {
     @Test
     void test_createManager_success() throws Exception {
         // prepare
+        var requestCounter = meterRegistry.counter("create_manager_endpoint_count");
+        double initialCount = requestCounter.count();
+
+        var requestTimer = meterRegistry.timer("create_manager_endpoint_timer");
+        long initialTimeCount = requestTimer.count();
+
         createManagerAndExpect(
                 "Bruce",
                 "Wayne",
@@ -85,6 +98,7 @@ class ManagerControllerTest {
                 201,
                 "Manager was successfully created!"
         );
+
         assertThat(dbUtil.managerExistsByEmail("bruce.wayne@example.com")).isTrue();
 
         // test
@@ -98,6 +112,9 @@ class ManagerControllerTest {
         assertThat(createdManager.getId()).isNotNull();
         assertThat(createdManager.getCreationDate()).isNotNull();
         assertThat(createdManager.getUpdateDate()).isNotNull();
+
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
+        assertThat(requestTimer.count()).isEqualTo(initialTimeCount + 1);
     }
 
     @Test
@@ -120,6 +137,7 @@ class ManagerControllerTest {
                         "\"BAD_REQUEST\",\"message\":" +
                         "\"Manager with the provided details already exists.\"}"
         );
+        assertThat(dbUtil.managerExistsByEmail("john.weak@example.com")).isFalse();
     }
 
     @Test
@@ -132,6 +150,9 @@ class ManagerControllerTest {
                         "john.doe@example.com",
                         "+1234567890"));
 
+        var requestCounter = meterRegistry.counter("find_manager_endpoint_count");
+        double initialCount = requestCounter.count();
+
         // test
         mockMvc.perform(MockMvcRequestBuilders.get("/managers/" + expectedManager.getId())
                         .contentType(MediaType.APPLICATION_JSON))
@@ -139,6 +160,7 @@ class ManagerControllerTest {
 
         // assert
         assertThat(dbUtil.managerExistsByEmail("john.doe@example.com")).isTrue();
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
     @Test
@@ -150,6 +172,7 @@ class ManagerControllerTest {
                         "Doe",
                         "john.doe@example.com",
                         "+123456789"));
+
         ManagerUpdateDto managerUpdateDto = new ManagerUpdateDto(
                 expectedManager.getId(),
                 "Alisa",
@@ -157,6 +180,9 @@ class ManagerControllerTest {
                 "alisa.first@example.com",
                 "+1234567811",
                 ManagerStatus.ACTIVE);
+
+        var requestCounter = meterRegistry.counter("update_manager_endpoint_count");
+        double initialCount = requestCounter.count();
 
         String managerJson = objectMapper.writeValueAsString(managerUpdateDto);
 
@@ -168,6 +194,7 @@ class ManagerControllerTest {
 
         // assert
         assertThat(dbUtil.managerExistsByEmail("alisa.first@example.com")).isTrue();
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
 
         Manager actualManager = managerRepository.findById(expectedManager.getId()).get();
 
@@ -188,6 +215,9 @@ class ManagerControllerTest {
                         "john.doe@example.com",
                         "+123456789"));
 
+        var requestCounter = meterRegistry.counter("delete_manager_endpoint_count");
+        double initialCount = requestCounter.count();
+
         String managerJson = objectMapper.writeValueAsString(expectedManager);
 
         // test
@@ -199,9 +229,9 @@ class ManagerControllerTest {
 
         // assert
         assertThat(dbUtil.managerExistsByEmail("john.doe@example.com")).isFalse();
-
         assertThat(managerRepository.existsById(expectedManager.getId()))
                 .as("Manager should be deleted").isFalse();
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
     private void createManagerAndExpect(String firstName, String lastName, String email, String phone,

@@ -1,4 +1,5 @@
 package de.yehorsh.managerservice.service;
+
 import de.yehorsh.managerservice.ManagerServiceApplication;
 import de.yehorsh.managerservice.config.ContainersEnvironment;
 import de.yehorsh.managerservice.controller.DBUtil;
@@ -8,6 +9,7 @@ import de.yehorsh.managerservice.exception.ManagerNotFoundException;
 import de.yehorsh.managerservice.model.Manager;
 import de.yehorsh.managerservice.model.enums.ManagerStatus;
 import de.yehorsh.managerservice.repository.ManagerRepository;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,7 +29,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = ManagerServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = ManagerServiceApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 class ManagerServiceTest {
@@ -37,17 +42,23 @@ class ManagerServiceTest {
     private ManagerRepository managerRepository;
     @Autowired
     private DataSource dataSource;
+    @Autowired
     private DBUtil dbUtil;
+    @Autowired
+    private MeterRegistry meterRegistry;
 
     @BeforeEach
     void cleanUpDatabase() {
         managerRepository.deleteAll();
         dbUtil = new DBUtil(dataSource);
+        meterRegistry.clear();
     }
 
     @Test
     void test_createManager_success() throws SQLException {
         // prepare
+        var requestCounter = meterRegistry.counter("create_manager_service_count");
+        double initialCount = requestCounter.count();
         ManagerCreateDto managerCreateDto = new ManagerCreateDto(
                 "Alice",
                 "Smith",
@@ -70,6 +81,7 @@ class ManagerServiceTest {
         assertThat(createdManager.getCreationDate()).isNotNull();
         assertThat(createdManager.getUpdateDate()).isNotNull();
 
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
         assertThat(dbUtil.managerExistsByEmail("alice.smith@example.com")).isTrue();
     }
 
@@ -96,10 +108,9 @@ class ManagerServiceTest {
         managerService.createNewManager(managerCreateDto1);
 
         ManagerCreateDto managerCreateDto2 = new ManagerCreateDto(firstName2, lastName2, email2, phone2);
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            managerService.createNewManager(managerCreateDto2);
-        });
-
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                managerService.createNewManager(managerCreateDto2)
+        );
         assertThat(exception.getMessage()).isEqualTo(expectedErrorMessage);
     }
 
@@ -113,6 +124,9 @@ class ManagerServiceTest {
                         "bob.smith@example.com",
                         "+123456789"));
 
+        var requestCounter = meterRegistry.counter("find_manager_by_id_service_count");
+        double initialCount = requestCounter.count();
+
         // test
         Manager foundManager = managerService.findManagerById(expectedManager.getId());
 
@@ -123,6 +137,8 @@ class ManagerServiceTest {
         assertThat(foundManager.getLastName()).isEqualTo("Dilan");
         assertThat(foundManager.getEmail()).isEqualTo("bob.smith@example.com");
         assertThat(foundManager.getPhoneNumber()).isEqualTo("+123456789");
+
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
     @Test
@@ -131,9 +147,9 @@ class ManagerServiceTest {
         UUID managerId = UUID.randomUUID();
 
         // test
-        Exception exception = assertThrows(ManagerNotFoundException.class, () -> {
-            managerService.findManagerById(managerId);
-        });
+        Exception exception = assertThrows(ManagerNotFoundException.class, () ->
+                managerService.findManagerById(managerId)
+        );
 
         // assert
         assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found.");
@@ -150,6 +166,10 @@ class ManagerServiceTest {
                         "+123456789"));
 
         UUID managerId = managerService.findManagerById(expectedManager.getId()).getId();
+
+        var requestCounter = meterRegistry.counter("update_manager_service_count");
+        double initialCount = requestCounter.count();
+
         ManagerUpdateDto actualManager = new ManagerUpdateDto(
                 managerId,
                 "Smith",
@@ -171,14 +191,18 @@ class ManagerServiceTest {
         assertThat(updatedManager.getEmail()).isEqualTo("jane.smith@example.com");
         assertThat(updatedManager.getPhoneNumber()).isEqualTo("+987654321");
         assertThat(updatedManager.getManagerStatus()).isEqualTo(ManagerStatus.INACTIVE);
-
         assertThat(updatedManager.getUpdateDate()).isNotNull();
+
         assertThat(dbUtil.managerExistsByEmail("jane.smith@example.com")).isTrue();
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
     @Test
     void test_deleteManager_success() throws SQLException {
         // prepare
+        var requestCounter = meterRegistry.counter("delete_manager_service_count");
+        double initialCount = requestCounter.count();
+
         Manager expectedManager = managerService.createNewManager(
                 new ManagerCreateDto(
                         "Bob",
@@ -193,6 +217,7 @@ class ManagerServiceTest {
 
         // assert
         assertThat(dbUtil.managerExistsByEmail("bob.smith@example.com")).isFalse();
+        assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
     @Test
@@ -201,9 +226,9 @@ class ManagerServiceTest {
         UUID managerId = UUID.randomUUID();
 
         // test
-        Exception exception = assertThrows(ManagerNotFoundException.class, () -> {
-            managerService.deleteManager(managerId);
-        });
+        Exception exception = assertThrows(ManagerNotFoundException.class, () ->
+                managerService.deleteManager(managerId)
+        );
 
         // assert
         assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found.");
@@ -211,16 +236,12 @@ class ManagerServiceTest {
 
     @Test
     void test_deleteManagerWithNullManagerId_exception() {
-        // prepare
-        UUID managerId = null;
-
         // test
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            managerService.deleteManager(managerId);
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                managerService.deleteManager(null)
+        );
 
         // assert
         assertThat(exception.getMessage()).isEqualTo("Manager Id cannot be null.");
     }
 }
-
