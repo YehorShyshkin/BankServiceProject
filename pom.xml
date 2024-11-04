@@ -9,6 +9,7 @@
 
     <modules>
         <module>manager-service</module>
+        <module>customer-service</module>
     </modules>
 
     <properties>
