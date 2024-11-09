@@ -4,15 +4,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record ManagerCreateDto(@NotBlank(message = "Can not be empty.")
+public record ManagerCreateDto(@NotBlank(message = "Can not be empty")
                                @Pattern(regexp = "^\\p{L}+$",
-                                       message = "Invalid first name: only alphabetic characters are allowed!")
+                                       message = "Invalid first name: only alphabetic characters are allowed")
                                String firstName,
-                               @NotBlank(message = "Can not be empty.")
+                               @NotBlank(message = "Can not be empty")
                                @Pattern(regexp = "^\\p{L}+$",
-                                       message = "Invalid last name: only alphabetic characters are allowed!")
+                                       message = "Invalid last name: only alphabetic characters are allowed")
                                String lastName,
-                               @NotBlank(message = "Email should not be empty.")
+                               @NotBlank(message = "Email should not be empty")
                                @Email(message = "Email should be valid")
                                @Pattern(
                                        regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",

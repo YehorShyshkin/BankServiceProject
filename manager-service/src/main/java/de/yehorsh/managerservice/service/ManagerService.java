@@ -29,7 +29,7 @@ public class ManagerService {
                     managerCreateDto.email(),
                     managerCreateDto.phoneNumber(),
                     managerCreateDto.lastName());
-            throw new IllegalArgumentException("Manager with the provided details already exists.");
+            throw new IllegalArgumentException("Manager with the provided details already exists");
         }
 
         Manager createNewManager = Manager.builder()
@@ -56,7 +56,7 @@ public class ManagerService {
                 })
                 .orElseThrow(() -> {
                     log.error("Manager with Id: {} not found", managerId);
-                    return new ManagerNotFoundException("Manager with Id: " + managerId + " not found.");
+                    return new ManagerNotFoundException("Manager with Id: " + managerId + " not found");
                 });
     }
 
@@ -77,7 +77,7 @@ public class ManagerService {
     @LogInfo(name = "delete_manager_service")
     public void deleteManager(UUID managerId) {
         if (managerId == null) {
-            throw new IllegalArgumentException("Manager Id cannot be null.");
+            throw new IllegalArgumentException("Manager Id cannot be null");
         }
 
         Manager manager = findManagerById(managerId);

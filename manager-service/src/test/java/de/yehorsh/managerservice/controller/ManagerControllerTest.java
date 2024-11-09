@@ -61,19 +61,19 @@ class ManagerControllerTest {
 
     @ParameterizedTest
     @CsvSource({
-            // Testing: Valid manager details with all valid fields
-            "'Bruce', 'Wayne', 'bruce.wayne@example.com', '+1234567891', 201, 'Manager was successfully created!'",
-            // Testing: First name is empty
+            // Valid manager details with all valid fields
+            "'Bruce', 'Wayne', 'bruce.wayne@example.com', '+1234567891', 201, 'Manager was successfully created'",
+            // First name is empty
             "'', 'Doe', 'john.doe@example.com', '+123456789', 400, ''",
-            // Testing: Last name is empty
+            // Last name is empty
             "'John', '', 'john.doe@example.com', '+123456789', 400, ''",
-            // Testing: Email is empty
+            // Email is empty
             "'John', 'Doe', '', '+123456789', 400, ''",
-            // Testing: Phone number is empty
+            // Phone number is empty
             "'John', 'Doe', 'john.doe@example.com', '', 400, ''",
-            // Testing: Invalid email format
+            // Invalid email format
             "'John', 'Doe', 'invalid-email', '+123456789', 400, ''",
-            // Testing: Invalid phone number format
+            // Invalid phone number format
             "'John', 'Doe', 'john.doe@example.com', 'invalid-phone', 400, ''"
     })
     void test_createManager_invalidCases(String firstName, String lastName, String email, String phone,
@@ -96,7 +96,7 @@ class ManagerControllerTest {
                 "bruce.wayne@example.com",
                 "+1234567891",
                 201,
-                "Manager was successfully created!"
+                "Manager was successfully created"
         );
 
         assertThat(dbUtil.managerExistsByEmail("bruce.wayne@example.com")).isTrue();
@@ -125,7 +125,7 @@ class ManagerControllerTest {
                 "john@example.com",
                 "+1234567891",
                 201,
-                "Manager was successfully created!"
+                "Manager was successfully created"
         );
         createManagerAndExpect(
                 "John",
@@ -135,7 +135,7 @@ class ManagerControllerTest {
                 400,
                 "{\"httpStatus\":" +
                         "\"BAD_REQUEST\",\"message\":" +
-                        "\"Manager with the provided details already exists.\"}"
+                        "\"Manager with the provided details already exists\"}"
         );
         assertThat(dbUtil.managerExistsByEmail("john.weak@example.com")).isFalse();
     }
@@ -225,7 +225,7 @@ class ManagerControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(managerJson))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Manager with ID " + expectedManager.getId() + " was deleted!"));
+                .andExpect(content().string("Manager with ID " + expectedManager.getId() + " was deleted"));
 
         // assert
         assertThat(dbUtil.managerExistsByEmail("john.doe@example.com")).isFalse();

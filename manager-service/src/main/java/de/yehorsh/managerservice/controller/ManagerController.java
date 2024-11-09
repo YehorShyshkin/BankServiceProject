@@ -23,7 +23,7 @@ public class ManagerController {
     @PostMapping
     public ResponseEntity<String> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
         managerService.createNewManager(managerCreateDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Manager was successfully created!");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Manager was successfully created");
     }
 
     @LogInfo(name = "find_manager_endpoint")
@@ -45,6 +45,6 @@ public class ManagerController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteManager(@PathVariable("id") UUID id) {
         managerService.deleteManager(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Manager with ID " + id + " was deleted!");
+        return ResponseEntity.status(HttpStatus.OK).body("Manager with ID " + id + " was deleted");
     }
 }

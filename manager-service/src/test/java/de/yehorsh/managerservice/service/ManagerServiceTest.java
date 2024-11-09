@@ -89,15 +89,15 @@ class ManagerServiceTest {
     @CsvSource({
             // Testing: Two managers with the same first name, last name, and email
             "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Dilan', " +
-                    "'alice.smith@example.com', '+987654321', 'Manager with the provided details already exists.'",
+                    "'alice.smith@example.com', '+987654321', 'Manager with the provided details already exists'",
 
             // Testing: Two managers with the same email but different last names
             "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Smith', " +
-                    "'bob.smith@example.com', '+987654321', 'Manager with the provided details already exists.'",
+                    "'bob.smith@example.com', '+987654321', 'Manager with the provided details already exists'",
 
             // Testing: Two managers with the same email and phone number but different names
             "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Dilan', " +
-                    "'bob.smith@example.com', '+123456789', 'Manager with the provided details already exists.'"
+                    "'bob.smith@example.com', '+123456789', 'Manager with the provided details already exists'"
     })
     void test_createManagerDuplicateFields(
             String firstName1, String lastName1, String email1, String phone1,
@@ -152,7 +152,7 @@ class ManagerServiceTest {
         );
 
         // assert
-        assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found.");
+        assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found");
     }
 
     @Test
@@ -231,7 +231,7 @@ class ManagerServiceTest {
         );
 
         // assert
-        assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found.");
+        assertThat(exception.getMessage()).isEqualTo("Manager with Id: " + managerId + " not found");
     }
 
     @Test
@@ -242,6 +242,6 @@ class ManagerServiceTest {
         );
 
         // assert
-        assertThat(exception.getMessage()).isEqualTo("Manager Id cannot be null.");
+        assertThat(exception.getMessage()).isEqualTo("Manager Id cannot be null");
     }
 }

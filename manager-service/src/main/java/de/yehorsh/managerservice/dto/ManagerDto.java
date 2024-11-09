@@ -10,10 +10,10 @@ import java.util.UUID;
 
 public record ManagerDto(UUID managerId,
                          @Pattern(regexp = "^\\p{L}+$",
-                                 message = "Invalid first name: only alphabetic characters are allowed!")
+                                 message = "Invalid first name: only alphabetic characters are allowed")
                          String firstName,
                          @Pattern(regexp = "^\\p{L}+$",
-                                 message = "Invalid last name: only alphabetic characters are allowed!")
+                                 message = "Invalid last name: only alphabetic characters are allowed")
                          String lastName,
                          @Email
                          @Pattern(

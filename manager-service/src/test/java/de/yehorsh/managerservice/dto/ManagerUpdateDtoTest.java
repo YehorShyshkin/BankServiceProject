@@ -44,8 +44,8 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
-                .as("Invalid first name: only alphabetic characters are allowed!")
-                .isEqualTo("Invalid first name: only alphabetic characters are allowed!");
+                .as("Invalid first name: only alphabetic characters are allowed")
+                .isEqualTo("Invalid first name: only alphabetic characters are allowed");
     }
 
     @Test
@@ -70,10 +70,10 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(messages)
                 .as("Expected 'Invalid first name' message")
-                .contains("Invalid first name: only alphabetic characters are allowed!");
+                .contains("Invalid first name: only alphabetic characters are allowed");
         assertThat(messages)
-                .as("Can not be empty.")
-                .contains("Can not be empty.");
+                .as("Can not be empty")
+                .contains("Can not be empty");
     }
 
     @Test
@@ -92,8 +92,8 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage())
-                .as("Invalid last name: only alphabetic characters are allowed!")
-                .isEqualTo("Invalid last name: only alphabetic characters are allowed!");
+                .as("Invalid last name: only alphabetic characters are allowed")
+                .isEqualTo("Invalid last name: only alphabetic characters are allowed");
     }
 
     @Test
@@ -118,10 +118,10 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(messages)
                 .as("Expected 'Invalid last name' message")
-                .contains("Invalid last name: only alphabetic characters are allowed!");
+                .contains("Invalid last name: only alphabetic characters are allowed");
         assertThat(messages)
-                .as("Can not be empty.")
-                .contains("Can not be empty.");
+                .as("Can not be empty")
+                .contains("Can not be empty");
     }
 
     @Test
@@ -140,7 +140,7 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(violations).isNotEmpty();
         assertThat(violations).as("Expected 2 validation errors").hasSize(2);
-        assertThat(violations.iterator().next().getMessage()).isEqualTo("Invalid email address.");
+        assertThat(violations.iterator().next().getMessage()).isEqualTo("Invalid email address");
     }
 
     @Test
@@ -165,10 +165,10 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(messages)
                 .as("Expected 'Invalid email address.' message")
-                .contains("Invalid email address.");
+                .contains("Invalid email address");
         assertThat(messages)
-                .as("Can not be empty.")
-                .contains("Can not be empty.");
+                .as("Can not be empty")
+                .contains("Can not be empty");
     }
 
     @Test
@@ -215,17 +215,17 @@ class ManagerUpdateDtoTest extends ValidatorTestBase {
 
         assertThat(messages)
                 .as("Expected 'Invalid first name' message")
-                .contains("Invalid first name: only alphabetic characters are allowed!");
+                .contains("Invalid first name: only alphabetic characters are allowed");
         assertThat(messages)
                 .as("Expected 'Invalid last name' message")
-                .contains("Invalid last name: only alphabetic characters are allowed!");
+                .contains("Invalid last name: only alphabetic characters are allowed");
         assertThat(messages)
                 .as("Expected 'Invalid phone number' message")
                 .contains("Invalid phone number: it must be in a valid format " +
                         "(e.g., +123456789, (123) 456-7890, 123-456-7890)");
         assertThat(messages)
                 .as("Expected 'Invalid email address.' message")
-                .contains("Invalid email address.");
+                .contains("Invalid email address");
     }
 
     private void printViolations(Set<ConstraintViolation<ManagerUpdateDto>> violations) {
