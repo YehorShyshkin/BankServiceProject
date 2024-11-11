@@ -1,6 +1,6 @@
 package de.yehorsh.managerservice.service;
 
-import de.yehorsh.managerservice.config.LogInfo;
+import de.yehorsh.commonmodule.aspect.LogInfo;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
 import de.yehorsh.managerservice.exception.ManagerNotFoundException;

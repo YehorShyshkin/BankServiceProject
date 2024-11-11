@@ -1,4 +1,4 @@
-package de.yehorsh.commonmodule.config;
+package de.yehorsh.commonmodule.aspect;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package de.yehorsh.managerservice.config;
+package de.yehorsh.commonmodule.aspect;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Gauge;
