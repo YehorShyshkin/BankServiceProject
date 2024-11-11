@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 manager-service/.mvn
 manager-service/.env
+common-module/.mvn
 
 
 ### STS ###

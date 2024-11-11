@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>common-module</module>
         <module>manager-service</module>
         <module>customer-service</module>
     </modules>
@@ -25,6 +26,7 @@
         <slf4j.version>2.0.16</slf4j.version>
         <actuator.version>3.3.5</actuator.version>
         <prometheus.version>1.13.6</prometheus.version>
+        <aop.version>3.3.4</aop.version>
     </properties>
 
     <dependencyManagement>
@@ -126,6 +128,11 @@
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-registry-prometheus</artifactId>
                 <version>${prometheus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${aop.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
