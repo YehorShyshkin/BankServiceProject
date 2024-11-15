@@ -8,6 +8,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>eureka-server</module>
+        <module>api-gateway</module>
         <module>common-module</module>
         <module>manager-service</module>
         <module>customer-service</module>
@@ -27,8 +29,11 @@
         <actuator.version>3.3.5</actuator.version>
         <prometheus.version>1.13.6</prometheus.version>
         <aop.version>3.3.4</aop.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <gson.version>2.10.1</gson.version>
+        <jackson.bom.version>2.14.1</jackson.bom.version>
+        <gateway.version>2.2.10.RELEASE</gateway.version>
     </properties>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -49,6 +54,11 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-validation</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
@@ -57,11 +67,7 @@
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
                 <version>${spring.boot.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-webflux</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
+
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
@@ -134,6 +140,30 @@
                 <artifactId>spring-boot-starter-aop</artifactId>
                 <version>${aop.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-gateway-core</artifactId>
+                <version>${gateway.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -151,14 +181,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

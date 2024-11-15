@@ -6,6 +6,8 @@ target/
 manager-service/.mvn
 manager-service/.env
 common-module/.mvn
+api-gateway/.mvn
+eureka-server/.mvn
 
 
 ### STS ###
