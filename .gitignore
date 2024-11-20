@@ -8,6 +8,7 @@ manager-service/.env
 common-module/.mvn
 api-gateway/.mvn
 eureka-server/.mvn
+auth-service/.mvn
 
 
 ### STS ###

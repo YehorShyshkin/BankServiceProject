@@ -38,6 +38,7 @@ public class ManagerService {
                 .email(managerCreateDto.email())
                 .phoneNumber(managerCreateDto.phoneNumber())
                 .managerStatus(ManagerStatus.ACTIVE)
+                .userId(managerCreateDto.userId())
                 .build();
 
         Manager savedManager = managerRepository.save(createNewManager);

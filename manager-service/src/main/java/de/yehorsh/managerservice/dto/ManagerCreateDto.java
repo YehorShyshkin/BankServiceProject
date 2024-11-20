@@ -22,5 +22,6 @@ public record ManagerCreateDto(@NotBlank(message = "Can not be empty")
                                @Pattern(regexp = "^\\+?[0-9\\s().-]{7,15}$",
                                        message = "Invalid phone number: it must be in a valid format " +
                                                "(e.g., +123456789, (123) 456-7890, 123-456-7890)")
-                               String phoneNumber) {
+                               String phoneNumber,
+                               String userId) {
 }

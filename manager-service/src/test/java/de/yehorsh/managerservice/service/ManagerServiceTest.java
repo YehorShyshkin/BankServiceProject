@@ -63,7 +63,8 @@ class ManagerServiceTest {
                 "Alice",
                 "Smith",
                 "alice.smith@example.com",
-                "+123456789"
+                "+123456789",
+                "e0ae9b88-8306-4b16-91f8-13c4adb6bada"
         );
 
         // test
@@ -88,26 +89,26 @@ class ManagerServiceTest {
     @ParameterizedTest
     @CsvSource({
             // Testing: Two managers with the same first name, last name, and email
-            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Dilan', " +
-                    "'alice.smith@example.com', '+987654321', 'Manager with the provided details already exists'",
+            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Bob', 'Dilan', " +
+                    "'alice.smith@example.com', '+987654321', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Manager with the provided details already exists'",
 
             // Testing: Two managers with the same email but different last names
-            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Smith', " +
-                    "'bob.smith@example.com', '+987654321', 'Manager with the provided details already exists'",
+            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Bob', 'Smith', " +
+                    "'bob.smith@example.com', '+987654321', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Manager with the provided details already exists'",
 
             // Testing: Two managers with the same email and phone number but different names
-            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'Bob', 'Dilan', " +
-                    "'bob.smith@example.com', '+123456789', 'Manager with the provided details already exists'"
+            "'Alice', 'Smith', 'alice.smith@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Bob', 'Dilan', " +
+                    "'bob.smith@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 'Manager with the provided details already exists'"
     })
     void test_createManagerDuplicateFields(
-            String firstName1, String lastName1, String email1, String phone1,
-            String firstName2, String lastName2, String email2, String phone2,
+            String firstName1, String lastName1, String email1, String phone1, String userId1,
+            String firstName2, String lastName2, String email2, String phone2, String userId2,
             String expectedErrorMessage) {
 
-        ManagerCreateDto managerCreateDto1 = new ManagerCreateDto(firstName1, lastName1, email1, phone1);
+        ManagerCreateDto managerCreateDto1 = new ManagerCreateDto(firstName1, lastName1, email1, phone1, userId1);
         managerService.createNewManager(managerCreateDto1);
 
-        ManagerCreateDto managerCreateDto2 = new ManagerCreateDto(firstName2, lastName2, email2, phone2);
+        ManagerCreateDto managerCreateDto2 = new ManagerCreateDto(firstName2, lastName2, email2, phone2, userId2);
         Exception exception = assertThrows(IllegalArgumentException.class, () ->
                 managerService.createNewManager(managerCreateDto2)
         );
@@ -122,7 +123,8 @@ class ManagerServiceTest {
                         "Bob",
                         "Dilan",
                         "bob.smith@example.com",
-                        "+123456789"));
+                        "+123456789",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         var requestCounter = meterRegistry.counter("find_manager_by_id_service_count");
         double initialCount = requestCounter.count();
@@ -163,7 +165,8 @@ class ManagerServiceTest {
                         "Bob",
                         "Dilan",
                         "bob.smith@example.com",
-                        "+123456789"));
+                        "+123456789",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         UUID managerId = managerService.findManagerById(expectedManager.getId()).getId();
 
@@ -208,7 +211,8 @@ class ManagerServiceTest {
                         "Bob",
                         "Dilan",
                         "bob.smith@example.com",
-                        "+123456789"));
+                        "+123456789",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         UUID managerId = managerService.findManagerById(expectedManager.getId()).getId();
 

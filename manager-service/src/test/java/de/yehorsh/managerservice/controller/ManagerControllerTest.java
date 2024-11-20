@@ -62,23 +62,23 @@ class ManagerControllerTest {
     @ParameterizedTest
     @CsvSource({
             // Valid manager details with all valid fields
-            "'Bruce', 'Wayne', 'bruce.wayne@example.com', '+1234567891', 201, 'Manager was successfully created'",
+            "'Bruce', 'Wayne', 'bruce.wayne@example.com', '+1234567891', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 201, 'Manager was successfully created'",
             // First name is empty
-            "'', 'Doe', 'john.doe@example.com', '+123456789', 400, ''",
+            "'', 'Doe', 'john.doe@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''",
             // Last name is empty
-            "'John', '', 'john.doe@example.com', '+123456789', 400, ''",
+            "'John', '', 'john.doe@example.com', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''",
             // Email is empty
-            "'John', 'Doe', '', '+123456789', 400, ''",
+            "'John', 'Doe', '', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''",
             // Phone number is empty
-            "'John', 'Doe', 'john.doe@example.com', '', 400, ''",
+            "'John', 'Doe', 'john.doe@example.com', '', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''",
             // Invalid email format
-            "'John', 'Doe', 'invalid-email', '+123456789', 400, ''",
+            "'John', 'Doe', 'invalid-email', '+123456789', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''",
             // Invalid phone number format
-            "'John', 'Doe', 'john.doe@example.com', 'invalid-phone', 400, ''"
+            "'John', 'Doe', 'john.doe@example.com', 'invalid-phone', 'e0ae9b88-8306-4b16-91f8-13c4adb6bada', 400, ''"
     })
     void test_createManager_invalidCases(String firstName, String lastName, String email, String phone,
-                                         int expectedStatus, String expectedResponse) throws Exception {
-        createManagerAndExpect(firstName, lastName, email, phone, expectedStatus, expectedResponse);
+                                         String userId, int expectedStatus, String expectedResponse) throws Exception {
+        createManagerAndExpect(firstName, lastName, email, phone, userId, expectedStatus, expectedResponse);
     }
 
     @Test
@@ -95,6 +95,7 @@ class ManagerControllerTest {
                 "Wayne",
                 "bruce.wayne@example.com",
                 "+1234567891",
+                "e0ae9b88-8306-4b16-91f8-13c4adb6bada",
                 201,
                 "Manager was successfully created"
         );
@@ -124,6 +125,7 @@ class ManagerControllerTest {
                 "Weak",
                 "john@example.com",
                 "+1234567891",
+                "e0ae9b88-8306-4b16-91f8-13c4adb6bada",
                 201,
                 "Manager was successfully created"
         );
@@ -132,6 +134,7 @@ class ManagerControllerTest {
                 "Weak",
                 "john.weak@example.com",
                 "+123456789000",
+                "e0ae9b88-8306-4b16-91f8-13c4adb6bada",
                 400,
                 "{\"httpStatus\":" +
                         "\"BAD_REQUEST\",\"message\":" +
@@ -148,7 +151,8 @@ class ManagerControllerTest {
                         "John",
                         "Doe",
                         "john.doe@example.com",
-                        "+1234567890"));
+                        "+1234567890",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         var requestCounter = meterRegistry.counter("find_manager_endpoint_count");
         double initialCount = requestCounter.count();
@@ -171,7 +175,8 @@ class ManagerControllerTest {
                         "John",
                         "Doe",
                         "john.doe@example.com",
-                        "+123456789"));
+                        "+123456789",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         ManagerUpdateDto managerUpdateDto = new ManagerUpdateDto(
                 expectedManager.getId(),
@@ -213,7 +218,8 @@ class ManagerControllerTest {
                         "John",
                         "Doe",
                         "john.doe@example.com",
-                        "+123456789"));
+                        "+123456789",
+                        "e0ae9b88-8306-4b16-91f8-13c4adb6bada"));
 
         var requestCounter = meterRegistry.counter("delete_manager_endpoint_count");
         double initialCount = requestCounter.count();
@@ -234,10 +240,10 @@ class ManagerControllerTest {
         assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
 
-    private void createManagerAndExpect(String firstName, String lastName, String email, String phone,
+    private void createManagerAndExpect(String firstName, String lastName, String email, String phone, String userId,
                                         int expectedStatus, String expectedResponse) throws Exception {
 
-        ManagerCreateDto newManagerDto = new ManagerCreateDto(firstName, lastName, email, phone);
+        ManagerCreateDto newManagerDto = new ManagerCreateDto(firstName, lastName, email, phone, userId);
         String managerJson = objectMapper.writeValueAsString(newManagerDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")

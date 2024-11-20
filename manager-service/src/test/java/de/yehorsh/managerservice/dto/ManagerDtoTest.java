@@ -25,6 +25,7 @@ class ManagerDtoTest extends ValidatorTestBase {
                 ManagerStatus.ACTIVE,
                 "john.doe@example.com",
                 "+123456789",
+                "e0ae9b88-8306-4b16-91f8-13c4adb6bada",
                 OffsetDateTime.now(),
                 OffsetDateTime.now());
 

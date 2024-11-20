@@ -11,13 +11,14 @@
         <module>eureka-server</module>
         <module>api-gateway</module>
         <module>common-module</module>
+        <module>auth-service</module>
         <module>manager-service</module>
         <module>customer-service</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
-        <spring.boot.version>3.3.4</spring.boot.version>
+        <spring.boot.version>3.3.5</spring.boot.version>
         <postgresql.version>42.7.3</postgresql.version>
         <lombok.version>1.18.34</lombok.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
@@ -33,6 +34,9 @@
         <gson.version>2.10.1</gson.version>
         <jackson.bom.version>2.14.1</jackson.bom.version>
         <gateway.version>2.2.10.RELEASE</gateway.version>
+        <security.version>3.3.5</security.version>
+        <security.test.version>6.3.4</security.test.version>
+        <jjwt.version>0.12.6</jjwt.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -164,6 +168,31 @@
                 <artifactId>spring-cloud-gateway-core</artifactId>
                 <version>${gateway.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${security.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-test</artifactId>
+                <version>${security.test.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -176,11 +205,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -202,6 +226,15 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

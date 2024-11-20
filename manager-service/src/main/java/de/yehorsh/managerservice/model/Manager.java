@@ -38,6 +38,8 @@ public class Manager {
 
     private String phoneNumber;
 
+    private String userId;
+
     @Column(updatable = false)
     @CreationTimestamp
     private OffsetDateTime creationDate;
