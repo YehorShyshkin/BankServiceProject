@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
@@ -19,7 +18,7 @@ public class AuthController {
 
     private final UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/sing-in")
     public ResponseEntity<JwtAuthenticationDto> singIn(@RequestBody UserCredentialsDto userCredentialsDto) {
         try {
             JwtAuthenticationDto jwtAuthenticationDto = userService.singIn(userCredentialsDto);
@@ -30,7 +29,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/validate")
+    @PostMapping("/refresh")
     public JwtAuthenticationDto refreshToken(@RequestBody RefreshTokenDto refreshTokenDto) {
         return userService.refreshToken(refreshTokenDto);
     }

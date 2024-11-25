@@ -18,18 +18,17 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     /**
-     * Loads the user's details by their email address.
+     * Loads the user's details by their username address.
      *
-     * @param email the email address identifying the user whose data is required.
+     * @param username the username address identifying the user whose data is required.
      * @return a fully populated user record (never {@code null})
      * @throws UsernameNotFoundException if the user could not be found or the user has no granted authority
      */
 
     @Transactional
     @Override
-    public CustomUserDetails loadUserByUsername(String email) {
-        return userRepository.findByEmail(email)
-                .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with email " + email));
+    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).map(CustomUserDetails::new)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

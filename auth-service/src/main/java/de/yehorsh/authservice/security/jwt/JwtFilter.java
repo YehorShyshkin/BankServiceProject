@@ -20,27 +20,29 @@ import org.springframework.http.HttpHeaders;
 @Service
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
-
     private final CustomUserDetailsService customUserService;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain) throws ServletException, IOException {
-
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         String token = getTokenFromRequest(request);
         if (token != null && jwtService.validateJwtToken(token)) {
             setCustomUserDetailsToSecurityContextHolder(token);
         }
         filterChain.doFilter(request, response);
+
     }
 
+    /**
+     * Sets the custom user details into the SecurityContextHolder if the token is valid.
+     *
+     * @param token the JWT token
+     */
     private void setCustomUserDetailsToSecurityContextHolder(String token) {
-        String username = jwtService.getUsernameFromToken(token);
-        CustomUserDetails customUserDetails = customUserService.loadUserByUsername(username);
+        String email = jwtService.getEmailFromToken(token);
+        CustomUserDetails customUserDetails = customUserService.loadUserByUsername(email);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(customUserDetails,
                 null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
