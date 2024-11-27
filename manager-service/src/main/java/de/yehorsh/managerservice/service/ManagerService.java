@@ -1,5 +1,6 @@
 package de.yehorsh.managerservice.service;
 
+import de.yehorsh.authservice.dto.UserDto;
 import de.yehorsh.commonmodule.aspect.LogInfo;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
@@ -9,7 +10,10 @@ import de.yehorsh.managerservice.model.enums.ManagerStatus;
 import de.yehorsh.managerservice.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
@@ -18,6 +22,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ManagerService {
     private final ManagerRepository managerRepository;
+    private final RestTemplate restTemplate;
+
 
     @LogInfo(name = "create_manager_service")
     public Manager createNewManager(ManagerCreateDto managerCreateDto) {
@@ -32,13 +38,32 @@ public class ManagerService {
             throw new IllegalArgumentException("Manager with the provided details already exists");
         }
 
+        UserDto userDto = new UserDto(
+                managerCreateDto.email(),
+                managerCreateDto.password(),
+                "MANAGER");
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                "/users/create", userDto, String.class);
+
+        if (responseEntity.getStatusCode() != HttpStatus.CREATED) {
+            log.error("Failed to create user in AuthService: {}", responseEntity.getStatusCode());
+            throw new RuntimeException("Failed to create user in AuthService");
+        }
+
+        String userId = responseEntity.getBody();
+        if (userId == null || userId.isEmpty()) {
+            log.error("AuthService returned an empty userId");
+            throw new RuntimeException("Failed to retrieve userId from AuthService");
+        }
+
         Manager createNewManager = Manager.builder()
                 .firstName(managerCreateDto.firstName())
                 .lastName(managerCreateDto.lastName())
                 .email(managerCreateDto.email())
                 .phoneNumber(managerCreateDto.phoneNumber())
                 .managerStatus(ManagerStatus.ACTIVE)
-                .userId(managerCreateDto.userId())
+                .userId(userId)
                 .build();
 
         Manager savedManager = managerRepository.save(createNewManager);

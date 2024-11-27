@@ -27,9 +27,6 @@ public class User {
     @Column(name = "id")
     private UUID userId;
 
-    @Column(nullable = false)
-    private String username;
-
     @Column(nullable=false, unique=true)
     private String email;
 
@@ -56,19 +53,19 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username);
+        return Objects.equals(userId, user.userId) && Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username);
+        return Objects.hash(userId, email);
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "userId=" + userId +
-                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 ", updateDate=" + updateDate +
                 ", roles=" + roles +
                 ", creationDate=" + creationDate +

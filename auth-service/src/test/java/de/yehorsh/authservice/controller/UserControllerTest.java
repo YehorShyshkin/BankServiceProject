@@ -31,6 +31,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.sql.DataSource;
@@ -41,10 +42,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
-@SpringBootTest(
-        classes = AuthServiceApplication.class
-        , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+@SpringBootTest(classes = AuthServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 @Import(TestSecurityConfig.class)
@@ -88,13 +86,12 @@ class UserControllerTest {
         }
 
         // Add admin user
-        Role adminRole = roleRepository.findByName("MAIN_ADMIN")
-                .orElseThrow(() -> new RuntimeException("MAIN ADMIN role not found"));
+        Role adminRole = roleRepository.findByName("ADMIN")
+                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
 
         userRepository.save(User.builder()
                 .email("admin@example.com")
-                .username("admin")
-                .password(new BCryptPasswordEncoder().encode("password"))
+                .password(new BCryptPasswordEncoder().encode("StrongP@ssw0rd!"))
                 .roles(adminRole)
                 .status(UserStatus.NEW)
                 .build());
@@ -103,11 +100,11 @@ class UserControllerTest {
     private String getAccessToken() throws Exception {
         UserCredentialsDto userCredentialsDto = new UserCredentialsDto();
         userCredentialsDto.setEmail("admin@example.com");
-        userCredentialsDto.setPassword("password");
+        userCredentialsDto.setPassword("StrongP@ssw0rd!");
 
         String loginJson = objectMapper.writeValueAsString(userCredentialsDto);
 
-        String tokens = mockMvc.perform(MockMvcRequestBuilders.post("/auth/sing-in")
+        String tokens = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(loginJson))
                 .andReturn()
@@ -122,13 +119,14 @@ class UserControllerTest {
     @Test
     void test_createUser_success() throws Exception {
         // prepare
-        createUserAndExpect(
-                "BruceWayne",
-                "fafe#1af@fAfa_",
+        MvcResult result = createUserAndExpect(
                 "bruce.wayne@example.com",
-                "USER",
-                201,
-                "User was successfully created");
+                "fafe#1af@fAfa_",
+                "MANAGER",
+                201
+        );
+
+        String userId = result.getResponse().getContentAsString();
 
         assertThat(dbUtil.userExistsByEmail("bruce.wayne@example.com")).isTrue();
 
@@ -136,11 +134,11 @@ class UserControllerTest {
         User createUser = userRepository.findByEmail("bruce.wayne@example.com").get();
 
         // assert
+        assertThat(createUser.getUserId().toString()).isEqualTo(userId);
         assertThat(createUser.getUserId()).isNotNull();
-        assertThat(createUser.getUsername()).isEqualTo("BruceWayne");
         assertThat(passwordEncoder.matches("fafe#1af@fAfa_", createUser.getPassword())).isTrue();
         assertThat(createUser.getEmail()).isEqualTo("bruce.wayne@example.com");
-        assertThat(createUser.getRoles().getName()).isEqualTo("USER");
+        assertThat(createUser.getRoles().getName()).isEqualTo("MANAGER");
         assertThat(createUser.getUpdateDate()).isNotNull();
     }
 
@@ -150,9 +148,8 @@ class UserControllerTest {
         // prepare
         User expectedUser = userService.createUser(
                 new UserDto(
-                        "BruceWayne",
-                        passwordEncoder.encode("fafe#1af@fAfa_"),
                         "bruce@example.com",
+                        passwordEncoder.encode("fafe#1af@fAfa_"),
                         "MANAGER"
                 ), RoleName.MANAGER);
 
@@ -171,53 +168,41 @@ class UserControllerTest {
 
     @ParameterizedTest
     @CsvSource({
-            // Valid user details
-            "'validUser', 'StrongP@ssw0rd!', 'valid.email@example.com', 'ADMIN', 201, 'User was successfully created'",
+            // Successful user creation
+            "'valid.email@example.com','StrongP@ssw0rd!', 'ADMIN', 201, ''",
 
-            // Invalid username: empty
-            "'', 'StrongP@ssw0rd!', 'valid.email@example.com', 'ADMIN', 400, " +
-                    "'Username can only contain letters, numbers, underscores, and hyphens; Username cannot be empty; Username must be between 4 and 20 characters'",
-
-            // Invalid username: too short
-            "'usr', 'StrongP@ssw0rd!', 'valid.email@example.com', 'ADMIN', 400, 'Username must be between 4 and 20 characters'",
-
-            // Invalid username: invalid characters
-            "'inv@lid', 'StrongP@ssw0rd!', 'valid.email@example.com', 'ADMIN', 400, 'Username can only contain letters, numbers, underscores, and hyphens'",
-
-            // Invalid password: empty
-            "'validUser', '', 'valid.email@example.com', 'ADMIN', 400," +
+            // Error: empty password
+            "'valid.email@example.com','','ADMIN', 400, " +
                     "'Password cannot be empty; Password must be between 8 and 64 characters; The password is incorrect. Password is required to contain at least one uppercase and one lowercase, also one digit and one special character'",
 
-            // Invalid password: does not meet the requirements (only lowercase letters)
-            "'validUser', 'password', 'valid.email@example.com', 'ADMIN', 400, " +
+            // Error: password not meeting requirements
+            "'valid.email@example.com','password', 'ADMIN', 400, " +
                     "'The password is incorrect. Password is required to contain at least one uppercase and one lowercase, also one digit and one special character'",
 
-            // Invalid password: does not meet the requirements (no digit, no special character)
-            "'validUser', 'Password', 'valid.email@example.com', 'ADMIN', 400, " +
-                    "'The password is incorrect. Password is required to contain at least one uppercase and one lowercase, also one digit and one special character'",
+            // Error: invalid email format
+            "'invalid-email','StrongP@ssw0rd!','ADMIN', 400,'Email should be valid; Invalid email address'",
 
-            // Invalid email: empty
-            "'validUser', 'StrongP@ssw0rd!', '', 'ADMIN', 400, 'Email should not be empty; Invalid email address'",
-
-            // Invalid email: incorrect format
-            "'validUser', 'StrongP@ssw0rd!', 'invalid-email', 'ADMIN', 400, " +
-                    "'Email should be valid; Invalid email address'",
-
-            // Duplicate email (if needed for testing unique constraints)
-            "'validUser2', 'StrongP@ssw0rd!', 'valid.email@example.com', 'USER', 500, 'User with email valid.email@example.com already exists.'"
+            // Error: duplicate email
+            "'valid.email@example.com','StrongP@ssw0rd!', 'MANAGER', 500, 'User with email valid.email@example.com already exists.'"
     })
-    void test_createUser_invalidCases(String userName, String password, String email, String roleName, int expectedStatus, String expectedResponse) throws Exception {
-        createUserAndExpect(userName, password, email, roleName, expectedStatus, expectedResponse);
+    void test_createUser_invalidCases(String email, String password,  String roleName, int expectedStatus, String expectedResponse) throws Exception {
+        MvcResult result = createUserAndExpect(email, password, roleName, expectedStatus);
+        String actualResponse = result.getResponse().getContentAsString();
+        if (expectedStatus == 201) {
+            assertThat(actualResponse).matches("^[a-f0-9\\-]{36}$");
+        } else {
+            assertThat(actualResponse).isEqualTo(expectedResponse);
+        }
     }
 
-    private void createUserAndExpect(String userName, String password, String email, String roleName, int expectedStatus, String expectedResponse) throws Exception {
-        UserDto newUserDto = new UserDto(userName, password, email, roleName);
+    private MvcResult createUserAndExpect(String email, String password, String roleName, int expectedStatus) throws Exception {
+        UserDto newUserDto = new UserDto(email, password, roleName);
         String userJson = objectMapper.writeValueAsString(newUserDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/users/admin/create")
+        return mockMvc.perform(MockMvcRequestBuilders.post("/users/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().is(expectedStatus))
-                .andExpect(content().string(expectedResponse));
+                .andReturn();
     }
 }

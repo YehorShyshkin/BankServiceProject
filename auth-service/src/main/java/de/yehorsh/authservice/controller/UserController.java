@@ -1,6 +1,7 @@
 package de.yehorsh.authservice.controller;
 
 import de.yehorsh.authservice.dto.UserDto;
+import de.yehorsh.authservice.model.entity.User;
 import de.yehorsh.authservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +15,16 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/admin/create")
+    @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> createUser(@RequestBody @Valid UserDto userDto) {
-        userService.registerUser(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body("User was successfully created");
+        User createdUser = userService.registerUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser.getUserId().toString());
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto findById(@PathVariable("id") String id){
+    public UserDto findById(@PathVariable("id") String id) {
         return userService.findById(id);
     }
-
 }

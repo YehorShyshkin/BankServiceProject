@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class ManagerController {
 
     @LogInfo(name = "create_manager_endpoint")
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createManager(@RequestBody @Valid ManagerCreateDto managerCreateDto) {
         managerService.createNewManager(managerCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body("Manager was successfully created");
@@ -28,6 +30,7 @@ public class ManagerController {
 
     @LogInfo(name = "find_manager_endpoint")
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ManagerDto> findManager(@PathVariable("id") UUID id) {
         ManagerDto managerDto = ManagerDto.fromManager(managerService.findManagerById(id));
         return ResponseEntity.status(HttpStatus.OK).body(managerDto);
@@ -35,6 +38,7 @@ public class ManagerController {
 
     @LogInfo(name = "update_manager_endpoint")
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> updateManager(@PathVariable("id") UUID id,
                                                 @RequestBody @Valid ManagerUpdateDto managerUpdateDto) {
         managerService.updateManager(id, managerUpdateDto);
@@ -43,6 +47,7 @@ public class ManagerController {
 
     @LogInfo(name = "delete_manager_endpoint")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteManager(@PathVariable("id") UUID id) {
         managerService.deleteManager(id);
         return ResponseEntity.status(HttpStatus.OK).body("Manager with ID " + id + " was deleted");

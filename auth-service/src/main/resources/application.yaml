@@ -24,4 +24,4 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 jwt:
   token:
-    ttl-minutes: 1
+    ttl-minutes: 5

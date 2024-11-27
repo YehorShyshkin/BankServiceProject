@@ -35,11 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     }
 
-    /**
-     * Sets the custom user details into the SecurityContextHolder if the token is valid.
-     *
-     * @param token the JWT token
-     */
     private void setCustomUserDetailsToSecurityContextHolder(String token) {
         String email = jwtService.getEmailFromToken(token);
         CustomUserDetails customUserDetails = customUserService.loadUserByUsername(email);

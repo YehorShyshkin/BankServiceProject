@@ -3,6 +3,7 @@ package de.yehorsh.managerservice.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public record ManagerCreateDto(@NotBlank(message = "Can not be empty")
                                @Pattern(regexp = "^\\p{L}+$",
@@ -23,5 +24,10 @@ public record ManagerCreateDto(@NotBlank(message = "Can not be empty")
                                        message = "Invalid phone number: it must be in a valid format " +
                                                "(e.g., +123456789, (123) 456-7890, 123-456-7890)")
                                String phoneNumber,
-                               String userId) {
+                               @NotBlank(message = "Password cannot be empty")
+                               @Size(min = 8, max = 64, message = "Password must be between 8 and 64 characters")
+                               @Pattern(regexp = "^(?=.*\\d)(?=.*\\p{Ll})(?=.*\\p{Lu})(?=.*\\p{Punct})[\\p{L}\\d\\p{Punct}]*$",
+                                       message = "The password is incorrect. Password is required to contain "
+                                               + "at least one uppercase and one lowercase, also one digit and one special character")
+                               String password) {
 }

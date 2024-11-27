@@ -3,9 +3,7 @@ package de.yehorsh.authservice.model.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -13,6 +11,8 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "roles")
 public class Role {
@@ -21,6 +21,7 @@ public class Role {
     @Column(name = "id")
     private UUID id;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     @Override

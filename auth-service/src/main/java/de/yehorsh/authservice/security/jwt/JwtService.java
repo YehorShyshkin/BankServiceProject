@@ -27,12 +27,6 @@ public class JwtService {
     @Value("${jwt.token.ttl-minutes:60}")
     private long tokenTtlMinutes;
 
-    /**
-     * Generates authentication and refresh tokens for the given email.
-     *
-     * @param email the email address for which the tokens are generated
-     * @return a JwtAuthenticationDto containing the generated token and refresh token
-     */
     public JwtAuthenticationDto generateAuthToken(String email) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
         jwtDto.setToken(generateJwtToken(email));
@@ -40,13 +34,6 @@ public class JwtService {
         return jwtDto;
     }
 
-    /**
-     * Refreshes the base token using the given email and refresh token.
-     *
-     * @param email        the email address for which the token is refreshed
-     * @param refreshToken the refresh token to be used for refreshing the base token
-     * @return a JwtAuthenticationDto containing the new token and the same refresh token
-     */
     public JwtAuthenticationDto refreshBaseToken(String email, String refreshToken) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
         jwtDto.setToken(generateJwtToken(email));
@@ -54,12 +41,6 @@ public class JwtService {
         return jwtDto;
     }
 
-    /**
-     * Extracts the email address from the given JWT token.
-     *
-     * @param token the JWT token from which the email address is extracted
-     * @return the email address contained in the token
-     */
     public String getEmailFromToken(String token) {
         Claims claims = Jwts
                 .parser()
@@ -70,12 +51,6 @@ public class JwtService {
         return claims.getSubject();
     }
 
-    /**
-     * Validates the given JWT token.
-     *
-     * @param token the JWT token to be validated
-     * @return true if the token is valid, false otherwise
-     */
     public boolean validateJwtToken(String token) {
         try {
             Jwts.parser()

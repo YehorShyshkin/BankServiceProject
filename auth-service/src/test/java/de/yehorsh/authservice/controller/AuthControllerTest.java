@@ -31,10 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ActiveProfiles("test")
-@SpringBootTest(
-        classes = AuthServiceApplication.class
-        , webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
+@SpringBootTest(classes = AuthServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 class AuthControllerTest {
@@ -71,9 +68,8 @@ class AuthControllerTest {
         // prepare
         userService.createUser(
                 new UserDto(
-                        "BruceWayne",
-                        "fafe#1af@fAfa_",
                         "bruce@example.com",
+                        "fafe#1af@fAfa_",
                         RoleName.MANAGER.toString()
                 ), RoleName.MANAGER);
 
@@ -84,7 +80,7 @@ class AuthControllerTest {
         String userJson = objectMapper.writeValueAsString(loginRequest);
 
         // test
-        String tokenJson = mockMvc.perform(MockMvcRequestBuilders.post("/auth/sing-in")
+        String tokenJson = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isOk())
@@ -109,7 +105,7 @@ class AuthControllerTest {
         String userJson = objectMapper.writeValueAsString(loginRequest);
 
         // test
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/sing-in")
+        mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isUnauthorized());
@@ -120,9 +116,8 @@ class AuthControllerTest {
         // prepare
         userService.createUser(
                 new UserDto(
-                        "BruceWayne",
-                        "fafe#1af@fAfa_",
                         "wayne@example.com",
+                        "fafe#1af@fAfa_",
                         RoleName.MANAGER.toString()
                 ), RoleName.MANAGER);
 
@@ -133,7 +128,7 @@ class AuthControllerTest {
         String userJson = objectMapper.writeValueAsString(loginRequest);
 
         // test
-        String tokenJson = mockMvc.perform(MockMvcRequestBuilders.post("/auth/sing-in")
+        String tokenJson = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
                 .andExpect(status().isOk())

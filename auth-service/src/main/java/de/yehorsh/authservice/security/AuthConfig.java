@@ -28,13 +28,10 @@ public class AuthConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/admin/create",
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/create",
                                 "/auth/**").permitAll()
-                        .requestMatchers("/users/{id}").hasAuthority("MAIN_ADMIN")
-                        .requestMatchers("/managers").hasAuthority("MANAGER_ADMIN")
-                        .requestMatchers("managers/{id}").hasAuthority("MANAGER_ADMIN")
-                        .requestMatchers("/customers").hasAuthority("MANAGER")
-                        .requestMatchers("/customers/{id}").hasAuthority("MANAGER,MAIN_ADMIN")
+                        .requestMatchers("/managers").hasRole("ADMIN")
+                        .requestMatchers("/users/{id}").hasAuthority("ADMIN")
                         .requestMatchers("/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

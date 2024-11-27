@@ -42,10 +42,9 @@ public class UserService {
 
     @Transactional
     public User registerUser(UserDto userDto) {
-        return createUser(userDto, RoleName.USER);
+        return createUser(userDto, RoleName.valueOf(userDto.roleName()));
     }
 
-    @Transactional
     public User createUser(UserDto userDto, RoleName roleName) {
         if (userRepository.existsByEmail(userDto.email())){
             log.warn("User with email {} already exists", userDto.email());
@@ -56,14 +55,13 @@ public class UserService {
 
         User user = new User();
 
-        Role role = roleRepository.findByName(roleName.toString())
+        Role role = roleRepository.findByName(roleName.name())
                 .orElseThrow(() -> new RoleNotFoundException(
                         String.format("Role %s not found!", roleName)
                 ));
 
-        user.setUsername(userDto.userName());
-        user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setEmail(userDto.email());
+        user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setRoles(role);
         user.setStatus(UserStatus.ACTIVATED);
 
@@ -83,8 +81,7 @@ public class UserService {
         User user = userRepository.findById(UUID.fromString(id))
                 .orElseThrow(() -> new UserNotFoundException(String.format("User with id %s not found", id)));
         User currentUser = userProvider.getCurrentUser();
-        if (!currentUser.getRoles().getName().equals(RoleName.MAIN_ADMIN.toString())
-                && !currentUser.getRoles().getName().equals(RoleName.ADMIN.toString())
+        if (!currentUser.getRoles().getName().equals(RoleName.ADMIN.toString())
                 && !currentUser.getRoles().getName().equals(RoleName.MANAGER.toString())
                 && !currentUser.getUserId().equals(user.getUserId())) {
             throw new AccessDeniedException("Access denied");
@@ -94,10 +91,10 @@ public class UserService {
                 && !user.getRoles().getName().equals(RoleName.CUSTOMER.toString())) {
             throw new AccessDeniedException("Managers can only view customer data");
         }
+
         return new UserDto(
-                user.getUsername(),
-                user.getUserId().toString(),
                 user.getEmail(),
+                null,
                 user.getRoles().getName());
     }
 
