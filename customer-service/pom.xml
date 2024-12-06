@@ -10,11 +10,18 @@
         </parent>
         <artifactId>customer-service</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <name>customer-service</name>
+        <description>customer-service</description>
 
         <dependencies>
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>common-module</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>auth-service</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>

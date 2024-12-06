@@ -60,6 +60,8 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private CustomerStatus customerStatus;
 
+    private String userId;
+
     @Column(updatable = false)
     @CreationTimestamp
     private OffsetDateTime createdAt;

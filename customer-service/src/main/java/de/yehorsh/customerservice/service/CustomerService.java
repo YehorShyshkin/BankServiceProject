@@ -1,9 +1,11 @@
 package de.yehorsh.customerservice.service;
 
+import de.yehorsh.authservice.dto.UserDto;
 import de.yehorsh.commonmodule.aspect.LogInfo;
 import de.yehorsh.customerservice.dto.CustomerCreateDto;
 import de.yehorsh.customerservice.dto.CustomerDto;
 import de.yehorsh.customerservice.dto.CustomerUpdateDto;
+import de.yehorsh.customerservice.exception.AuthServiceException;
 import de.yehorsh.customerservice.exception.CustomerNotFoundException;
 import de.yehorsh.customerservice.exception.DuplicateFieldException;
 import de.yehorsh.customerservice.model.Customer;
@@ -11,7 +13,10 @@ import de.yehorsh.customerservice.model.enums.CustomerStatus;
 import de.yehorsh.customerservice.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    private final RestTemplate restTemplate;
 
     @LogInfo(name = "create_customer_service")
     public Customer createNewCustomer(CustomerCreateDto customerCreateDto) {
@@ -36,6 +42,26 @@ public class CustomerService {
             throw new IllegalArgumentException("Customer with the provided details already exists");
         }
 
+        UserDto userDto = new UserDto(
+                customerCreateDto.email(),
+                customerCreateDto.password(),
+                "CUSTOMER"
+        );
+
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+                "/users/create", userDto, String.class);
+
+        if (responseEntity.getStatusCode() != HttpStatus.CREATED) {
+            log.error("Failed to create user in AuthService: {}", responseEntity.getStatusCode());
+            throw new AuthServiceException("Failed to create user in AuthService");
+        }
+
+        String userId = responseEntity.getBody();
+        if (userId == null || userId.isEmpty()) {
+            log.error("AuthService returned an empty userId");
+            throw new AuthServiceException("Failed to retrieve userId from AuthService");
+        }
+
         Customer createNewCustomer = Customer.builder()
                 .firstName(customerCreateDto.firstName())
                 .lastName(customerCreateDto.lastName())
@@ -47,6 +73,7 @@ public class CustomerService {
                 .zipCode(customerCreateDto.zipCode())
                 .country(customerCreateDto.country())
                 .customerStatus(CustomerStatus.ACTIVE)
+                .userId(userId)
                 .build();
 
         Customer savedCustomer = customerRepository.save(createNewCustomer);

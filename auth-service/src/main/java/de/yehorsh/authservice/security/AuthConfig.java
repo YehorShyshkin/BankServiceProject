@@ -31,6 +31,8 @@ public class AuthConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/users/create",
                                 "/auth/**").permitAll()
                         .requestMatchers("/managers").hasRole("ADMIN")
+                        .requestMatchers("/customers").hasRole("MANAGER")
+                        .requestMatchers("/customers/{id}").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers("/users/{id}").hasAuthority("ADMIN")
                         .requestMatchers("/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
