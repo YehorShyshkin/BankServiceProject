@@ -38,7 +38,7 @@ public class CustomerController {
     }
 
     @LogInfo(name = "find_allCustomer_endpoint")
-    @GetMapping
+    @GetMapping("/findAllCustomers")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<CustomerDto>> findAllCustomers() {
         List<CustomerDto> customerDtoList = customerService.findAllCustomers();
@@ -46,7 +46,7 @@ public class CustomerController {
     }
 
     @LogInfo(name = "update_customer_endpoint")
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     @PreAuthorize("hasAuthority('MANAGER') or hasAuthority('CUSTOMER')")
     public ResponseEntity<CustomerUpdateDto> updateCustomer(@PathVariable("id") UUID id, @RequestBody @Valid CustomerUpdateDto customerUpdateDto) {
         customerService.updateCustomer(id, customerUpdateDto);

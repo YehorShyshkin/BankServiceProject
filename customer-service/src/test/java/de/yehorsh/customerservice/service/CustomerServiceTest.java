@@ -1,5 +1,13 @@
 package de.yehorsh.customerservice.service;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import de.yehorsh.authservice.model.entity.Role;
+import de.yehorsh.authservice.model.entity.User;
+import de.yehorsh.authservice.model.enums.RoleName;
+import de.yehorsh.authservice.model.enums.UserStatus;
+import de.yehorsh.authservice.repository.RoleRepository;
+import de.yehorsh.authservice.repository.UserRepository;
 import de.yehorsh.customerservice.CustomerServiceApplication;
 import de.yehorsh.customerservice.config.ContainersEnvironment;
 import de.yehorsh.customerservice.controller.DBUtil;
@@ -12,14 +20,16 @@ import de.yehorsh.customerservice.model.Customer;
 import de.yehorsh.customerservice.model.enums.CustomerStatus;
 import de.yehorsh.customerservice.repository.CustomerRepository;
 import io.micrometer.core.instrument.MeterRegistry;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -33,10 +43,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatCode;
 import static org.junit.Assert.assertThrows;
 
 @ActiveProfiles("test")
-@SpringBootTest(classes = CustomerServiceApplication.class,
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = CustomerServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
+@AutoConfigureWireMock
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class CustomerServiceTest {
     @Autowired
     private CustomerService customerService;
@@ -48,53 +59,117 @@ class CustomerServiceTest {
     private DBUtil dbUtil;
     @Autowired
     private MeterRegistry meterRegistry;
+    private WireMockServer wireMockServer;
+
 
     @BeforeEach
     void cleanUpDatabase() {
         customerRepository.deleteAll();
         dbUtil = new DBUtil(dataSource);
         meterRegistry.clear();
+        wireMockServer = new WireMockServer(8084);
+        wireMockServer.start();
+        WireMock.configureFor("localhost", 8084);
+
+        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/users/create"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"id\": \"12345\"}"))
+        );
     }
 
+    @BeforeAll
+    static void setUpDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
+        // Ensure roles exist
+        for (RoleName roleName : RoleName.values()) {
+            if (!roleRepository.existsByName(roleName.name())) {
+                Role role = new Role();
+                role.setId(UUID.randomUUID());
+                role.setName(String.valueOf(roleName));
+                roleRepository.save(role);
+            }
+        }
+
+        // Add manager user
+        Role managerRole = roleRepository.findByName("MANAGER")
+                .orElseThrow(() -> new RuntimeException("MANAGER role not found"));
+
+        userRepository.save(User.builder()
+                .email("manager@example.com")
+                .password(new BCryptPasswordEncoder().encode("StrongManagerP@ssw0rd!"))
+                .roles(managerRole)
+                .status(UserStatus.ACTIVATED)
+                .build());
+
+        // Add admin user
+        Role adminRole = roleRepository.findByName("ADMIN")
+                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
+
+        userRepository.save(User.builder()
+                .email("admin@example.com")
+                .password(new BCryptPasswordEncoder().encode("StrongAdminP@ssw0rd!"))
+                .roles(adminRole)
+                .status(UserStatus.NEW)
+                .build());
+
+        // Add customer user
+        Role customerRole = roleRepository.findByName("CUSTOMER")
+                .orElseThrow(() -> new RuntimeException("CUSTOMER role not found"));
+
+        userRepository.save(User.builder()
+                .email("customer@example.com")
+                .password(new BCryptPasswordEncoder().encode("StrongCustomer@ssw0rd!"))
+                .roles(customerRole)
+                .status(UserStatus.NEW)
+                .build());
+    }
+
+    @AfterEach
+    void cleanUp() {
+        wireMockServer.stop();
+    }
+
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     @ParameterizedTest
     @CsvSource({
             // Duplicate email
-            "'John', 'Doe', 'john.doe@example.com', '+123 456 7890', '1234567890', " +
+            "'John', 'Doe', 'john.doe@example.com', 'Password1!', '+123 456 7890', '1234567890', " +
                     "'123 Main St.', 'Springfield', '12345', 'USA', " +
-                    "'Jane', 'Smith', 'john.doe@example.com', '+987 654 3210', '0987654321', " +
+                    "'Jane', 'Smith', 'john.doe@example.com', 'Password1!', '+987 654 3210', '0987654321', " +
                     "'456 Elm St.', 'Shelbyville', '54321', 'USA', " +
                     "'Customer with the provided details already exists'",
 
             // Duplicate phone number
-            "'John', 'Doe', 'john.doe@example.com', '+123 456 7890', '1234567890', " +
+            "'John', 'Doe', 'john.doe@example.com', 'Password1!', '+123 456 7890', '1234567890', " +
                     "'123 Main St.', 'Springfield', '12345', 'USA', " +
-                    "'Jane', 'Smith', 'jane.smith@example.com', '+123 456 7890', '0987654321', " +
+                    "'Jane', 'Smith', 'jane.smith@example.com', 'Password1!', '+123 456 7890', '0987654321', " +
                     "'456 Elm St.', 'Shelbyville', '54321', 'USA', " +
                     "'Customer with the provided details already exists'",
 
             // Duplicate tax number
-            "'John', 'Doe', 'john.doe@example.com', '+123 456 7890', '1234567890', " +
+            "'John', 'Doe', 'john.doe@example.com', 'Password1!', '+123 456 7890', '1234567890', " +
                     "'123 Main St.', 'Springfield', '12345', 'USA', " +
-                    "'Jane', 'Smith', 'jane.smith@example.com', '+987 654 3210', '1234567890', " +
+                    "'Jane', 'Smith', 'jane.smith@example.com', 'Password1!', '+987 654 3210', '1234567890', " +
                     "'456 Elm St.', 'Shelbyville', '54321', 'USA', " +
                     "'Customer with the provided details already exists'"
     })
     void test_createCustomerDuplicateFields(
-            String firstName1, String lastName1, String email1, String phoneNumber1, String taxNumber1,
+            String firstName1, String lastName1, String email1, String password1, String phoneNumber1, String taxNumber1,
             String address1, String city1, String zipCode1, String country1,
-            String firstName2, String lastName2, String email2, String phoneNumber2, String taxNumber2,
+            String firstName2, String lastName2, String email2, String password2, String phoneNumber2, String taxNumber2,
             String address2, String city2, String zipCode2, String country2,
             String expectedErrorMessage) {
 
         // prepare
         CustomerCreateDto customerCreateDto1 = new CustomerCreateDto(
-                firstName1, lastName1, email1, phoneNumber1, taxNumber1,
+                firstName1, lastName1, email1, password1, phoneNumber1, taxNumber1,
                 address1, city1, zipCode1, country1
         );
         customerService.createNewCustomer(customerCreateDto1);
 
         CustomerCreateDto duplicateCustomer = new CustomerCreateDto(
-                firstName2, lastName2, email2, phoneNumber2, taxNumber2,
+                firstName2, lastName2, email2, password2, phoneNumber2, taxNumber2,
                 address2, city2, zipCode2, country2
         );
 
@@ -108,6 +183,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_createCustomer_success() throws SQLException {
         // prepare
         var requestCounter = meterRegistry.counter("create_customer_service_count");
@@ -116,6 +192,7 @@ class CustomerServiceTest {
                 "Clark",
                 "Kent",
                 "clark.kent@example.com",
+                "Password123!",
                 "+1234567890",
                 "123456789",
                 "123 Main Street",
@@ -144,6 +221,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_findCustomer_success() {
         // prepare
         Customer expectedCustomer = customerService.createNewCustomer(
@@ -151,6 +229,7 @@ class CustomerServiceTest {
                         "Clark",
                         "Kent",
                         "clark.kent@example.com",
+                        "Password123!",
                         "+1234567890",
                         "123456789",
                         "123 Main Street",
@@ -181,12 +260,14 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com", authorities = "MANAGER")
     void test_findAllCustomer_success() throws Exception {
         customerService.createNewCustomer(
                 new CustomerCreateDto(
                         "Tony",
                         "Stark",
                         "tony.stark@example.com",
+                        "Password123!",
                         "+1098765432",
                         "123456789",
                         "10880 Malibu Point",
@@ -198,6 +279,7 @@ class CustomerServiceTest {
                         "Peter",
                         "Parker",
                         "peter.parker@example.com",
+                        "Password123!",
                         "+1234567890",
                         "564738292",
                         "15 Queens Blvd",
@@ -219,6 +301,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_findNotExistingCustomer_exception() {
         // prepare
         UUID customerId = UUID.randomUUID();
@@ -232,6 +315,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_updateCustomer_success() throws SQLException {
         // prepare
         Customer expectedCustomer = customerService.createNewCustomer(
@@ -239,6 +323,7 @@ class CustomerServiceTest {
                         "Clark",
                         "Kent",
                         "clark.kent@example.com",
+                        "Password123!",
                         "+1234567890",
                         "123456789",
                         "123 Main Street",
@@ -288,6 +373,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_updateCustomerWithDuplicatePhoneNumber_exception() {
         // prepare
         Customer existingCustomer = customerService.createNewCustomer(
@@ -295,6 +381,7 @@ class CustomerServiceTest {
                         "Clark",
                         "Kent",
                         "clark.kent@example.com",
+                        "Password123!",
                         "+123434567890",
                         "123456789",
                         "123 Main Street",
@@ -326,6 +413,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_updateCustomerWithDuplicateEmail_exception() {
         // prepare
         Customer expectedCustomer = customerService.createNewCustomer(
@@ -333,6 +421,7 @@ class CustomerServiceTest {
                         "Clark",
                         "Kent",
                         "clark.kent@example.com",
+                        "Password123!",
                         "+123434567890",
                         "123456789",
                         "123 Main Street",
@@ -365,6 +454,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_updateCustomerWithDuplicateTaxNumber_exception() {
         // prepare
         var duplicateTaxNumber = "1t672263";
@@ -373,6 +463,7 @@ class CustomerServiceTest {
                         "Bruce",
                         "Wayne",
                         "bruce.wayne@example.com",
+                        "Password123!",
                         "+19876543210",
                         duplicateTaxNumber,
                         "1007 Mountain Drive",
@@ -405,6 +496,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_deleteCustomer_success() throws SQLException {
         // prepare
         var requestCounter = meterRegistry.counter("delete_customer_service_count");
@@ -415,6 +507,7 @@ class CustomerServiceTest {
                         "Clark",
                         "Kent",
                         "clark.kent@example.com",
+                        "Password123!",
                         "+1234567890",
                         "123456789",
                         "123 Main Street",
@@ -433,6 +526,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_deleteNotExistingCustomer_exception() {
         // prepare
         UUID customerId = UUID.randomUUID();
@@ -447,6 +541,7 @@ class CustomerServiceTest {
     }
 
     @Test
+    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_deleteCustomerWithNullCustomerId_exception() {
         // test
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () ->

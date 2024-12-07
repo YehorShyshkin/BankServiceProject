@@ -30,10 +30,12 @@ public class AuthConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/users/create",
                                 "/auth/**").permitAll()
-                        .requestMatchers("/managers").hasRole("ADMIN")
-                        .requestMatchers("/customers").hasRole("MANAGER")
-                        .requestMatchers("/customers/{id}").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers("/users/{id}").hasAuthority("ADMIN")
+                        .requestMatchers("/managers").hasRole("ADMIN")
+                        .requestMatchers("/customers").hasAuthority("MANAGER")
+                        .requestMatchers("/customers/{id}").hasAnyAuthority("MANAGER", "ADMIN")
+                        .requestMatchers("/customers/findAllCustomers").hasAuthority("ADMIN")
+                        .requestMatchers("/customers/update/{id}").hasAnyAuthority("MANAGER", "CUSTOMER")
                         .requestMatchers("/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

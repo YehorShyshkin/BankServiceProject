@@ -70,6 +70,7 @@ class CustomerDtoTest extends ValidatorTestBase {
                 "12345",
                 "Country",
                 CustomerStatus.ACTIVE,
+                "608edd0f-7008-4742-88b8-7cba54834450",
                 OffsetDateTime.now(),
                 OffsetDateTime.now());
 
