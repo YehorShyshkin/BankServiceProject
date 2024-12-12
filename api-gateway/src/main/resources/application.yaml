@@ -1,6 +1,5 @@
 server:
   port: 9000
-
 spring:
   application:
     name: api-gateway
@@ -22,9 +21,11 @@ spring:
             - Path=/managers/**
           filters:
             - AuthenticationFilter
+        - id: auth-service
+          uri: http://localhost:8084
+          predicates:
+              - Path=/auth/**
 eureka:
-  instance:
-    prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka

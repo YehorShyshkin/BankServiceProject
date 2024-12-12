@@ -28,14 +28,9 @@ public class AuthConfig {
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/users/create",
-                                "/auth/**").permitAll()
-                        .requestMatchers("/users/{id}").hasAuthority("ADMIN")
-                        .requestMatchers("/managers").hasRole("ADMIN")
-                        .requestMatchers("/customers").hasAuthority("MANAGER")
-                        .requestMatchers("/customers/{id}").hasAnyAuthority("MANAGER", "ADMIN")
-                        .requestMatchers("/customers/findAllCustomers").hasAuthority("ADMIN")
-                        .requestMatchers("/customers/update/{id}").hasAnyAuthority("MANAGER", "CUSTOMER")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/users/create", "/auth/**").permitAll()
+                        .requestMatchers("/users/{id}").hasRole("ADMIN")
                         .requestMatchers("/**").authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

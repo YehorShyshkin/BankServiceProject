@@ -1,7 +1,7 @@
 package de.yehorsh.authservice.security.jwt;
 
-import de.yehorsh.authservice.security.CustomUserDetails;
-import de.yehorsh.authservice.security.CustomUserDetailsService;
+import de.yehorsh.authservice.service.CustomUserDetails;
+import de.yehorsh.authservice.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,6 @@ public class JwtFilter extends OncePerRequestFilter {
             setCustomUserDetailsToSecurityContextHolder(token);
         }
         filterChain.doFilter(request, response);
-
     }
 
     private void setCustomUserDetailsToSecurityContextHolder(String token) {

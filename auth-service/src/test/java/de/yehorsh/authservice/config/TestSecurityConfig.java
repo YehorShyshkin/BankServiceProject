@@ -2,7 +2,7 @@ package de.yehorsh.authservice.config;
 
 import de.yehorsh.authservice.model.entity.User;
 import de.yehorsh.authservice.repository.UserRepository;
-import de.yehorsh.authservice.security.CustomUserDetails;
+import de.yehorsh.authservice.service.CustomUserDetails;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;

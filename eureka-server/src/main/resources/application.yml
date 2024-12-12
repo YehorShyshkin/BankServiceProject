@@ -1,6 +1,5 @@
 server:
   port: 8761
-
 spring:
   application:
     name: eureka-service
@@ -10,8 +9,8 @@ eureka:
     fetchRegistry: false
   server:
     waitTimeInMsWhenSyncEmpty: 0
-  instance:
-    hostname: 138.68.94.218
+#  instance:
+#    hostname: 138.68.94.218
 
 logging:
   level.com.netflix.eureka: off

@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  customer-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-service
+    ports:
+      - "8085:8085"
+    networks:
+      - app-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_SERVER_URL=http://eureka-service:8761/eureka/
+    depends_on:
+      - auth-service
+
+networks:
+  app-network:
+    driver: bridge

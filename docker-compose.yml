@@ -1,0 +1,107 @@
+services:
+  eureka-server:
+    container_name: eureka-server
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  api-gateway:
+    container_name: api-gateway
+    build: ./api-gateway
+    ports:
+      - "9000:9000"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - app-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  auth-service-db:
+    container_name: auth-service-db
+    image: postgres:16-alpine
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./auth-service/db/data:/var/lib/postgresql/data
+      - ./auth-service/db/init-sql:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: masterkey
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth-service:
+    container_name: auth-service
+    build: ./auth-service
+    ports:
+      - "8084:8084"
+    networks:
+      - app-network
+    depends_on:
+      auth-service-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-service-db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=masterkey
+      - SPRING_PROFILES_ACTIVE=docker
+
+  customer-service-db:
+    container_name: customer-service-db
+    image: postgres:16-alpine
+    networks:
+      - app-network
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./customer-service/db/data:/var/lib/postgresql/data
+      - ./customer-service/db/init-sql:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: masterkey
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+#  customer-service:
+#    container_name: customer-service
+#    build: ./customer-service
+#    ports:
+#      - "8082:8082"
+#    networks:
+#      - app-network
+#    depends_on:
+#      customer-service-db:
+#        condition: service_healthy
+#      eureka-server:
+#        condition: service_healthy
+#    environment:
+#      - SPRING_DATASOURCE_URL=jdbc:postgresql://customer-service-db:5433/postgres
+#      - SPRING_DATASOURCE_USERNAME=postgres
+#      - SPRING_DATASOURCE_PASSWORD=masterkey
+#      - SPRING_PROFILES_ACTIVE=docker
+#
+
+
+networks:
+  app-network:
+    driver: bridge

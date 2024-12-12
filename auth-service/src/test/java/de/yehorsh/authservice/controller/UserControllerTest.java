@@ -30,12 +30,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.sql.DataSource;
 
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,6 +79,11 @@ class UserControllerTest {
     @BeforeAll
     static void setUpDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
         // Ensure roles exist
+//        try (Connection connection = dataSource.getConnection();
+//             Statement statement = connection.createStatement()) {
+//            statement.execute("CREATE SCHEMA IF NOT EXISTS auth_service");
+//        }
+
         for (RoleName roleName : RoleName.values()) {
             if (!roleRepository.existsByName(roleName.name())) {
                 Role role = new Role();
@@ -150,8 +158,8 @@ class UserControllerTest {
                 new UserDto(
                         "bruce@example.com",
                         passwordEncoder.encode("fafe#1af@fAfa_"),
-                        "MANAGER"
-                ), RoleName.MANAGER);
+                        "ADMIN"
+                ), RoleName.ADMIN);
 
         String token = getAccessToken();
 

@@ -24,7 +24,7 @@ class JwtServiceTest {
 
     @Test
     void test_generateAuthToken_success() {
-        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL, null);
         assertThat(jwtAuthenticationDto.getToken()).isNotNull();
         assertThat(EMAIL).isEqualTo(jwtService.getEmailFromToken(jwtAuthenticationDto.getToken()));
         assertThat(jwtService.validateJwtToken(jwtAuthenticationDto.getToken())).isTrue();
@@ -32,12 +32,12 @@ class JwtServiceTest {
 
     @Test
     void test_refreshBaseToken_success() throws InterruptedException {
-        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL, null);
 
         Thread.sleep(1000);
 
         JwtAuthenticationDto jwtAuthenticationDtoNew =
-                jwtService.refreshBaseToken(EMAIL, jwtAuthenticationDto.getRefreshToken());
+                jwtService.refreshBaseToken(EMAIL, jwtAuthenticationDto.getRefreshToken(), "MANAGER");
         assertThat(jwtAuthenticationDtoNew).isNotNull();
         assertThat(jwtAuthenticationDto.getRefreshToken()).isEqualTo(jwtAuthenticationDtoNew.getRefreshToken());
         assertThat(jwtAuthenticationDtoNew.getToken()).isNotEqualTo(jwtAuthenticationDto.getToken());
@@ -45,13 +45,13 @@ class JwtServiceTest {
 
     @Test
     void test_getEmailFromToken_success() {
-        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL, null);
         assertThat(EMAIL).isEqualTo(jwtService.getEmailFromToken(jwtAuthenticationDto.getToken()));
     }
 
     @Test
     void test_validateJwtToken_success() {
-        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL);
+        JwtAuthenticationDto jwtAuthenticationDto = jwtService.generateAuthToken(EMAIL, null);
         assertThat(jwtService.validateJwtToken(jwtAuthenticationDto.getToken())).isTrue();
     }
 

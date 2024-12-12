@@ -14,7 +14,6 @@ import de.yehorsh.authservice.model.enums.RoleName;
 import de.yehorsh.authservice.model.enums.UserStatus;
 import de.yehorsh.authservice.repository.RoleRepository;
 import de.yehorsh.authservice.repository.UserRepository;
-import de.yehorsh.authservice.security.UserProvider;
 import de.yehorsh.authservice.security.jwt.JwtService;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -72,10 +71,6 @@ public class UserService {
         return savedUser;
     }
 
-    public RoleName getAuthorizedUserRole() {
-        return RoleName.valueOf(userProvider.getCurrentUser().getRoles().getName());
-    }
-
     @Transactional
     public UserDto findById(String id) {
         User user = userRepository.findById(UUID.fromString(id))
@@ -100,14 +95,18 @@ public class UserService {
 
     public JwtAuthenticationDto singIn(UserCredentialsDto userCredentialsDto) {
         User user = findByCredentials(userCredentialsDto);
-        return jwtService.generateAuthToken(user.getEmail());
+        return jwtService.generateAuthToken(user.getEmail(), user.getRoles().getName());
     }
 
     public JwtAuthenticationDto refreshToken(RefreshTokenDto refreshTokenDto) {
         String refreshToken = refreshTokenDto.getRefreshToken();
         if (refreshToken != null && jwtService.validateJwtToken(refreshToken)) {
             User user = findByEmail(jwtService.getEmailFromToken(refreshToken));
-            return jwtService.refreshBaseToken(user.getEmail(), refreshToken);
+            String userRole = user.getRoles().getName();
+            if (userRole == null) {
+                throw new AuthenticationException("User role is not defined");
+            }
+            return jwtService.refreshBaseToken(user.getEmail(), refreshToken, userRole);
         }
         throw new  AuthenticationException("Invalid refresh token");
     }
@@ -123,7 +122,7 @@ public class UserService {
         throw new AuthenticationException("Email or password is not correct");
     }
 
-    private User findByEmail(String email) {
+    public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() ->
                 new UserNotFoundException(String.format("User with email %s not found", email)));
     }

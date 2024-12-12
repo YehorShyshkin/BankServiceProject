@@ -26,6 +26,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -60,7 +61,8 @@ class CustomerServiceTest {
     @Autowired
     private MeterRegistry meterRegistry;
     private WireMockServer wireMockServer;
-
+    @MockBean
+    private RoleRepository roleRepository;
 
     @BeforeEach
     void cleanUpDatabase() {
@@ -80,48 +82,28 @@ class CustomerServiceTest {
     }
 
     @BeforeAll
-    static void setUpDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
+    static void initializeDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
         // Ensure roles exist
         for (RoleName roleName : RoleName.values()) {
-            if (!roleRepository.existsByName(roleName.name())) {
-                Role role = new Role();
-                role.setId(UUID.randomUUID());
-                role.setName(String.valueOf(roleName));
-                roleRepository.save(role);
-            }
+            roleRepository.findByName(roleName.name())
+                    .orElseGet(() -> roleRepository.save(new Role(UUID.randomUUID(), roleName.name())));
         }
 
-        // Add manager user
-        Role managerRole = roleRepository.findByName("MANAGER")
-                .orElseThrow(() -> new RuntimeException("MANAGER role not found"));
+        // Create users with roles
+        createUser(userRepository, roleRepository, "manager@example.com", "MANAGER", UserStatus.ACTIVATED);
+        createUser(userRepository, roleRepository, "admin@example.com", "ADMIN", UserStatus.ACTIVATED);
+        createUser(userRepository, roleRepository, "customer@example.com", "CUSTOMER", UserStatus.ACTIVATED);
+    }
 
+    private static void createUser(UserRepository userRepository, RoleRepository roleRepository,
+                                   String email, String roleName, UserStatus status) {
+        Role role = roleRepository.findByName(roleName)
+                .orElseThrow(() -> new RuntimeException(roleName + " role not found"));
         userRepository.save(User.builder()
-                .email("manager@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongManagerP@ssw0rd!"))
-                .roles(managerRole)
-                .status(UserStatus.ACTIVATED)
-                .build());
-
-        // Add admin user
-        Role adminRole = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
-
-        userRepository.save(User.builder()
-                .email("admin@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongAdminP@ssw0rd!"))
-                .roles(adminRole)
-                .status(UserStatus.NEW)
-                .build());
-
-        // Add customer user
-        Role customerRole = roleRepository.findByName("CUSTOMER")
-                .orElseThrow(() -> new RuntimeException("CUSTOMER role not found"));
-
-        userRepository.save(User.builder()
-                .email("customer@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongCustomer@ssw0rd!"))
-                .roles(customerRole)
-                .status(UserStatus.NEW)
+                .email(email)
+                .password(new BCryptPasswordEncoder().encode("StrongPassword123!"))
+                .roles(role)
+                .status(status)
                 .build());
     }
 

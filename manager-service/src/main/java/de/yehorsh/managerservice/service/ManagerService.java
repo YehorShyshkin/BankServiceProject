@@ -1,7 +1,7 @@
 package de.yehorsh.managerservice.service;
 
-import de.yehorsh.authservice.dto.UserDto;
 import de.yehorsh.commonmodule.aspect.LogInfo;
+import de.yehorsh.commonmodule.dto.UserCreateDto;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
 import de.yehorsh.managerservice.exception.ManagerNotFoundException;
@@ -38,13 +38,13 @@ public class ManagerService {
             throw new IllegalArgumentException("Manager with the provided details already exists");
         }
 
-        UserDto userDto = new UserDto(
+        UserCreateDto userCreateDto = new UserCreateDto(
                 managerCreateDto.email(),
                 managerCreateDto.password(),
                 "MANAGER");
 
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-                "/users/create", userDto, String.class);
+                "/users/create", userCreateDto, String.class);
 
         if (responseEntity.getStatusCode() != HttpStatus.CREATED) {
             log.error("Failed to create user in AuthService: {}", responseEntity.getStatusCode());

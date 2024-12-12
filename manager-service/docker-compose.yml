@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  manager-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: manager-service:latest
+    container_name: manager-service
+    ports:
+      - "8086:8086"
+    networks:
+      - app-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - EUREKA_SERVER_URL=http://eureka-service:8761/eureka/
+    depends_on:
+      - customer-service
+
+networks:
+  app-network:
+    driver: bridge

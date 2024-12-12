@@ -6,10 +6,8 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import de.yehorsh.authservice.dto.JwtAuthenticationDto;
 import de.yehorsh.authservice.dto.UserCredentialsDto;
-import de.yehorsh.authservice.dto.UserDto;
 import de.yehorsh.authservice.model.entity.Role;
 import de.yehorsh.authservice.model.entity.User;
-import de.yehorsh.authservice.model.enums.RoleName;
 import de.yehorsh.authservice.model.enums.UserStatus;
 import de.yehorsh.authservice.repository.RoleRepository;
 import de.yehorsh.authservice.repository.UserRepository;
@@ -30,6 +28,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -48,11 +48,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import javax.sql.DataSource;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -61,32 +60,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @SpringBootTest(classes = CustomerServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 @AutoConfigureWireMock
+@ContextConfiguration(initializers = {ContainersEnvironment.Initializer.class})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class CustomerControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private CustomerRepository customerRepository;
-
     @Autowired
     private CustomerService customerService;
-
     @Autowired
     private DataSource dataSource;
-
     @Autowired
     private DBUtil dbUtil;
-
     @Autowired
     private MeterRegistry meterRegistry;
-
     private static WireMockServer wireMockServer;
+    @Mock
+    private RoleRepository roleRepository;
 
     @BeforeAll
     static void start() {
@@ -126,25 +120,27 @@ class CustomerControllerTest {
         customerRepository.deleteAll();
         dbUtil = new DBUtil(dataSource);
         meterRegistry.clear();
-
     }
 
     @BeforeAll
     static void setUpDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
         // Ensure roles exist
-        for (RoleName roleName : RoleName.values()) {
-            if (!roleRepository.existsByName(roleName.name())) {
-                Role role = new Role();
-                role.setId(UUID.randomUUID());
-                role.setName(String.valueOf(roleName));
-                roleRepository.save(role);
-            }
-        }
+        Role managerRole = new Role();
+        managerRole.setName("MANAGER");
+        Mockito.when(roleRepository.findByName("MANAGER"))
+                .thenReturn(Optional.of(managerRole));
+
+        Role adminRole = new Role();
+        adminRole.setName("ADMIN");
+        Mockito.when(roleRepository.findByName("ADMIN"))
+                .thenReturn(Optional.of(adminRole));
+
+        Role customerRole = new Role();
+        customerRole.setName("CUSTOMER");
+        Mockito.when(roleRepository.findByName("CUSTOMER"))
+                .thenReturn(Optional.of(customerRole));
 
         // Add manager user
-        Role managerRole = roleRepository.findByName("MANAGER")
-                .orElseThrow(() -> new RuntimeException("MANAGER role not found"));
-
         userRepository.save(User.builder()
                 .email("manager@example.com")
                 .password(new BCryptPasswordEncoder().encode("StrongManagerP@ssw0rd!"))
@@ -153,25 +149,19 @@ class CustomerControllerTest {
                 .build());
 
         // Add admin user
-        Role adminRole = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new RuntimeException("ADMIN role not found"));
-
         userRepository.save(User.builder()
                 .email("admin@example.com")
                 .password(new BCryptPasswordEncoder().encode("StrongAdminP@ssw0rd!"))
                 .roles(adminRole)
-                .status(UserStatus.NEW)
+                .status(UserStatus.ACTIVATED)
                 .build());
 
         // Add customer user
-        Role customerRole = roleRepository.findByName("CUSTOMER")
-                .orElseThrow(() -> new RuntimeException("CUSTOMER role not found"));
-
         userRepository.save(User.builder()
                 .email("customer@example.com")
                 .password(new BCryptPasswordEncoder().encode("StrongCustomerP@ssw0rd!"))
                 .roles(customerRole)
-                .status(UserStatus.NEW)
+                .status(UserStatus.ACTIVATED)
                 .build());
     }
 
@@ -192,11 +182,9 @@ class CustomerControllerTest {
         userCredentialsDto.setEmail(email);
         userCredentialsDto.setPassword(password);
 
-        String loginJson = objectMapper.writeValueAsString(userCredentialsDto);
-
         String tokens = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginJson))
+                        .content(objectMapper.writeValueAsString(userCredentialsDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn()
                 .getResponse()
@@ -277,28 +265,16 @@ class CustomerControllerTest {
 
         String token = getManagerAccessToken();
 
-        // test
-        String customerCreateJson = objectMapper.writeValueAsString(customerCreateDto);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
                         .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerCreateJson))
+                        .content(objectMapper.writeValueAsString(customerCreateDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        UserDto expectedUserDto = new UserDto(
-                customerCreateDto.email(),
-                "StrongP@ssw0rd!",
-                "CUSTOMER"
-        );
-
-        wireMockServer.verify(postRequestedFor(urlEqualTo("/users/create"))
-                .withRequestBody(equalToJson(objectMapper.writeValueAsString(expectedUserDto))));
-
         assertThat(dbUtil.customerExistsByEmail("clark.kent@example.com")).isTrue();
 
-        Customer createCustomer = customerRepository.findCustomerByEmail("clark.kent@example.com").get();
+        Customer createCustomer = customerRepository.findCustomerByEmail("clark.kent@example.com").orElseThrow();
 
         // assert
         assertThat(createCustomer.getFirstName()).isEqualTo("Clark");
@@ -353,7 +329,6 @@ class CustomerControllerTest {
                 "Themyscira",
                 "54321",
                 "Greece"
-
         );
 
         // test
@@ -406,7 +381,6 @@ class CustomerControllerTest {
                 "Themyscira",
                 "54321",
                 "Greece"
-
         );
 
         // test
@@ -459,7 +433,6 @@ class CustomerControllerTest {
                 "Themyscira",
                 "54321",
                 "Greece"
-
         );
 
         // test

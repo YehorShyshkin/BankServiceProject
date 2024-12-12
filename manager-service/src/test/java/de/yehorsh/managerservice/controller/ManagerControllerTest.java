@@ -3,7 +3,7 @@ package de.yehorsh.managerservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import de.yehorsh.authservice.dto.UserDto;
+import de.yehorsh.commonmodule.dto.UserCreateDto;
 import de.yehorsh.managerservice.ManagerServiceApplication;
 import de.yehorsh.managerservice.config.ContainersEnvironment;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
@@ -33,7 +33,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.sql.DataSource;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
+import static com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.put;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -160,7 +165,7 @@ class ManagerControllerTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        UserDto expectedUserDto = new UserDto(
+        UserCreateDto expectedUserDto = new UserCreateDto(
                 managerCreateDto.email(),
                 "Password123!",
                 "MANAGER"

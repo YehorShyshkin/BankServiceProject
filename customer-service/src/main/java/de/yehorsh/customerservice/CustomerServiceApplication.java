@@ -8,8 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan({
         "de.yehorsh.customerservice",
-        "de.yehorsh.commonmodule",
-        "de.yehorsh.authservice"
+        "de.yehorsh.commonmodule,"
 })
 @EnableDiscoveryClient
 public class CustomerServiceApplication {

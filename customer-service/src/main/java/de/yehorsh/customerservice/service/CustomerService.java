@@ -1,7 +1,7 @@
 package de.yehorsh.customerservice.service;
 
-import de.yehorsh.authservice.dto.UserDto;
 import de.yehorsh.commonmodule.aspect.LogInfo;
+import de.yehorsh.commonmodule.dto.UserCreateDto;
 import de.yehorsh.customerservice.dto.CustomerCreateDto;
 import de.yehorsh.customerservice.dto.CustomerDto;
 import de.yehorsh.customerservice.dto.CustomerUpdateDto;
@@ -42,7 +42,7 @@ public class CustomerService {
             throw new IllegalArgumentException("Customer with the provided details already exists");
         }
 
-        UserDto userDto = new UserDto(
+        UserCreateDto userDto = new UserCreateDto(
                 customerCreateDto.email(),
                 customerCreateDto.password(),
                 "CUSTOMER"

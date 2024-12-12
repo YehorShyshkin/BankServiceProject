@@ -27,16 +27,17 @@ public class JwtService {
     @Value("${jwt.token.ttl-minutes:60}")
     private long tokenTtlMinutes;
 
-    public JwtAuthenticationDto generateAuthToken(String email) {
+
+    public JwtAuthenticationDto generateAuthToken(String email, String role) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
-        jwtDto.setToken(generateJwtToken(email));
-        jwtDto.setRefreshToken(generateRefreshToken(email));
+        jwtDto.setToken(generateJwtToken(email, role));
+        jwtDto.setRefreshToken(generateRefreshToken(email, role));
         return jwtDto;
     }
 
-    public JwtAuthenticationDto refreshBaseToken(String email, String refreshToken) {
+    public JwtAuthenticationDto refreshBaseToken(String email, String refreshToken, String role) {
         JwtAuthenticationDto jwtDto = new JwtAuthenticationDto();
-        jwtDto.setToken(generateJwtToken(email));
+        jwtDto.setToken(generateJwtToken(email, role));
         jwtDto.setRefreshToken(refreshToken);
         return jwtDto;
     }
@@ -73,7 +74,8 @@ public class JwtService {
         return false;
     }
 
-    private String generateJwtToken(String email) {
+    private String generateJwtToken(String email, String role) {
+
         Date data = Date.from(
                 LocalDateTime.now()
                         .plusMinutes(tokenTtlMinutes)
@@ -83,12 +85,13 @@ public class JwtService {
 
         return Jwts.builder()
                 .subject(email)
+                .claim("role", role)
                 .expiration(data)
                 .signWith(getSingInKey())
                 .compact();
     }
 
-    private String generateRefreshToken(String email) {
+    private String generateRefreshToken(String email, String role) {
         Date date = Date.from(
                 LocalDateTime.now()
                         .plusDays(1)
@@ -96,6 +99,7 @@ public class JwtService {
                         .toInstant());
         return Jwts.builder()
                 .subject(email)
+                .claim("role", role)
                 .expiration(date)
                 .signWith(getSingInKey())
                 .compact();
