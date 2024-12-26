@@ -1,9 +1,9 @@
 package de.yehorsh.managerservice.service;
 
-import de.yehorsh.commonmodule.aspect.LogInfo;
-import de.yehorsh.commonmodule.dto.UserCreateDto;
+import de.yehorsh.managerservice.aspect.LogInfo;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
+import de.yehorsh.managerservice.dto.UserCreateDto;
 import de.yehorsh.managerservice.exception.ManagerNotFoundException;
 import de.yehorsh.managerservice.model.Manager;
 import de.yehorsh.managerservice.model.enums.ManagerStatus;
@@ -23,7 +23,6 @@ import java.util.UUID;
 public class ManagerService {
     private final ManagerRepository managerRepository;
     private final RestTemplate restTemplate;
-
 
     @LogInfo(name = "create_manager_service")
     public Manager createNewManager(ManagerCreateDto managerCreateDto) {

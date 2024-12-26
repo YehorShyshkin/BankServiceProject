@@ -3,11 +3,11 @@ package de.yehorsh.managerservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import de.yehorsh.commonmodule.dto.UserCreateDto;
 import de.yehorsh.managerservice.ManagerServiceApplication;
 import de.yehorsh.managerservice.config.ContainersEnvironment;
 import de.yehorsh.managerservice.dto.ManagerCreateDto;
 import de.yehorsh.managerservice.dto.ManagerUpdateDto;
+import de.yehorsh.managerservice.dto.UserCreateDto;
 import de.yehorsh.managerservice.exception.ManagerNotFoundException;
 import de.yehorsh.managerservice.model.Manager;
 import de.yehorsh.managerservice.model.enums.ManagerStatus;
@@ -52,22 +52,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ManagerControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private ManagerRepository managerRepository;
-
     @Autowired
     private DataSource dataSource;
-
     @Autowired
     private DBUtil dbUtil;
-
     @Autowired
     private MeterRegistry meterRegistry;
-
     private WireMockServer wireMockServer;
 
     @BeforeEach
@@ -157,11 +151,10 @@ class ManagerControllerTest {
         );
 
         // test
-        String managerCreateJson = objectMapper.writeValueAsString(managerCreateDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(managerCreateJson))
+                        .content(objectMapper.writeValueAsString(managerCreateDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
 
@@ -234,33 +227,46 @@ class ManagerControllerTest {
     void test_findManager_success() throws Exception {
         // prepare
         ManagerCreateDto managerCreateDto = new ManagerCreateDto(
-                "John",
-                "Weak",
-                "john@example.com",
+                "Bruce",
+                "Wayne",
+                "bruce.wayne@example.com",
                 "+1234567891",
-                "fdfdfs1fd1_A"
+                "Password123!"
         );
+
+        // test
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(managerCreateDto)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("Manager was successfully created"))
                 .andReturn();
 
-        Manager createdManager = managerRepository.findManagerByEmail("john@example.com")
+        UserCreateDto expectedUserDto = new UserCreateDto(
+                managerCreateDto.email(),
+                "Password123!",
+                "MANAGER"
+        );
+
+        wireMockServer.verify(postRequestedFor(urlEqualTo("/users/create"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(expectedUserDto))));
+
+        assertThat(dbUtil.managerExistsByEmail(managerCreateDto.email())).isTrue();
+
+
+        Manager createdManager = managerRepository.findManagerByEmail("bruce.wayne@example.com")
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found"));
 
         var requestCounter = meterRegistry.counter("find_manager_endpoint_count");
         double initialCount = requestCounter.count();
 
         // test
-        mockMvc.perform(MockMvcRequestBuilders.get("/managers/" + createdManager.getId())
+        mockMvc.perform(MockMvcRequestBuilders.get("/managers/find/" + createdManager.getId())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         // assert
-        assertThat(dbUtil.managerExistsByEmail("john@example.com")).isTrue();
+        assertThat(dbUtil.managerExistsByEmail("bruce.wayne@example.com")).isTrue();
 
         assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
     }
@@ -274,14 +280,25 @@ class ManagerControllerTest {
                 "Doe",
                 "john.doe@example.com",
                 "+123456789",
-                "fdfdfs1fd1_A"
+                "Password123!"
         );
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(managerCreateDto)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("Manager was successfully created"));
+                .andReturn();
+
+        UserCreateDto expectedUserDto = new UserCreateDto(
+                managerCreateDto.email(),
+                "Password123!",
+                "MANAGER"
+        );
+
+        wireMockServer.verify(postRequestedFor(urlEqualTo("/users/create"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(expectedUserDto))));
+
+        assertThat(dbUtil.managerExistsByEmail(managerCreateDto.email())).isTrue();
 
         Manager createdManager = managerRepository.findManagerByEmail("john.doe@example.com")
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found"));
@@ -307,7 +324,7 @@ class ManagerControllerTest {
 
         String managerJson = objectMapper.writeValueAsString(managerUpdateDto);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/managers/" + createdManager.getId())
+        mockMvc.perform(MockMvcRequestBuilders.put("/managers/update/" + createdManager.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(managerJson))
                 .andExpect(status().isOk());
@@ -335,15 +352,25 @@ class ManagerControllerTest {
                 "Doe",
                 "john.doe@example.com",
                 "+123456789",
-                "fdfdfs1fd1_A"
+                "Password123!"
         );
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(expectedManager)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("Manager was successfully created"));
+                .andReturn();
 
+        UserCreateDto expectedUserDto = new UserCreateDto(
+                expectedManager.email(),
+                "Password123!",
+                "MANAGER"
+        );
+
+        wireMockServer.verify(postRequestedFor(urlEqualTo("/users/create"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(expectedUserDto))));
+
+        assertThat(dbUtil.managerExistsByEmail(expectedManager.email())).isTrue();
 
         var requestCounter = meterRegistry.counter("delete_manager_endpoint_count");
         double initialCount = requestCounter.count();
@@ -354,7 +381,7 @@ class ManagerControllerTest {
                 .orElseThrow(() -> new ManagerNotFoundException("Manager not found"));
 
         // test
-        mockMvc.perform(MockMvcRequestBuilders.delete("/managers/" + createdManager.getId())
+        mockMvc.perform(MockMvcRequestBuilders.delete("/managers/delete/" + createdManager.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(managerJson))
                 .andExpect(status().isOk())
@@ -371,7 +398,6 @@ class ManagerControllerTest {
                                         int expectedStatus, String expectedMessage) throws Exception {
 
         ManagerCreateDto newManagerDto = new ManagerCreateDto(firstName, lastName, email, phone, password);
-        String managerJson = objectMapper.writeValueAsString(newManagerDto);
 
         wireMockServer.stubFor(post(urlEqualTo("/users/create"))
                 .willReturn(aResponse()
@@ -381,7 +407,7 @@ class ManagerControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post("/managers")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(managerJson))
+                        .content(objectMapper.writeValueAsString(newManagerDto)))
                 .andExpect(status().is(expectedStatus))
                 .andExpect(content().string(expectedMessage));
 
