@@ -11,8 +11,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 public class ContainersEnvironment {
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:15")
-            .withDatabaseName("integration-tests-db")
-            .withInitScript("schema.sql");
+            .withDatabaseName("integration-tests-db");
 
     static {
         postgreSQLContainer.start();

@@ -23,7 +23,7 @@ public class DBUtil {
 
     public boolean userExistsByEmail(String email) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT COUNT(*) FROM auth_service.users WHERE email = ?";
+            String query = "SELECT COUNT(*) FROM users WHERE email = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
@@ -37,7 +37,7 @@ public class DBUtil {
 
     public UserDetails getUserByEmail(String email) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "SELECT first_name, last_name, email, phone_number FROM auth_service.users WHERE email = ?";
+            String query = "SELECT first_name, last_name, email, phone_number FROM users WHERE email = ?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
