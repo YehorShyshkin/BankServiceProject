@@ -10,7 +10,6 @@
     <modules>
         <module>eureka-server</module>
         <module>api-gateway</module>
-        <module>common-module</module>
         <module>auth-service</module>
         <module>manager-service</module>
         <module>customer-service</module>
