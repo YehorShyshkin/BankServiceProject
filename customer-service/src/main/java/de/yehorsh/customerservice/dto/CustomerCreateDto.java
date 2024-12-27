@@ -27,6 +27,7 @@ public record CustomerCreateDto(@NotBlank(message = "Can not be empty")
                                 String password,
 
                                 // format +1234567890, (123) 456-7890, 123-456-7890
+                                @NotBlank(message = "Phone number cannot be empty")
                                 @Pattern(regexp = "^\\+?\\d{1,3}\\s?\\(?\\d{1,4}\\)?[-\\s]?\\d{1,4}[-\\s]?\\d{1,4}$",
                                         message = "Invalid phone number format, use one of: +123456789, (123) 456-7890, 123-456-7890")
                                 String phoneNumber,

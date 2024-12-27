@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .requestMatchers("/customers").hasRole(ROLE_MANAGER)
                         .requestMatchers("/customers/{id}").hasAnyRole(ROLE_MANAGER, ROLE_ADMIN)
                         .requestMatchers("/customers/findAllCustomers").hasRole(ROLE_ADMIN)
-                        .requestMatchers("/customers/update/{id}").hasAnyRole(ROLE_MANAGER, ROLE_ADMIN)
+                        .requestMatchers("/customers/update/{id}").hasAnyRole(ROLE_MANAGER, ROLE_CUSTOMER)
                         .requestMatchers("/customers/delete/{id}").hasAnyRole(ROLE_MANAGER, ROLE_CUSTOMER)
                         .anyRequest().authenticated()
                 )

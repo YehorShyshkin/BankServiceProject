@@ -1,10 +1,10 @@
 package de.yehorsh.customerservice.service;
 
-import de.yehorsh.commonmodule.aspect.LogInfo;
-import de.yehorsh.commonmodule.dto.UserCreateDto;
+import de.yehorsh.customerservice.aspect.LogInfo;
 import de.yehorsh.customerservice.dto.CustomerCreateDto;
 import de.yehorsh.customerservice.dto.CustomerDto;
 import de.yehorsh.customerservice.dto.CustomerUpdateDto;
+import de.yehorsh.customerservice.dto.UserCreateDto;
 import de.yehorsh.customerservice.exception.AuthServiceException;
 import de.yehorsh.customerservice.exception.CustomerNotFoundException;
 import de.yehorsh.customerservice.exception.DuplicateFieldException;
@@ -113,20 +113,26 @@ public class CustomerService {
         Customer customer = findCustomerById(customerId);
         log.debug("Found customer for update with Id: {}", customerId);
 
-        boolean isEmailExists = customerRepository.existsByEmail(customerUpdateDto.email());
-        if (isEmailExists) {
+        if (customerRepository.existsByEmail(customerUpdateDto.email()) &&
+                !customerUpdateDto.email().equals(customer.getEmail())) {
             log.warn("Email {} is already taken by another customer", customerUpdateDto.email());
             throw new DuplicateFieldException("This email is already registered to another account");
         }
 
-        boolean isPhoneNumberExists = customerRepository.existsByPhoneNumber(customerUpdateDto.phoneNumber());
-        if (isPhoneNumberExists) {
+        if (!customerUpdateDto.phoneNumber().equals(customer.getPhoneNumber()) &&
+                customerRepository.existsByPhoneNumber(customerUpdateDto.phoneNumber())) {
             log.warn("Phone number {} is already taken by another customer", customerUpdateDto.phoneNumber());
             throw new DuplicateFieldException("This phone number is already registered to another account");
         }
 
-        boolean isTaxNumberExists = customerRepository.existsByTaxNumber(customerUpdateDto.taxNumber());
-        if (isTaxNumberExists) {
+        if (!customerUpdateDto.taxNumber().equals(customer.getTaxNumber()) &&
+                customerRepository.existsByTaxNumber(customerUpdateDto.taxNumber())) {
+            log.warn("Tax number {} is already taken by another customer", customerUpdateDto.taxNumber());
+            throw new DuplicateFieldException("This tax number is already registered to another account");
+        }
+
+        if (customerRepository.existsByTaxNumber(customerUpdateDto.taxNumber()) &&
+                !customer.getTaxNumber().equals(customerUpdateDto.taxNumber())) {
             log.warn("Tax number {} is already taken by another customer", customerUpdateDto.taxNumber());
             throw new DuplicateFieldException("This tax number is already registered to another account");
         }

@@ -2,12 +2,6 @@ package de.yehorsh.customerservice.service;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import de.yehorsh.authservice.model.entity.Role;
-import de.yehorsh.authservice.model.entity.User;
-import de.yehorsh.authservice.model.enums.RoleName;
-import de.yehorsh.authservice.model.enums.UserStatus;
-import de.yehorsh.authservice.repository.RoleRepository;
-import de.yehorsh.authservice.repository.UserRepository;
 import de.yehorsh.customerservice.CustomerServiceApplication;
 import de.yehorsh.customerservice.config.ContainersEnvironment;
 import de.yehorsh.customerservice.controller.DBUtil;
@@ -26,9 +20,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -61,8 +53,6 @@ class CustomerServiceTest {
     @Autowired
     private MeterRegistry meterRegistry;
     private WireMockServer wireMockServer;
-    @MockBean
-    private RoleRepository roleRepository;
 
     @BeforeEach
     void cleanUpDatabase() {
@@ -73,38 +63,13 @@ class CustomerServiceTest {
         wireMockServer.start();
         WireMock.configureFor("localhost", 8084);
 
+
+
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/users/create"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(201)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"id\": \"12345\"}"))
-        );
-    }
-
-    @BeforeAll
-    static void initializeDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
-        // Ensure roles exist
-        for (RoleName roleName : RoleName.values()) {
-            roleRepository.findByName(roleName.name())
-                    .orElseGet(() -> roleRepository.save(new Role(UUID.randomUUID(), roleName.name())));
-        }
-
-        // Create users with roles
-        createUser(userRepository, roleRepository, "manager@example.com", "MANAGER", UserStatus.ACTIVATED);
-        createUser(userRepository, roleRepository, "admin@example.com", "ADMIN", UserStatus.ACTIVATED);
-        createUser(userRepository, roleRepository, "customer@example.com", "CUSTOMER", UserStatus.ACTIVATED);
-    }
-
-    private static void createUser(UserRepository userRepository, RoleRepository roleRepository,
-                                   String email, String roleName, UserStatus status) {
-        Role role = roleRepository.findByName(roleName)
-                .orElseThrow(() -> new RuntimeException(roleName + " role not found"));
-        userRepository.save(User.builder()
-                .email(email)
-                .password(new BCryptPasswordEncoder().encode("StrongPassword123!"))
-                .roles(role)
-                .status(status)
-                .build());
+                        .withBody("{\"id\": \"12345\"}")));
     }
 
     @AfterEach
@@ -371,6 +336,19 @@ class CustomerServiceTest {
                         "54321",
                         "USA"));
 
+        customerService.createNewCustomer(
+                new CustomerCreateDto(
+                        "Bruce",
+                        "Wayne",
+                        "bruce.wayne@example.com",
+                        "SecurePassword456!",
+                        "+987654321000",
+                        "987654321",
+                        "1007 Park Avenue",
+                        "Gotham",
+                        "10001",
+                        "USA"));
+
         UUID customerId = customerService.findCustomerById(existingCustomer.getId()).getId();
 
         CustomerUpdateDto updateDto = new CustomerUpdateDto(
@@ -378,7 +356,7 @@ class CustomerServiceTest {
                 "John",
                 "Smith",
                 "unique.email@example.com",
-                "+123434567890",
+                "+987654321000",
                 "12343414341",
                 "456 Elm Street",
                 "Gotham",
@@ -411,13 +389,26 @@ class CustomerServiceTest {
                         "54321",
                         "USA"));
 
+        customerService.createNewCustomer(
+                new CustomerCreateDto(
+                        "Bruce",
+                        "Wayne",
+                        "bruce.wayne@example.com",
+                        "SecurePassword456!",
+                        "+987654321000",
+                        "987654321",
+                        "1007 Park Avenue",
+                        "Gotham",
+                        "10001",
+                        "USA"));
+
         UUID customerId = customerService.findCustomerById(expectedCustomer.getId()).getId();
 
         CustomerUpdateDto customerUpdateDto = new CustomerUpdateDto(
                 customerId,
                 "John",
                 "Smith",
-                "clark.kent@example.com",
+                "bruce.wayne@example.com",
                 "+111111111111",
                 "uniqueTax123",
                 "456 Elm Street",
@@ -439,7 +430,6 @@ class CustomerServiceTest {
     @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_updateCustomerWithDuplicateTaxNumber_exception() {
         // prepare
-        var duplicateTaxNumber = "1t672263";
         Customer existingCustomer = customerService.createNewCustomer(
                 new CustomerCreateDto(
                         "Bruce",
@@ -447,10 +437,23 @@ class CustomerServiceTest {
                         "bruce.wayne@example.com",
                         "Password123!",
                         "+19876543210",
-                        duplicateTaxNumber,
+                        "1t672263",
                         "1007 Mountain Drive",
                         "Gotham",
                         "12345",
+                        "USA"));
+
+        customerService.createNewCustomer(
+                new CustomerCreateDto(
+                        "Clark",
+                        "Kent",
+                        "clark.kent@example.com",
+                        "Password123!",
+                        "+123434567890",
+                        "123456789",
+                        "123 Main Street",
+                        "Metropolis",
+                        "54321",
                         "USA"));
 
         UUID customerId = customerService.findCustomerById(existingCustomer.getId()).getId();
@@ -461,7 +464,7 @@ class CustomerServiceTest {
                 "Doe",
                 "john.doe@example.com",
                 "+1112223344",
-                duplicateTaxNumber,
+                "123456789",
                 "123 Elm Street",
                 "Metropolis",
                 "54321",

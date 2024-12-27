@@ -4,23 +4,19 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import de.yehorsh.authservice.dto.JwtAuthenticationDto;
-import de.yehorsh.authservice.dto.UserCredentialsDto;
-import de.yehorsh.authservice.model.entity.Role;
-import de.yehorsh.authservice.model.entity.User;
-import de.yehorsh.authservice.model.enums.UserStatus;
-import de.yehorsh.authservice.repository.RoleRepository;
-import de.yehorsh.authservice.repository.UserRepository;
 import de.yehorsh.customerservice.CustomerServiceApplication;
 import de.yehorsh.customerservice.config.ContainersEnvironment;
 import de.yehorsh.customerservice.dto.CustomerCreateDto;
 import de.yehorsh.customerservice.dto.CustomerDto;
 import de.yehorsh.customerservice.dto.CustomerUpdateDto;
+import de.yehorsh.customerservice.dto.UserCreateDto;
 import de.yehorsh.customerservice.exception.CustomerNotFoundException;
 import de.yehorsh.customerservice.model.Customer;
 import de.yehorsh.customerservice.model.enums.CustomerStatus;
 import de.yehorsh.customerservice.repository.CustomerRepository;
 import de.yehorsh.customerservice.service.CustomerService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,30 +24,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.sql.DataSource;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -79,8 +70,9 @@ class CustomerControllerTest {
     @Autowired
     private MeterRegistry meterRegistry;
     private static WireMockServer wireMockServer;
-    @Mock
-    private RoleRepository roleRepository;
+    private static String managerToken;
+    private static String adminToken;
+    private static String customerToken;
 
     @BeforeAll
     static void start() {
@@ -88,113 +80,75 @@ class CustomerControllerTest {
         wireMockServer.start();
         WireMock.configureFor("localhost", 8084);
 
+        long now = System.currentTimeMillis();
+        String secretKey = "d91fb2a36c4ad89da9f322bcfcd7b357294eb77e8c44d5b36695f449ddacc76f";
+
+        managerToken = Jwts.builder()
+                .setSubject("manager@example.com")
+                .claim("role", "MANAGER")
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + 3600000))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        adminToken = Jwts.builder()
+                .setSubject("admin@example.com")
+                .claim("role", "ADMIN")
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + 3600000))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        customerToken = Jwts.builder()
+                .setSubject("customer@example.com")
+                .claim("role", "CUSTOMER")
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + 3600000))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/users/create"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(201)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"id\": \"12345\"}")));
+
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/auth/login"))
                 .withRequestBody(equalToJson("{\"email\": \"manager@example.com\", \"password\": \"StrongManagerP@ssw0rd!\"}"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYW5hZ2VyQGV4YW1wbGUuY29tIiwiYXV0aG9yaXRpZXMiOlsiTUFOQUdFUiJdLCJpYXQiOjE2NzI1MzEyMDAsImV4cCI6MTY3MjUzNDgwMH0.uWiQZ7o6HVTjDUdjq3OCvRgfLDLo6sdcDWBhAjIj0So\"}")));
+                        .withBody("{\"token\": \"" + managerToken + "\"}")));
 
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/auth/login"))
                 .withRequestBody(equalToJson("{\"email\": \"admin@example.com\", \"password\": \"StrongAdminP@ssw0rd!\"}"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBleGFtcGxlLmNvbSIsImF1dGhvcml0aWVzIjpbIkFETUlOIl0sImlhdCI6MTY3MjUzMTIwMCwiZXhwIjoxNjcyNTM0ODAwfQ.YhRoBkjG7PexnbBbQ_Wv9IC4ReHeo6wW6BEM7Cqgk98\"}")));
+                        .withBody("{\"token\": \"" + adminToken + "\"}")));
 
         WireMock.stubFor(WireMock.post(WireMock.urlEqualTo("/auth/login"))
-                .withRequestBody(equalToJson("{\"email\":\"customer@example.com\",\"password\":\"StrongCustomerP@ssw0rd!\"}"))
+                .withRequestBody(equalToJson("{\"email\": \"customer@example.com\", \"password\": \"StrongCustomerP@ssw0rd!\"}"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"token\":\"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjdXN0b21lckBleGFtcGxlLmNvbSIsImF1dGhvcml0aWVzIjpbIkNVU1RPTUVSIl0sImlhdCI6MTY3MjUzMTIwMCwiZXhwIjoxNjcyNTM0ODAwfQ.5PbR5RNSMHUVc_uPxndOHoAjpJ7UdE23Pc4QlNX_VFw\"}")));
+                        .withBody("{\"token\": \"" + customerToken + "\"}")));
     }
 
     @AfterAll
-    static void cleanUp() {
+    static void cleanUpWireMockServer()
+    {
         wireMockServer.stop();
     }
 
     @BeforeEach
-    void cleanUpDatabase() {
+    void cleanUpDatabase()
+    {
         customerRepository.deleteAll();
         dbUtil = new DBUtil(dataSource);
         meterRegistry.clear();
     }
 
-    @BeforeAll
-    static void setUpDatabase(@Autowired UserRepository userRepository, @Autowired RoleRepository roleRepository) {
-        // Ensure roles exist
-        Role managerRole = new Role();
-        managerRole.setName("MANAGER");
-        Mockito.when(roleRepository.findByName("MANAGER"))
-                .thenReturn(Optional.of(managerRole));
-
-        Role adminRole = new Role();
-        adminRole.setName("ADMIN");
-        Mockito.when(roleRepository.findByName("ADMIN"))
-                .thenReturn(Optional.of(adminRole));
-
-        Role customerRole = new Role();
-        customerRole.setName("CUSTOMER");
-        Mockito.when(roleRepository.findByName("CUSTOMER"))
-                .thenReturn(Optional.of(customerRole));
-
-        // Add manager user
-        userRepository.save(User.builder()
-                .email("manager@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongManagerP@ssw0rd!"))
-                .roles(managerRole)
-                .status(UserStatus.ACTIVATED)
-                .build());
-
-        // Add admin user
-        userRepository.save(User.builder()
-                .email("admin@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongAdminP@ssw0rd!"))
-                .roles(adminRole)
-                .status(UserStatus.ACTIVATED)
-                .build());
-
-        // Add customer user
-        userRepository.save(User.builder()
-                .email("customer@example.com")
-                .password(new BCryptPasswordEncoder().encode("StrongCustomerP@ssw0rd!"))
-                .roles(customerRole)
-                .status(UserStatus.ACTIVATED)
-                .build());
-    }
-
-    private String getManagerAccessToken() throws Exception {
-        return getAccessToken("manager@example.com", "StrongManagerP@ssw0rd!");
-    }
-
-    private String getAdminAccessToken() throws Exception {
-        return getAccessToken("admin@example.com", "StrongAdminP@ssw0rd!");
-    }
-
-    private String getCustomerAccessToken() throws Exception {
-        return getAccessToken("customer@example.com", "StrongCustomerP@ssw0rd!");
-    }
-
-    private String getAccessToken(String email, String password) throws Exception {
-        UserCredentialsDto userCredentialsDto = new UserCredentialsDto();
-        userCredentialsDto.setEmail(email);
-        userCredentialsDto.setPassword(password);
-
-        String tokens = mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(userCredentialsDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        JwtAuthenticationDto jwtAuthenticationDto = objectMapper.readValue(tokens, JwtAuthenticationDto.class);
-        return jwtAuthenticationDto.getToken();
-    }
-
-    @WithMockUser(value = "manager@example.com", authorities = "MANAGER")
     @ParameterizedTest
     @CsvSource({
             // Valid customer details with all valid fields
@@ -210,7 +164,7 @@ class CustomerControllerTest {
             "'John', 'Doe', '', 'StrongPassword1!', '+123456789', '12345678', '123 Main St', 'Metropolis', '54321', 'USA', 400, 'Email cannot be empty.; Invalid email address'",
 
             // Phone number is empty
-            "'John', 'Doe', 'john.doe@example.com', 'StrongPassword1!', '', '12345678', '123 Main St', 'Metropolis', '54321', 'USA', 400, 'Phone number cannot be empty; Invalid phone number format, use one of: +123456789, (123) 456-7890, 123-456-7890'",
+            "'John', 'Doe', 'john.doe@example.com', 'StrongPassword1!', '', '12345678', '123 Main St', 'Metropolis', '54321', 'USA', 400, 'Invalid phone number format, use one of: +123456789, (123) 456-7890, 123-456-7890; Phone number cannot be empty'",
 
             // Invalid email format
             "'John', 'Doe', 'invalid-email', 'StrongPassword1!', '+123456789', '12345678', '123 Main St', 'Metropolis', '54321', 'USA', 400, 'Invalid email address; Invalid email address'",
@@ -241,7 +195,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "manager@example.com", authorities = "MANAGER")
     void test_createCustomer_success() throws Exception {
         // prepare
         var requestCounter = meterRegistry.counter("create_customer_endpoint_count");
@@ -263,14 +216,21 @@ class CustomerControllerTest {
                 "USA"
         );
 
-        String token = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(customerCreateDto)))
                 .andExpect(status().isCreated())
                 .andReturn();
+
+        UserCreateDto expectedUserDto = new UserCreateDto(
+                customerCreateDto.email(),
+                "StrongP@ssw0rd!",
+                "CUSTOMER"
+        );
+
+        wireMockServer.verify(postRequestedFor(urlEqualTo("/users/create"))
+                .withRequestBody(equalToJson(objectMapper.writeValueAsString(expectedUserDto))));
 
         assertThat(dbUtil.customerExistsByEmail("clark.kent@example.com")).isTrue();
 
@@ -293,7 +253,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "manager@example.com", authorities = "MANAGER")
     void test_createCustomerWithExistingEmail_badRequest() throws Exception {
         // prepare
         CustomerCreateDto firstCustomerCreateDto = new CustomerCreateDto(
@@ -309,10 +268,8 @@ class CustomerControllerTest {
                 "USA"
         );
 
-        String token = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstCustomerCreateDto)))
                 .andExpect(status().isCreated())
@@ -333,7 +290,7 @@ class CustomerControllerTest {
 
         // test
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(secondCustomerCreateDto)))
                 .andExpect(status().isBadRequest())
@@ -345,7 +302,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "manager@example.com", authorities = "MANAGER")
     void test_createCustomerWithSamePhone_badRequest() throws Exception {
         // prepare
         CustomerCreateDto firstCustomerCreateDto = new CustomerCreateDto(
@@ -361,10 +317,8 @@ class CustomerControllerTest {
                 "USA"
         );
 
-        String token = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstCustomerCreateDto)))
                 .andExpect(status().isCreated())
@@ -385,7 +339,7 @@ class CustomerControllerTest {
 
         // test
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(secondCustomerCreateDto)))
                 .andExpect(status().isBadRequest())
@@ -397,7 +351,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "manager@example.com", authorities = "MANAGER")
     void test_createCustomerWithSameTaxNumber_badRequest() throws Exception {
         // prepare
         CustomerCreateDto firstCustomerCreateDto = new CustomerCreateDto(
@@ -413,10 +366,8 @@ class CustomerControllerTest {
                 "USA"
         );
 
-        String token = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstCustomerCreateDto)))
                 .andExpect(status().isCreated())
@@ -437,7 +388,7 @@ class CustomerControllerTest {
 
         // test
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(secondCustomerCreateDto)))
                 .andExpect(status().isBadRequest())
@@ -449,7 +400,6 @@ class CustomerControllerTest {
     }
 
     @Test
-    @WithMockUser(value = "manager@example.com", authorities = "MANAGER")
     void test_findCustomer_success() throws Exception {
         // prepare
         CustomerCreateDto expectedCustomer = new CustomerCreateDto(
@@ -465,10 +415,8 @@ class CustomerControllerTest {
                 "USA"
         );
 
-        String token = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(expectedCustomer)))
                 .andExpect(status().isCreated())
@@ -482,7 +430,7 @@ class CustomerControllerTest {
 
         // test
         mockMvc.perform(MockMvcRequestBuilders.get("/customers/" + createCustomer.getId())
-                        .header("Authorization", "Bearer " + token)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
@@ -518,16 +466,14 @@ class CustomerControllerTest {
                         "10001",
                         "USA");
 
-        String tokenManager = getManagerAccessToken();
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + tokenManager)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCustomer1)))
                 .andExpect(status().isCreated());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + tokenManager)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(newCustomer2)))
                 .andExpect(status().isCreated());
@@ -535,11 +481,9 @@ class CustomerControllerTest {
         var requestCounter = meterRegistry.counter("find_allCustomer_endpoint_count");
         double initialCount = requestCounter.count();
 
-        String tokenAdmin = getAdminAccessToken();
-
         // test
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/customers/findAllCustomers")
-                        .header("Authorization", "Bearer " + tokenAdmin)
+                        .header("Authorization", "Bearer " + adminToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -585,26 +529,35 @@ class CustomerControllerTest {
     @Test
     void test_updateCustomer_success() throws Exception {
         // prepare
-        Customer expectedCustomer = customerService.createNewCustomer(
-                new CustomerCreateDto(
+        CustomerCreateDto expectedCustomer = new CustomerCreateDto(
                         "Tony",
                         "Stark",
-                        "customer@example.com",
+                        "tony.stark@example.com",
                         "StrongCustomerP@ssw0rd!",
                         "+1098765432",
                         "123456789",
                         "10880 Malibu Point",
                         "Malibu",
                         "90265",
-                        "USA"));
+                        "USA");
+
+       mockMvc.perform(MockMvcRequestBuilders.post("/customers")
+                        .header("Authorization", "Bearer " + managerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(expectedCustomer)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        Customer updatedCustomer = customerRepository.findCustomerByEmail("tony.stark@example.com")
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
 
         CustomerUpdateDto customerUpdateDto = new CustomerUpdateDto(
-                expectedCustomer.getId(),
-                "Peter",
-                "Parker",
-                "customer@example.com",
+                updatedCustomer.getId(),
+                "Tony",
+                "Stark",
+                "tony.stark@example.com",
                 "+1234567890",
-                "1343414341",
+                "234567891",
                 "15 Queens Blvd",
                 "New York",
                 "10001",
@@ -614,26 +567,27 @@ class CustomerControllerTest {
         var requestCounter = meterRegistry.counter("update_customer_endpoint_count");
         double initialCount = requestCounter.count();
 
-        String tokenCustomer = getCustomerAccessToken();
-        String customerJson = objectMapper.writeValueAsString(customerUpdateDto);
-
         // test
-        mockMvc.perform(MockMvcRequestBuilders.put("/customers/update/" + expectedCustomer.getId())
-                        .header("Authorization", "Bearer " + tokenCustomer)
+        mockMvc.perform(MockMvcRequestBuilders.put("/customers/update/" + updatedCustomer.getId())
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerJson))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(customerUpdateDto)))
+                .andExpect(status().isOk())
+                .andReturn();
 
         // assert
-        assertThat(dbUtil.customerExistsByEmail("customer@example.com")).isTrue();
+        assertThat(dbUtil.customerExistsByEmail("tony.stark@example.com")).isTrue();
         assertThat(requestCounter.count()).isEqualTo(initialCount + 1);
 
-        Customer actualCustomer = customerRepository.findById(expectedCustomer.getId()).get();
+        Customer actualCustomer = customerRepository.findCustomerByEmail("tony.stark@example.com")
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
 
-        assertThat(actualCustomer.getFirstName()).isEqualTo("Peter");
-        assertThat(actualCustomer.getLastName()).isEqualTo("Parker");
-        assertThat(actualCustomer.getEmail()).isEqualTo("customer@example.com");
+        assertThat(actualCustomer.getId()).isNotNull();
+        assertThat(actualCustomer.getFirstName()).isEqualTo("Tony");
+        assertThat(actualCustomer.getLastName()).isEqualTo("Stark");
+        assertThat(actualCustomer.getEmail()).isEqualTo("tony.stark@example.com");
         assertThat(actualCustomer.getPhoneNumber()).isEqualTo("+1234567890");
+        assertThat(actualCustomer.getTaxNumber()).isEqualTo("234567891");
         assertThat(actualCustomer.getAddress()).isEqualTo("15 Queens Blvd");
         assertThat(actualCustomer.getCity()).isEqualTo("New York");
         assertThat(actualCustomer.getZipCode()).isEqualTo("10001");
@@ -661,11 +615,10 @@ class CustomerControllerTest {
         double initialCount = requestCounter.count();
 
         String customerJson = objectMapper.writeValueAsString(expectedCustomer);
-        String tokenManager = getManagerAccessToken();
 
         // test
-        mockMvc.perform(MockMvcRequestBuilders.delete("/customers/" + expectedCustomer.getId())
-                        .header("Authorization", "Bearer " + tokenManager)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/customers/delete/" + expectedCustomer.getId())
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(customerJson))
                 .andExpect(status().isOk())
@@ -705,14 +658,10 @@ class CustomerControllerTest {
         CustomerCreateDto newCustomerDto = new CustomerCreateDto(firstName, lastName, email, password, phoneNumber,
                 taxNumber, address, city, zipCode, country);
 
-        String tokenManager = getManagerAccessToken();
-
-        String customerJson = objectMapper.writeValueAsString(newCustomerDto);
-
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
-                        .header("Authorization", "Bearer " + tokenManager)
+                        .header("Authorization", "Bearer " + managerToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(customerJson))
+                        .content(objectMapper.writeValueAsString(newCustomerDto)))
                 .andExpect(status().is(expectedStatus))
                 .andExpect(content().string(expectedResponse));
     }

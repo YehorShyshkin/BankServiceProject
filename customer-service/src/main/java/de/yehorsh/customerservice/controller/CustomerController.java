@@ -1,6 +1,6 @@
 package de.yehorsh.customerservice.controller;
 
-import de.yehorsh.commonmodule.aspect.LogInfo;
+import de.yehorsh.customerservice.aspect.LogInfo;
 import de.yehorsh.customerservice.dto.CustomerCreateDto;
 import de.yehorsh.customerservice.dto.CustomerDto;
 import de.yehorsh.customerservice.dto.CustomerUpdateDto;
