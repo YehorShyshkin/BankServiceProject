@@ -9,7 +9,7 @@ services:
     ports:
       - "8084:8084"
     networks:
-      - app-network
+      - bank-service
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - EUREKA_SERVER_URL=http://eureka-service:8761/eureka/
@@ -17,5 +17,5 @@ services:
       - api-gateway
 
 networks:
-  app-network:
+  bank-service:
     driver: bridge

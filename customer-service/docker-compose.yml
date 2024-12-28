@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     container_name: customer-service
     ports:
-      - "8085:8085"
+      - "8082:8082"
     networks:
-      - app-network
+      - bank-service
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - EUREKA_SERVER_URL=http://eureka-service:8761/eureka/
@@ -17,5 +17,5 @@ services:
       - auth-service
 
 networks:
-  app-network:
+  bank-service:
     driver: bridge
