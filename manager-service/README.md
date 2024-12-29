@@ -72,9 +72,9 @@ The service exposes the following endpoints:
 | Endpoint                | HTTP Method | Description                       |
 |-------------------------|-------------|-----------------------------------|
 | `/managers`             | `POST`      | Creates a new manager             |
-| `/managers/{id}`        | `GET`       | Retrieves a manager by ID         |
-| `/managers/{id}`        | `PUT`       | Updates an existing manager       |
-| `/managers/{id}`        | `DELETE`    | Deletes a manager by ID           |
+| `/managers/find/{id}`   | `GET`       | Retrieves a manager by ID         |
+| `/managers/update/{id}` | `PUT`       | Updates an existing manager       |
+| `/managers/delete/{id}` | `DELETE`    | Deletes a manager by ID           |
 
 #### Validation
 - The application uses Jakarta Validation annotations to ensure input fields are correctly formatted and required fields are present
@@ -88,7 +88,7 @@ The service exposes the following endpoints:
 
 #### Testing
 
-![Test manager-service.png](screenshots/Test%20manager-service.png)
+![manager-service test.png](screenshots/manager-service%20test.png)
 
 ##### Integration Tests
 Service uses Testcontainers for integration testing.
