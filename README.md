@@ -62,17 +62,58 @@ Germany, 2023-2024.
 #### Create Users
 
 ##### Admin create
+
+curl -i -X POST http://localhost:8084/users/create \                                                             
+-H "Content-Type: application/json" \  
+-d '{  
+"email": "user@example.com",  
+"password": "Password2&",  
+"roleName": "ADMIN"  
+}'  
+  
 ![Admin create.png](auth-service/screenshots/Admin%20create.png)
 
 ##### Customer create
 
+curl -i -X POST http://localhost:8082/customers \                                                 
+-H "Content-Type: application/json" \  
+-H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJleGFtcGxlLm1hbmFnZXJAZW1haWwuY29tIiwicm9sZSI6Ik1BTkFHRVIiLCJleHAiOjE3MzQwOTk4Mzl9.TKUrZViWuBP3kg-F_-JQJVRkkLjimL8uAlFs4WUcnuFhnABiqg9aGTc8ZP72yet8" \  
+-d '{  
+"firstName": "Emily",  
+"lastName": "Taylor",  
+"email": "emily.taylor.new@example.com",  
+"password": "UniquePassword789!",  
+"phoneNumber": "+1998765432",  
+"taxNumber": "5678901234",  
+"address": "321 Pine Boulevard",  
+"city": "Dreamcity",  
+"zipCode": "98765",  
+"country": "UK"  
+}'  
+
 ![Customer create.png](customer-service/screenshots/Customer%20create.png)
 
 ##### Manager create
+
+curl -i -X POST http://localhost:8081/managers \  
+-H "Content-Type: application/json" \  
+-H "Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwicm9sZSI6IkFETUlOIiwiZXhwIjoxNzM1MjE3NjAwfQ.xvlwb02pf_AAVxQXZu48c9QQkI-bGvx3Ifrlxb0ccb5BbJqPYkgYQh1ahe4StZZ4" \  
+-d '{  
+"firstName": "Michael",  
+"lastName": "Johnson",  
+"email": "michael.johnson@example.com",  
+"phoneNumber": "+1122334455",  
+"password": "SecurePassword123!"  
+}'    
+  
 ![Manager create.png](manager-service/screenshots/Manager%20create.png)
 
 ##### Token
-
+EMAIL="user@example.com"   
+curl -i -X POST http://localhost:8084/auth/login \                                          
+-H "Content-Type: application/json" \    
+-d "{\"email\":\"${EMAIL}\",\"password\":\"Password2&\"}" 
+  
 ![manager token.png](auth-service/screenshots/manager%20token.png)
 
 
@@ -96,11 +137,7 @@ Germany, 2023-2024.
    ```bash
    ./mvn clean install
 
-3. **Run the application:**
-    ```bash
-   ./mvn spring-boot:run
-
-4. **Run Docker Compose to start PostgreSQL and PgAdmin:**
+3. **Run Docker Compose to start PostgreSQL and PgAdmin:**
     ```bash
     docker-compose up
 
