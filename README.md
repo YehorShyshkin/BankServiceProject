@@ -105,7 +105,7 @@ curl -i -X POST http://localhost:8081/managers \
 "phoneNumber": "+1122334455",  
 "password": "SecurePassword123!"  
 }'    
-  
+
 ![Manager create.png](manager-service/screenshots/Manager%20create.png)
 
 ##### Token
